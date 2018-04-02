@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="InformiInventory.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d"
+             d:DesignHeight="712.549"
+             DataContext="{Binding ViewModels.LoginViewModel}"
+             d:DesignWidth="1166.82">
+
+    <Grid Margin="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="0.2*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="0.2*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="1" Grid.Row="1"  Margin="1"  HorizontalAlignment="Center" VerticalAlignment="Stretch" >
+            <RadioButton Command="" Content="Anmelden über Personalkarte"/>
+            <TextBlock Margin="0 5 0 0" Text="Personalkarte" />
+            <PasswordBox x:Name="EmpCodePasswordBox"/>
+            <RadioButton Margin="0 20 0 0" Content="Anmelden über Benutzernamen und Kennwort" IsChecked="True"/>
+            <TextBlock Margin="0 5 0 0" Text="Benutzername" />
+            <TextBox x:Name="UserNameBox"/>
+            <TextBlock Margin="0 5 0 0" Text="Kennwort" />
+            <PasswordBox x:Name="PwPasswordBox"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="InformiInventory.Views.DifferenceListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d"
+             d:DesignHeight="712.549"
+             d:DesignWidth="1166.82"
+             >
+    <Grid Margin="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*" />
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="0.25*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0" Grid.Column="0">
+            <telerik:Label Content="Filiale:" FontWeight="SemiBold" Margin="0 0 10 0" />
+            <telerik:Label Content="{Binding Store}" Width="100" />
+            <telerik:Label Content="Datum:" FontWeight="SemiBold" Margin="0 0 10 0" />
+            <telerik:Label Content="{Binding Dt, StringFormat={}{0:d}}" Width="100" />
+            <telerik:Label Content="Inventur-Datum:" FontWeight="SemiBold" Margin="0 0 10 0" />
+            <telerik:Label Content="{Binding InventoryDt, StringFormat={}{0:d}}" Width="100" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0" Grid.Column="1">
+            <telerik:RadButton Content="Speichern" Margin="5" Foreground="Green"  HorizontalAlignment="Right" Width="100"/>
+            <telerik:RadButton Content="Abbrechen" Margin="5" Foreground="Red" Width="100" />
+        </StackPanel>
+
+        <telerik:RadGridView Grid.Row="1"
+                             Grid.Column="0"
+                             Grid.ColumnSpan="2"
+                             Margin="5"
+                             x:Name="DifferenceLinesGrid"
+                             AlternationCount="2"
+                             GroupRenderMode="Flat"
+                             IsFilteringAllowed="False"
+                             CanUserReorderColumns="False"
+                             CanUserResizeColumns="False"
+                             AutoGenerateColumns="False"
+                             RowIndicatorVisibility="Collapsed"
+                             CanUserFreezeColumns="False"
+                             IsSynchronizedWithCurrentItem="True"
+                             ItemsSource="{Binding Differences}"
+                             CanUserInsertRows="False"
+                             CanUserDeleteRows="False"
+                             ShowGroupPanel="False">
+            <telerik:RadGridView.Columns >
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Index}" IsReadOnly="True" Header="Pos" Width="50"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Location}" IsReadOnly="True" Header="Stellplatz" Width="100" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Art}" IsReadOnly="True" Header="Artikel" Width="100" x:Name="ArtColumn" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding AN}" IsReadOnly="True" Header="Bezeichnung" Width="200" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}" x:Name="GTINColumn" Header="EAN" Width="100" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding TargetStock}" x:Name="TargetStockColumn" Header="Sollbestand" Width="100" TextAlignment="Right" HeaderTextAlignment="Right" DataFormatString="n2" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ActualStock}" x:Name="ActualStockColumn" Header="Istbestand" Width="100" TextAlignment="Right" HeaderTextAlignment="Right" DataFormatString="n2" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Difference}" x:Name="DifferenceColumn" Header="Differenz" Width="100" TextAlignment="Right" HeaderTextAlignment="Right" DataFormatString="n2" />
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
+    </Grid>
+</UserControl>

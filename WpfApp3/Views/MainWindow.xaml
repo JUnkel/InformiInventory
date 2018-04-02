@@ -1,0 +1,15 @@
+﻿<Window xmlns:informiInventory="clr-namespace:InformiInventory"
+        x:Class="InformiInventory.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        xmlns:InformiInventory.Views="clr-namespace:InformiInventory.Views"
+        Title="MainWindow" 
+        Height="450"
+        Width="800">
+    <Grid>
+        <ContentControl>
+            <InformiInventory.Views:LoginView/>
+        </ContentControl>
+    </Grid>
+</Window>
