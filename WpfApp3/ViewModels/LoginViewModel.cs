@@ -10,19 +10,8 @@ using Telerik.Windows.Controls;
 
 namespace Inventory.ViewModels
 {
-    class LoginViewModel : INotifyPropertyChanged
+    class LoginViewModel : InformiInventory.ViewModels.Commands.ViewModelBase
     {
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-
-        bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-            field = value;
-            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            return true;
-        }
-
-
         public LoginViewModel()
         {
 
