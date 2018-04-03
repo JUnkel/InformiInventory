@@ -7,39 +7,25 @@ using System.Windows.Input;
 
 namespace InformiInventory.ViewModels.Commands
 {
-    public class RelayCommand : ICommand
+    public class RelayCommand : CommandBase
     {
-        private Action<object> _action;
+        private readonly Action _execute;
 
-        private Func<bool> _func;
+        private readonly Func<bool> _canExecute;
 
-        public RelayCommand(Action<object> action, Func<bool> func)
+        public RelayCommand() { }
+
+        public RelayCommand(Action execute) : this(execute, null) { }
+
+        public RelayCommand(Action execute, Func<bool> canExecute)
         {
-            _action = action;
-            _func = func;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
         }
 
-        public event EventHandler CanExecuteChanged
-        {
-            add
-            {
-                CommandManager.RequerySuggested += value;
-            }
-            remove
-            {
-                CommandManager.RequerySuggested -= value;
-            }
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Execute(object parameter)
-        {
-            _action(parameter);
-        }
+        public override bool CanExecute(object parameter) => _canExecute == null || _canExecute();
+            public override void Execute(object parameter) { _execute(); }
     }
+
 }
 

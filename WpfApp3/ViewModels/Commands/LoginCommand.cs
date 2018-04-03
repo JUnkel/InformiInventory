@@ -15,11 +15,20 @@ namespace InformiInventory.ViewModels.Commands
         {
             _loginViewModel = vm;
         }
+
         public bool CanExecute(object parameter)
         {
-            //Abfragen, ob Eingabe Scancode oder Passwort und Anmeldename ausgefüllt
+            var vm = (Inventory.ViewModels.LoginViewModel)parameter;
+            
+            if(vm.Password != null && vm.Username != null)
+            {
+                return true;
+            }
 
-            return true;
+            else
+            {
+                return false;
+            }
         }
         public void Execute(object parameter)
         {

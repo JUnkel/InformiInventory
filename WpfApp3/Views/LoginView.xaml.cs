@@ -23,10 +23,5 @@ namespace InformiInventory.Views
         {
             InitializeComponent();
         }
-
-        private void PwPasswordBox_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-
-        }
     }
 }

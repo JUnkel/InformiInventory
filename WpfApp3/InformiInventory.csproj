@@ -82,6 +82,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\PetaPoco.cs" />
+    <Compile Include="ViewModels\Commands\BaseCommand.cs" />
+    <Compile Include="ViewModels\Commands\Generic\RelayCommandT.cs" />
     <Compile Include="ViewModels\Commands\LoginCommand.cs" />
     <Compile Include="ViewModels\Commands\Generic\RelayCommand.cs" />
     <Compile Include="ViewModels\ViewModelBase\ViewModelBase.cs" />

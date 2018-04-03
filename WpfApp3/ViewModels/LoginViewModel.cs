@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Telerik.Windows.Controls;
 using InformiInventory;
+using InformiInventory.ViewModels.Commands.Generic;
 
 namespace Inventory.ViewModels
 {
@@ -24,7 +25,7 @@ namespace Inventory.ViewModels
         {
             get
             {
-                return new InformiInventory.ViewModels.Commands.RelayCommand(this,LogIn);
+                return new InformiInventory.ViewModels.Commands.LoginCommand(this);
             }
         }
 
