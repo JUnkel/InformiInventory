@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace InformiInventory.ViewModels.Commands
 {
-    public class ViewModelBase : InformiInventory.ViewModels.INotifyPropertyChanged.INotifyPropertyChanged, System.Windows.Input.ICommand
+    public class ViewModelBase : InformiInventory.ViewModels.INotifyPropertyChanged.INotifyPropertyChanged
     {
        
     }

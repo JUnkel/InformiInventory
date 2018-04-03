@@ -5,20 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace WpfApp3.ViewModels.Commands
+namespace InformiInventory.ViewModels.Commands
 {
     public class LoginCommand : ICommand
     {
-        public event EventHandler CanExecuteChanged;
+        private Inventory.ViewModels.LoginViewModel _loginViewModel;
 
+        public LoginCommand(Inventory.ViewModels.LoginViewModel vm)
+        {
+            _loginViewModel = vm;
+        }
         public bool CanExecute(object parameter)
         {
-            throw new NotImplementedException();
-        }
+            //Abfragen, ob Eingabe Scancode oder Passwort und Anmeldename ausgefüllt
 
+            return true;
+        }
         public void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            _loginViewModel.LogIn();
         }
+
+        public event EventHandler CanExecuteChanged;
     }
 }

@@ -6,10 +6,13 @@
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
              mc:Ignorable="d"
              d:DesignHeight="712.549"
-             DataContext="{Binding ViewModels.LoginViewModel}"
+             xmlns:vm="clr-namespace:Inventory.ViewModels"
              d:DesignWidth="1166.82">
+    <UserControl.Resources>
+         <vm:LoginViewModel x:Key="LoginVM" />
+    </UserControl.Resources>
 
-    <Grid Margin="1">
+    <Grid Margin="1" DataContext="{Binding Source={StaticResource LoginVM}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*"/>
             <RowDefinition Height="1*"/>
@@ -24,12 +27,13 @@
         <StackPanel Grid.Column="1" Grid.Row="1"  Margin="1"  HorizontalAlignment="Center" VerticalAlignment="Stretch" >
             <RadioButton Command="" Content="Anmelden über Personalkarte"/>
             <TextBlock Margin="0 5 0 0" Text="Personalkarte" />
-            <PasswordBox x:Name="EmpCodePasswordBox"/>
-            <RadioButton Margin="0 20 0 0" Content="Anmelden über Benutzernamen und Kennwort" IsChecked="True"/>
-            <TextBlock Margin="0 5 0 0" Text="Benutzername" />
-            <TextBox x:Name="UserNameBox"/>
+            <TextBox x:Name="ScanCodePasswordBox" />
+            <RadioButton Margin="0 5 0 0" Content="Anmelden über Benutzernamen und Kennwort" IsChecked="True"/>
+            <TextBlock Margin="0 5 0 0" Text="Benutzername"/>
+            <TextBox x:Name="UserNameBox" Text="{Binding Username}"/>
             <TextBlock Margin="0 5 0 0" Text="Kennwort" />
-            <PasswordBox x:Name="PwPasswordBox"/>
+            <TextBox x:Name="PwPasswordBox" Text="{Binding Password}"/>
+            <Button Command="{Binding LoginCommand}" Content="Anmelden" Margin="0 5 0 0"/>
         </StackPanel>
     </Grid>
 </UserControl>
