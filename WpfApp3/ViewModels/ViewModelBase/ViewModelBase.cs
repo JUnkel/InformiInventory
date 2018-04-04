@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InformiInventory.ViewModels.Commands
+namespace InformiInventory.ViewModels.ViewModelBase
 {
     public class ViewModelBase : InformiInventory.ViewModels.INotifyPropertyChanged.INotifyPropertyChanged
     {

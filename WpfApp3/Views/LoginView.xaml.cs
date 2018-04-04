@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InformiInventory.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,8 @@ namespace InformiInventory.Views
 {
     public partial class LoginView : UserControl
     {
+        public LoginViewModel LoginViewModel { get; set; } = new LoginViewModel();
+
         public LoginView()
         {
             InitializeComponent();

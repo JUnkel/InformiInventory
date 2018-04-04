@@ -9,32 +9,41 @@ namespace InformiInventory.ViewModels.Commands
 {
     public class LoginCommand : ICommand
     {
-        private Inventory.ViewModels.LoginViewModel _loginViewModel;
+        private LoginViewModel _loginViewModel;
 
-        public LoginCommand(Inventory.ViewModels.LoginViewModel vm)
+        public LoginCommand(LoginViewModel vm)
         {
             _loginViewModel = vm;
         }
 
         public bool CanExecute(object parameter)
         {
-            var vm = (Inventory.ViewModels.LoginViewModel)parameter;
+            var vm = (LoginViewModel)parameter;
             
-            if(vm.Password != null && vm.Username != null)
+            if(vm == null)
+            {
+                return false;
+            }
+            else if(!string.IsNullOrWhiteSpace(vm.Password)  && !string.IsNullOrWhiteSpace(vm.Username))
             {
                 return true;
             }
-
             else
             {
                 return false;
             }
         }
+
         public void Execute(object parameter)
         {
             _loginViewModel.LogIn();
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+
+            remove => CommandManager.RequerySuggested -= value;
+        }
     }
 }

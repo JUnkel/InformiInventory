@@ -8,26 +8,15 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Telerik.Windows.Controls;
 using InformiInventory;
-using InformiInventory.ViewModels.Commands.Generic;
+using System.Windows;
 
-namespace Inventory.ViewModels
+namespace InformiInventory.ViewModels
 {
-    public class LoginViewModel : InformiInventory.ViewModels.Commands.ViewModelBase
+    public class LoginViewModel : InformiInventory.ViewModels.ViewModelBase.ViewModelBase
     {
-        public LoginViewModel()
-        {
-            _loginCommand = new InformiInventory.ViewModels.Commands.LoginCommand(this);
-        }
+        private ICommand _loginCommand = null;
 
-        private InformiInventory.ViewModels.Commands.LoginCommand _loginCommand;
-
-        public ICommand LoginCommand
-        {
-            get
-            {
-                return new InformiInventory.ViewModels.Commands.LoginCommand(this);
-            }
-        }
+        public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new InformiInventory.ViewModels.Commands.LoginCommand(this));
 
         string _username;
 
@@ -58,9 +47,11 @@ namespace Inventory.ViewModels
         {
             //Abfrage Datenbank
 
-            if (Password == "prosoft")
+            if (Password == "prosoft" && Username == "admin")
             {
-                System.Windows.Forms.MessageBox.Show("Anmeldung erfolgreich.");
+                Application curApp = Application.Current;
+
+                curApp.MainWindow.Content = new InformiInventory.Views.MenuView();
             }
             else
             {

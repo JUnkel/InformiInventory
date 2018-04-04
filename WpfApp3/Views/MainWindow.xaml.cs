@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,9 +18,21 @@ namespace InformiInventory.Views
 {
     public partial class MainWindow : Window
     {
+        public static MainWindow Instance { get; private set; }
+
         public MainWindow()
         {
             InitializeComponent();
+
+            Content = new LoginView();
+
+            Instance = this;
+
+            var uri = new Uri("pack://application:,,,/Images/app-background.png");
+
+            var image = new BitmapImage(uri);
+
+            Instance.Background = new ImageBrush(image);
         }
     }
 }

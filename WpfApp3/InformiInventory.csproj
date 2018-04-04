@@ -84,8 +84,12 @@
     <Compile Include="Models\PetaPoco.cs" />
     <Compile Include="ViewModels\Commands\BaseCommand.cs" />
     <Compile Include="ViewModels\Commands\Generic\RelayCommandT.cs" />
+    <Compile Include="ViewModels\Commands\MenuComand.cs" />
     <Compile Include="ViewModels\Commands\LoginCommand.cs" />
     <Compile Include="ViewModels\Commands\Generic\RelayCommand.cs" />
+    <Compile Include="ViewModels\DifferenceListViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel.cs" />
+    <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase\ViewModelBase.cs" />
     <Compile Include="ViewModels\INotifyPropertyChanged\INotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -94,16 +98,8 @@
     <Compile Include="Views\LoginView.xaml.cs" />
     <Compile Include="Views\MainWindow.xaml.cs" />
     <Compile Include="Views\MenuView.xaml.cs" />
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\DifferenceListView.xaml">
@@ -155,6 +151,89 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\action-addrole.png" />
+    <Resource Include="Images\action-approve.png" />
+    <Resource Include="Images\action-bill.png" />
+    <Resource Include="Images\action-book.png" />
+    <Resource Include="Images\action-calc.png" />
+    <Resource Include="Images\action-cancel.png" />
+    <Resource Include="Images\action-check.png" />
+    <Resource Include="Images\action-create-sales-order.png" />
+    <Resource Include="Images\action-deliver.png" />
+    <Resource Include="Images\action-details.png" />
+    <Resource Include="Images\action-finish.png" />
+    <Resource Include="Images\action-pick.png" />
+    <Resource Include="Images\action-reapprove.png" />
+    <Resource Include="Images\action-send-mail.png" />
+    <Resource Include="Images\action-trash.png" />
+    <Resource Include="Images\add-item.png" />
+    <Resource Include="Images\app-background.png" />
+    <Resource Include="Images\application-vnd.ms-excel.png" />
+    <Resource Include="Images\arrow-down.png" />
+    <Resource Include="Images\arrow-left-3.png" />
+    <Resource Include="Images\arrow-right-3.png" />
+    <Resource Include="Images\arrow-up.png" />
+    <Resource Include="Images\button-blue.png" />
+    <Resource Include="Images\button-green.png" />
+    <Resource Include="Images\button-purple.png" />
+    <Resource Include="Images\button-red.png" />
+    <Resource Include="Images\button-seagreen.png" />
+    <Resource Include="Images\button-yellow.png" />
+    <Resource Include="Images\call-start.png" />
+    <Resource Include="Images\contact-new-2.png" />
+    <Resource Include="Images\dialog-cancel.png" />
+    <Resource Include="Images\dialog-error-2.png" />
+    <Resource Include="Images\dialog-error-4.png" />
+    <Resource Include="Images\dialog-error.png" />
+    <Resource Include="Images\dialog-information-4.png" />
+    <Resource Include="Images\dialog-information.png" />
+    <Resource Include="Images\dialog-question-2.png" />
+    <Resource Include="Images\dialog-question.png" />
+    <Resource Include="Images\dialog-warning-4.png" />
+    <Resource Include="Images\dialog-warning.png" />
+    <Resource Include="Images\document-open-5.png" />
+    <Resource Include="Images\document-print-preview-2.png" />
+    <Resource Include="Images\DPDIcon.png" />
+    <Resource Include="Images\edit-add.png" />
+    <Resource Include="Images\edit-clear.png" />
+    <Resource Include="Images\edit-copy.png" />
+    <Resource Include="Images\edit-delete-2.png" />
+    <Resource Include="Images\edit-find.png" />
+    <Resource Include="Images\edit-remove-3.png" />
+    <Resource Include="Images\emblem-important-4.png" />
+    <Resource Include="Images\emblem-notice.png" />
+    <Resource Include="Images\emblem-question.png" />
+    <Resource Include="Images\format-line-spacing-triple.png" />
+    <Resource Include="Images\gfax.png" />
+    <Resource Include="Images\go-first.png" />
+    <Resource Include="Images\go-home-5.png" />
+    <Resource Include="Images\go-last.png" />
+    <Resource Include="Images\go-next.png" />
+    <Resource Include="Images\go-prev.png" />
+    <Resource Include="Images\item-cancel.png" />
+    <Resource Include="Images\item-edit.png" />
+    <Resource Include="Images\item-save.png" />
+    <Resource Include="Images\kgpg_key1.png" />
+    <Resource Include="Images\list.png" />
+    <Resource Include="Images\logo.ico" />
+    <Resource Include="Images\logo_bash-tec.png" />
+    <Resource Include="Images\logo_colombus.png" />
+    <Resource Include="Images\mark-blue.png" />
+    <Resource Include="Images\mark-green.png" />
+    <Resource Include="Images\mobile-phone.png" />
+    <Resource Include="Images\order.png" />
+    <Resource Include="Images\printer-4.png" />
+    <Resource Include="Images\remove-item.png" />
+    <Resource Include="Images\show-blanketorders.png" />
+    <Resource Include="Images\SISIcon.png" />
+    <Resource Include="Images\snowflake-hi.png" />
+    <Resource Include="Images\validation-error.png" />
+    <Resource Include="Images\view-details.png" />
+    <Resource Include="Images\view-filter.png" />
+    <Resource Include="Images\view-list.png" />
+    <Resource Include="Images\view-refresh.png" />
+    <Resource Include="Images\view-table.png" />
+    <Resource Include="Images\view-tableanddetails.png" />
     <Content Include="Scripts\20180327_CreateDb.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

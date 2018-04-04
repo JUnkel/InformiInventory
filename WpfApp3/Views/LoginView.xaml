@@ -4,15 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-             xmlns:vm="clr-namespace:Inventory.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="712.549"
-             d:DesignWidth="1166.82">
-    <UserControl.Resources>
-        <vm:LoginViewModel x:Key="LoginVM" />
-    </UserControl.Resources>
-
-    <Grid Margin="1" DataContext="{Binding Source={StaticResource LoginVM}}">
+             d:DesignWidth="1166.82"
+             DataContext="{Binding LoginViewModel, RelativeSource={RelativeSource Self}}"
+             FocusManager.FocusedElement="{Binding ElementName=UserNameTextBox}">
+    <Grid Margin="1">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*"/>
             <RowDefinition Height="1*"/>
@@ -20,21 +17,31 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.2*"/>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="1" Grid.Row="1"  Margin="1"  HorizontalAlignment="Center" VerticalAlignment="Stretch" >
-            <RadioButton Command="" Content="Anmelden über Personalkarte"/>
-            <TextBlock Margin="0 5 0 0" Text="Personalkarte" />
-            <TextBox x:Name="ScanCodePasswordBox" />
-            <RadioButton Margin="0 5 0 0" Content="Anmelden über Benutzernamen und Kennwort" IsChecked="True"/>
+        
+        <StackPanel Grid.Column="1" Grid.Row="1"  Margin="1"  HorizontalAlignment="Stretch" VerticalAlignment="Center">
+            
+            <!--<RadioButton Command="" Content="Anmelden über Personalkarte"/>
+            
+            <TextBlock Margin="0 5 0 0" Text="Personalkarte" />-->
+            
+            <!--<TextBox x:Name="ScanCodePasswordBox" />-->
+            
+            <!--<RadioButton Margin="0 5 0 0" Content="Anmelden über Benutzernamen und Kennwort" IsChecked="True"/>-->
+            
             <TextBlock Margin="0 5 0 0" Text="Benutzername"/>
-            <TextBox x:Name="UserNameTextBox" Text="{Binding Username}"/>
-            <TextBlock Margin="0 5 0 0" Text="Kennwort" />
-            <TextBox x:Name="PwPasswordTextBox" Text="{Binding Password}"/>
-            <Button Command="{Binding Path=LoginCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding ElementName=PwPasswordTextBox}" CommandTarget="{Binding }"  Content="Anmelden" Margin="0 5 0 0">
-            </Button>
+            
+            <TextBox x:Name="UserNameTextBox" Text="{Binding Username}" Margin="0 5 0 0"/>
+            
+            <TextBlock Margin="0 0 5 0" Text="Kennwort" />
+            
+            <TextBox x:Name="PwPasswordTextBox" Text="{Binding Password}" Margin="0 5 0 0" FocusManager.FocusedElement="{Binding ElementName=LoginBtn}"/>
+
+            <Button x:Name="LoginBtn" Command="{Binding LoginCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=LoginBtn}" Content="Anmelden" Margin="0 5 0 0"/>
+
         </StackPanel>
     </Grid>
 </UserControl>
