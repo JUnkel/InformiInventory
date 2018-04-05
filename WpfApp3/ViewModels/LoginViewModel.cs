@@ -9,14 +9,16 @@ using System.Windows.Input;
 using Telerik.Windows.Controls;
 using InformiInventory;
 using System.Windows;
+using informiInventory;
+using System.Configuration;
 
-namespace InformiInventory.ViewModels
+namespace InformiInventory
 {
-    public class LoginViewModel : InformiInventory.ViewModels.ViewModelBase.ViewModelBase
+    public class LoginViewModel : ViewModelBase
     {
         private ICommand _loginCommand = null;
 
-        public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new InformiInventory.ViewModels.Commands.LoginCommand(this));
+        public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new LoginCommand(this));
 
         string _username;
 
@@ -45,17 +47,20 @@ namespace InformiInventory.ViewModels
 
         public void LogIn()
         {
-            //Abfrage Datenbank
+            var connectionString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
 
-            if (Password == "prosoft" && Username == "admin")
+            using (var db = new PetaPoco.Database(connectionString))
             {
-                Application curApp = Application.Current;
+                var user = db.FirstOrDefault<User>("SELECT 1 UID, Username FROM Users WHERE KeyCode = @0 AND Username = @1", Password, Username);
 
-                curApp.MainWindow.Content = new InformiInventory.Views.MenuView();
-            }
-            else
-            {
-                System.Windows.Forms.MessageBox.Show("Anmeldung fehlgeschlagen.");
+                if (user == null)
+                {
+                    MessageBox.Show("Anmeldung fehlgeschlagen.", "Informi Inventory", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    MainWindow.Instance.Content = new MenuView();
+                }
             }
         }
     }

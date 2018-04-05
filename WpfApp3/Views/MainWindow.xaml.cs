@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InformiInventory.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
@@ -14,19 +15,28 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace InformiInventory.Views
+namespace InformiInventory
 {
     public partial class MainWindow : Window
     {
         public static MainWindow Instance { get; private set; }
 
+        private object _selectedViewModel;
+
+        public object SelectedViewModel
+        {
+            get { return _selectedViewModel; }
+
+            set { _selectedViewModel = value; }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
 
-            Content = new LoginView();
-
             Instance = this;
+
+            Instance.Content = new LoginView();
 
             var uri = new Uri("pack://application:,,,/Images/app-background.png");
 

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace InformiInventory.ViewModels
+namespace InformiInventory
 {
-    public class DifferenceListViewModel : ViewModelBase.ViewModelBase
+    public class DifferenceListViewModel : ViewModelBase
     {
 
     }

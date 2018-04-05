@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InformiInventory.ViewModels.INotifyPropertyChanged
-{
+namespace InformiInventory
+{ 
     public class INotifyPropertyChanged
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;

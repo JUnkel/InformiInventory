@@ -1,31 +1,29 @@
-﻿<Window xmlns:informiinventory="clr-namespace:InformiInventory"
-        x:Class="InformiInventory.Views.MainWindow"
+﻿<Window x:Class="InformiInventory.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-        xmlns:InformiInventory.Views="clr-namespace:InformiInventory.Views"
-        xmlns:local="clr-namespace:InformiInventory.ViewModels"
-        Title="InformiInventur" 
+        xmlns:local="clr-namespace:InformiInventory"
+        Title="Informi Inventur" 
         Height="450"
         Width="800"
         Icon="/Images/logo.ico">
     <Window.Resources>
         <DataTemplate DataType="{x:Type local:DifferenceListViewModel}">
-            <InformiInventory.Views:DifferenceListView/>
+            <local:DifferenceListView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type LoginViewModel}">
-            <InformiInventory.Views:LoginView/>
+        <DataTemplate DataType="{x:Type local:LoginViewModel}">
+            <local:LoginView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type InventoryViewModel}">
-            <InformiInventory.Views:InventoryView/>
+        <DataTemplate DataType="{x:Type local:NavigationViewModel}">
+            <local:MenuView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type NavigationViewModel}">
-            <InformiInventory.Views:MenuView/>
+        <DataTemplate DataType="{x:Type local:InventoryViewModel}">
+            <local:InventoryView/>
         </DataTemplate>
     </Window.Resources>
 
     <Grid>
-        <ContentControl x:Name="MainWindowContentControl" Content="{Binding SelectedContentControl}"/>
+        <ContentControl x:Name="MainWindowContentControl" Content="{Binding SelectedViewModel}"/>
     </Grid>
 </Window>
 

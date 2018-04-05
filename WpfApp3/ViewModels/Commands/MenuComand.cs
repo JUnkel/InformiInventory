@@ -6,44 +6,32 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-
-
-
-namespace InformiInventory.ViewModels.Commands
+namespace InformiInventory
 {
-    //public class MenuCommand : ICommand
-    //{
-    //    private MenuViewModel  _menuViewModel;
+    public class NavigationCommand : ICommand
+    {
+        private NavigationViewModel _navigationViewModel;
 
-    //    public MenuCommand(MenuViewModel vm)
-    //    {
-    //        _menuViewModel = vm;
-    //    }
+        public NavigationCommand(NavigationViewModel vm)
+        {
+            _navigationViewModel = vm;
+        }
 
-    //    public bool CanExecute(object parameter)
-    //    {
-    //        var viewName = (string)parameter;
-            
-    //        if(string.IsNullOrWhiteSpace(viewName))
-    //        {
-    //            return false;
-    //        }
-    //        else
-    //        {
-    //            return true;
-    //        }
-    //    }
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
 
-    //    public void Execute(object parameter)
-    //    {
-    //        var usercontrol = (UserControl)parameter;
-    //    }
+        public void Execute(object parameter)
+        {
+            var usercontrol = (UserControl)parameter;
+        }
 
-    //    public event EventHandler CanExecuteChanged
-    //    {
-    //        add => CommandManager.RequerySuggested += value;
+        public event EventHandler CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
 
-    //        remove => CommandManager.RequerySuggested -= value;
-    //    }
-    //}
+            remove => CommandManager.RequerySuggested -= value;
+        }
+    }
 }

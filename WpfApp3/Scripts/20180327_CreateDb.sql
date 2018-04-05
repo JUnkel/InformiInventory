@@ -38,8 +38,7 @@ CREATE TABLE  Inventories
 
 INSERT INTO Inventories(StoreId, CrDt, CrUserId,InventoryUserId) VALUES (0,GETDATE(),0,0);
 
-
-CREATE TABLE  InventoryLines
+CREATE TABLE InventoryLines
 (
 		InventoryLineId INTEGER NOT NULL PRIMARY KEY,		
 	

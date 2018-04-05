@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace InformiInventory.ViewModels.Commands
+namespace InformiInventory
 {
     public class LoginCommand : ICommand
     {

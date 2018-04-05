@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace InformiInventory.ViewModels
+namespace InformiInventory
 {
-    public class InventoryViewModel : ViewModelBase.ViewModelBase
+    public class InventoryViewModel : ViewModelBase
     {
-        public void Navigate(string View)
-        {
-            Application curApp = Application.Current;
+        //public void Navigate(string View)
+        //{
+        //    //Application curApp = Application.Current;
 
-            curApp.MainWindow.Content = new InformiInventory.Views.MenuView();
-        }
+        //    InformiInventory.Views.MainWindow.Instance.SelectedViewModel = new InformiInventory.ViewModels.NavigationViewModel();
+        //}
 
     }
 }

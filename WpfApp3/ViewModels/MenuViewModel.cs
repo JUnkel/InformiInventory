@@ -6,22 +6,26 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using InformiInventory.ViewModels.INotifyPropertyChanged;
 
-namespace InformiInventory.ViewModels
+namespace InformiInventory
 {
-        public class NavigationViewModel : ViewModelBase.ViewModelBase
+        public class NavigationViewModel : ViewModelBase
         {
             public ICommand DifferenceListCommand { get; set; }
 
             public ICommand InventoryCommand { get; set; }
+
+            public ICommand NavigationCommand { get; set; }
+
+            public ICommand LoginCommand { get; set; }
 
             private object _selectedViewModel;
 
             public object SelectedViewModel
             {
                 get { return _selectedViewModel; }
-                set     { SetProperty(ref _selectedViewModel, value); }
+
+                set { SetProperty(ref _selectedViewModel, value); }
             }
 
             public NavigationViewModel()
@@ -29,22 +33,36 @@ namespace InformiInventory.ViewModels
                 DifferenceListCommand = new BaseCommand(OpenDifferenceList);
 
                 InventoryCommand = new BaseCommand(OpenInventory);
+
+                NavigationCommand = new BaseCommand(OpenNavigationCommand);
+
+                LoginCommand = new BaseCommand(OpenLogin);
             }
 
             private void OpenDifferenceList(object obj)
             {
-                SelectedViewModel = new DifferenceListViewModel();
+                MainWindow.Instance.Content = new DifferenceListView();
             }
             private void OpenInventory(object obj)
             {
-                SelectedViewModel = new InventoryViewModel();
+                MainWindow.Instance.Content = new InventoryView();
             }
-        }
+            private void OpenLogin(object obj)
+            {
+                MainWindow.Instance.Content = new LoginView();
+            }
+            private void OpenNavigationCommand(object obj)
+            {
+                MainWindow.Instance.Content = new MenuView();
+            }
+    }
 
         public class BaseCommand : ICommand
         {
             private Predicate<object> _canExecute;
+
             private Action<object> _method;
+
             public event EventHandler CanExecuteChanged;
 
             public BaseCommand(Action<object> method)

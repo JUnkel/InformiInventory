@@ -15,13 +15,15 @@ using System.Windows.Shapes;
 using Telerik.Windows.Controls.GridView;
 using Telerik.Windows.Data;
 
-namespace InformiInventory.Views
+namespace InformiInventory
 {
     public partial class DifferenceListView
     {
         public DifferenceListView()
         {
             InitializeComponent();
+
+            DataContext = new DifferenceListViewModel();
         }
     }
 }
