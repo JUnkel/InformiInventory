@@ -1,4 +1,5 @@
-﻿CREATE TABLE Users (
+﻿CREATE TABLE Users
+(
 	UserId INTEGER NOT NULL PRIMARY KEY,
 	
 	UserName VARCHAR(40) NOT NULL,
@@ -8,11 +9,11 @@
 
 INSERT INTO Users (Username, KeyCode) VALUES ('admin', 'prosoft');
 
-CREATE TABLE Stores (
-	
+CREATE TABLE Stores
+(
 	StoreId INTEGER NOT NULL PRIMARY KEY,
 	
-	StoreName VARCHAR (40) NOT NULL Unique,
+	StoreName VARCHAR (40) NOT NULL Unique
 );
 
 INSERT INTO Stores (StoreName) VALUES ('Iserlohn');
@@ -36,7 +37,7 @@ CREATE TABLE  Inventories
 		FOREIGN KEY(StoreId) REFERENCES Stores(StoreId)
 );
 
-INSERT INTO Inventories(StoreId, CrDt, CrUserId,InventoryUserId) VALUES (0,GETDATE(),0,0);
+INSERT INTO Inventories(StoreId, CrDt, CrUserId,InventoryUserId) VALUES (0,date('now'),0,0);
 
 CREATE TABLE InventoryLines
 (
@@ -56,10 +57,10 @@ CREATE TABLE InventoryLines
 
 		FOREIGN KEY(ArtId) REFERENCES Articles(ArtId),
 
-		FOREIGN KEY(InventoryId) REFERENCES Inventories(InventoryId),
+		FOREIGN KEY(InventoryId) REFERENCES Inventories(InventoryId)
 );
 
-INSERT INTO Inventories(InventoryId, BookDt, UserId, ArtId, Amnt, TargetStock) VALUES (0,GETDATE(),0,0,5,10);
+INSERT INTO InventoryLines(InventoryId, BookDt, UserId, ArtId, Amnt, TargetStock) VALUES (0,date('now'),0,0,5,10);
 
 CREATE TABLE Articles
 (
@@ -67,7 +68,7 @@ CREATE TABLE Articles
 	
 	AN VARCHAR(40),
 	
-	GTIN VARCHAR(14) UNIQUE,	
+	GTIN VARCHAR(14) UNIQUE
 );
 
 INSERT INTO Articles(AN, GTIN) VALUES ('Pizza Thunfisch', '0123456789');

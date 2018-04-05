@@ -49,7 +49,7 @@ namespace InformiInventory
         {
             var connectionString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
 
-            using (var db = new PetaPoco.Database(connectionString))
+            using (var db = new PetaPoco.Database("db"))
             {
                 var user = db.FirstOrDefault<User>("SELECT 1 UID, Username FROM Users WHERE KeyCode = @0 AND Username = @1", Password, Username);
 

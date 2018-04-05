@@ -30,7 +30,7 @@
             
             <TextBlock Margin="0 0 5 0" Text="Kennwort" />
             
-            <TextBox x:Name="PwPasswordTextBox" Text="{Binding Password}" Margin="0 5 0 0" FocusManager.FocusedElement="{Binding ElementName=LoginBtn}"/>
+            <TextBox x:Name="PwPasswordTextBox" Text="{Binding Password}" Margin="0 5 0 0"/>
 
             <Button x:Name="LoginBtn" Command="{Binding LoginCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=LoginBtn}" Content="Anmelden" Margin="0 5 0 0"/>
 

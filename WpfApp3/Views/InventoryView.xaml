@@ -20,17 +20,6 @@
             <ColumnDefinition Width="0.25*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0" Grid.Column="0">
-            <Label Content="Filiale:" FontWeight="SemiBold" Margin="0 0 10 0" />
-            <Label Content="{Binding Store}" Width="100" />
-            <Label Content="Datum:" FontWeight="SemiBold" Margin="0 0 10 0" />
-            <Label Content="{Binding Dt, StringFormat={}{0:d}}" Width="100" />
-        </StackPanel>
-
-        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0" Grid.Column="1">
-            <Button Content="Speichern" Margin="5" Foreground="Green"  HorizontalAlignment="Right" Width="100"/>
-            <Button Content="Abbrechen" Margin="5" Foreground="Red" Width="100" />
-        </StackPanel>
 
         <telerik:RadGridView Grid.Row="1"
                              Grid.Column="0"

@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         xmlns:local="clr-namespace:InformiInventory"
-        Title="Informi Inventur" 
+        Title="Informi Inventur"
+        WindowState="Maximized"
         Height="450"
         Width="800"
         Icon="/Images/logo.ico">
@@ -23,6 +24,29 @@
     </Window.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="0.1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="0.4*"/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0" Grid.Column="0" Background="Gray" x:Name="NavigationPanel" Visibility="Hidden">
+            <Label Content="Filiale:" FontWeight="SemiBold" Margin="0 0 10 0" />
+            <Label Content="{Binding Store}" Width="100" />
+            <Label Content="Datum:" FontWeight="SemiBold" Margin="0 0 10 0" />
+            <Label Content="{Binding Dt, StringFormat={}{0:d}}" Width="100" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0" Grid.Column="1"  x:Name="SaveDeletePanel" Visibility="Hidden">
+            <Button Content="Speichern" Margin="5" Foreground="Green"  HorizontalAlignment="Right" Width="100"/>
+            <Button Content="Abbrechen" Margin="5" Foreground="Red" Width="100" />
+        </StackPanel>
+
         <ContentControl x:Name="MainWindowContentControl" Content="{Binding SelectedViewModel}"/>
     </Grid>
 </Window>
