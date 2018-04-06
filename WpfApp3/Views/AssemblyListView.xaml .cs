@@ -18,13 +18,13 @@ using Telerik.Windows.Data;
 
 namespace InformiInventory.Views
 {
-    public partial class DifferenceListView : UserControl
+    public partial class AssemblyListView : UserControl
     {
-        public DifferenceListView()
+        public AssemblyListView()
         {
             InitializeComponent();
 
-            DataContext = new DifferenceListViewModel();
+            DataContext = new AssemblyListViewModel();
 
             MainWindow.Instance.NavigationPanel.Visibility = Visibility.Visible;
         }

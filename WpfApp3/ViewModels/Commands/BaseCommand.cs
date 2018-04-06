@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
-namespace InformiInventory.ViewModels.Commands
+namespace InformiInventory.Commands
 {
     public abstract class CommandBase : ICommand
     {

@@ -11,15 +11,14 @@ using InformiInventory;
 using System.Windows;
 using informiInventory;
 using System.Configuration;
+using InformiInventory.Views;
+using InformiInventory.Commands;
 
-namespace InformiInventory
+namespace InformiInventory.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        private ICommand _loginCommand = null;
-
-        public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new LoginCommand(this));
-
+        #region Properties
         string _username;
 
         public string Username
@@ -45,23 +44,29 @@ namespace InformiInventory
             set { SetProperty(ref _dt, value); }
         }
 
+        #endregion
+
+        #region Commands
+        private ICommand _loginCommand = null;
+
+        public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new LoginCommand(this));
+
         public void LogIn()
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
-
             using (var db = new PetaPoco.Database("db"))
             {
                 var user = db.FirstOrDefault<User>("SELECT 1 UID, Username FROM Users WHERE KeyCode = @0 AND Username = @1", Password, Username);
 
                 if (user == null)
                 {
-                    MessageBox.Show("Anmeldung fehlgeschlagen.", "Informi Inventory", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Anmeldung fehlgeschlagen.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
-                    MainWindow.Instance.Content = new MenuView();
+                    MainWindow.Instance.MainWindowContentControl.Content = new MenuView();
                 }
             }
         }
+        #endregion
     }
 }

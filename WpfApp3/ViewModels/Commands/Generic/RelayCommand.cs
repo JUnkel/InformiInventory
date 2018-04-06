@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InformiInventory.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,8 @@ namespace InformiInventory.ViewModels.Commands
         }
 
         public override bool CanExecute(object parameter) => _canExecute == null || _canExecute();
-            public override void Execute(object parameter) { _execute(); }
+
+        public override void Execute(object parameter) { _execute(); }
     }
 
 }

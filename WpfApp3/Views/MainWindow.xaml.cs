@@ -1,4 +1,5 @@
-﻿using InformiInventory.ViewModels;
+﻿using informiInventory;
+using InformiInventory.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -15,13 +16,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace InformiInventory
+namespace InformiInventory.Views
 {
     public partial class MainWindow : Window
     {
         public static MainWindow Instance { get; private set; }
 
         private object _selectedViewModel;
+
+        public static User CurentUser { get; set; }
 
         public object SelectedViewModel
         {
@@ -36,13 +39,15 @@ namespace InformiInventory
 
             Instance = this;
 
-            Instance.Content = new LoginView();
+            Instance.MainWindowContentControl.Content = new LoginView();
 
             var uri = new Uri("pack://application:,,,/Images/app-background.png");
 
             var image = new BitmapImage(uri);
 
             Instance.Background = new ImageBrush(image);
+
+            Instance.NavigationPanel.DataContext = new NavigationViewModel();
         }
     }
 }

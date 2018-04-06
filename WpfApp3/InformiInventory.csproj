@@ -47,15 +47,9 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.4.1\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.108.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.108.0\lib\net46\System.Data.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.108.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.108.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
@@ -96,24 +90,33 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Api\Article.cs" />
-    <Compile Include="Api\Inventory.cs" />
-    <Compile Include="Api\InventoryDifference.cs" />
-    <Compile Include="Api\InventoryLines.cs" />
-    <Compile Include="Api\Store.cs" />
-    <Compile Include="Api\User.cs" />
+    <Compile Include="Models\ArticleModel.cs" />
+    <Compile Include="Models\InventoryDifferenceModel.cs" />
+    <Compile Include="Models\InventoryLinesModel.cs" />
+    <Compile Include="Models\StoreModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\AssemblyListModel.cs" />
+    <Compile Include="Models\DifferenceListModel.cs" />
+    <Compile Include="Models\InventoryModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\NavigationModel.cs" />
     <Compile Include="Models\PetaPoco.cs" />
     <Compile Include="ViewModels\Commands\BaseCommand.cs" />
     <Compile Include="ViewModels\Commands\Generic\RelayCommandT.cs" />
-    <Compile Include="ViewModels\Commands\MenuComand.cs" />
+    <Compile Include="ViewModels\Commands\InventoryCommand.cs" />
+    <Compile Include="ViewModels\Commands\LoginCommand - Copy.cs" />
+    <Compile Include="ViewModels\Commands\ExcelComand.cs" />
     <Compile Include="ViewModels\Commands\LoginCommand.cs" />
     <Compile Include="ViewModels\Commands\Generic\RelayCommand.cs" />
     <Compile Include="ViewModels\DifferenceListViewModel.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
-    <Compile Include="ViewModels\MenuViewModel.cs" />
+    <Compile Include="ViewModels\NavigationViewModel.cs" />
+    <Compile Include="ViewModels\AssemblyListViewModel.cs" />
+    <Compile Include="ViewModels\ExcelViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase\ViewModelBase.cs" />
     <Compile Include="ViewModels\INotifyPropertyChanged\INotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="Views\AssemblyListView.xaml .cs" />
     <Compile Include="Views\DifferenceListView.xaml.cs" />
     <Compile Include="Views\InventoryView.xaml.cs" />
     <Compile Include="Views\LoginView.xaml.cs" />
@@ -123,6 +126,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\AssemblyListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\DifferenceListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

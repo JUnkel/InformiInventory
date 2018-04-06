@@ -4,24 +4,25 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 
 namespace InformiInventory.ViewModels
 {
-    public class DifferenceListViewModel : ViewModelBase
+    public class AssemblyListViewModel :ViewModelBase
     {
-        ObservableCollection<InformiInventory.Models.DifferenceListModel> _differences;
 
-        ObservableCollection<InformiInventory.Models.DifferenceListModel> Differences
+        ObservableCollection<InformiInventory.Models.AssemblyListModel> _assemblies;
+
+        ObservableCollection<InformiInventory.Models.AssemblyListModel> Assemblies
         {
             get
             {
-                if (_differences == null) _differences = new ObservableCollection<Models.DifferenceListModel>();
+                if (_assemblies == null) _assemblies = new ObservableCollection<Models.AssemblyListModel>();
 
-                return _differences;
+                return _assemblies;
             }
         }
+
+
 
         string _store;
 
@@ -64,12 +65,12 @@ namespace InformiInventory.ViewModels
         }
 
 
-        decimal _difference;
+        decimal _orderAmnt;
 
-        public decimal Difference
+        public decimal _OrderAmnt
         {
-            get { return _difference; }
-            set { SetProperty(ref _difference, value); }
+            get { return _orderAmnt; }
+            set { SetProperty(ref _orderAmnt, value); }
         }
 
         int _userId;
@@ -79,6 +80,5 @@ namespace InformiInventory.ViewModels
             get { return _userId; }
             set { SetProperty(ref _userId, value); }
         }
-
     }
 }

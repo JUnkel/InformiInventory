@@ -6,25 +6,34 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace InformiInventory
+namespace InformiInventory.ViewModels.Commands
 {
-    public class NavigationCommand : ICommand
+    public class InventoryCommand : ICommand
     {
-        private NavigationViewModel _navigationViewModel;
+        private InventoryViewModel _vm;
 
-        public NavigationCommand(NavigationViewModel vm)
+        public InventoryCommand(InventoryViewModel vm)
         {
-            _navigationViewModel = vm;
+            _vm = vm;
         }
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            var userControl = (UserControl)parameter;
+
+            if (userControl == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public void Execute(object parameter)
         {
-            var usercontrol = (UserControl)parameter;
+            _vm.GetInventories();
         }
 
         public event EventHandler CanExecuteChanged

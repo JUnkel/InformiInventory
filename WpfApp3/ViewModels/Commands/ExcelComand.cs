@@ -4,40 +4,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace InformiInventory.Commands
 {
-    public class LoginCommand : ICommand
+    public class ExcelCommand : ICommand
     {
-        private LoginViewModel _loginViewModel;
+        private ExcelViewModel _excelViewModel;
 
-        public LoginCommand(LoginViewModel vm)
+        public ExcelCommand(ExcelViewModel vm)
         {
-            _loginViewModel = vm;
+            _excelViewModel = vm;
         }
 
         public bool CanExecute(object parameter)
         {
-            var vm = (LoginViewModel)parameter;
-            
-            if(vm == null)
-            {
-                return false;
-            }
-            else if(!string.IsNullOrWhiteSpace(vm.Password)  && !string.IsNullOrWhiteSpace(vm.Username))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return true;
         }
 
         public void Execute(object parameter)
         {
-            _loginViewModel.LogIn();
+            var vm = (ExcelViewModel)parameter;
         }
 
         public event EventHandler CanExecuteChanged

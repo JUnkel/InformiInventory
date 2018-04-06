@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InformiInventory.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,15 +16,17 @@ using System.Windows.Shapes;
 using Telerik.Windows.Controls.GridView;
 using Telerik.Windows.Data;
 
-namespace InformiInventory
+namespace InformiInventory.Views
 {
-    public partial class InventoryView
+    public partial class InventoryView : UserControl
     {
         public InventoryView()
         {
             InitializeComponent();
 
             DataContext = new InventoryViewModel();
+
+            MainWindow.Instance.NavigationPanel.Visibility = Visibility.Visible;
         }
     }
 }

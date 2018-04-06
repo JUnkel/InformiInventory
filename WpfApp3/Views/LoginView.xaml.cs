@@ -16,17 +16,17 @@ using System.Windows.Shapes;
 using Telerik.Windows.Controls.GridView;
 using Telerik.Windows.Data;
 
-namespace InformiInventory
+namespace InformiInventory.Views
 {
     public partial class LoginView : UserControl
     {
-        public LoginViewModel LoginViewModel { get; set; } = new LoginViewModel();
-
         public LoginView()
         {
             InitializeComponent();
 
             DataContext = new LoginViewModel();
+
+            MainWindow.Instance.NavigationPanel.Visibility = Visibility.Hidden;
         }
     }
 }

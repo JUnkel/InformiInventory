@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace informiInventory
+namespace informiInventory.Models
 {
-    public class InventoryLine
+    public class InventoryLineModel
     {
         public string Store { get; set; }
 
