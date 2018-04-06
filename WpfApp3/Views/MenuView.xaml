@@ -34,8 +34,8 @@
         <Button x:Name="DifferenceListBtn" Content="Differenzliste" Margin="5"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="400px" Height="200px" Grid.Column="2" Grid.Row="1" FontSize="25" Command="{Binding DifferenceListCommand}"/>
 
         <Button x:Name="AssemblyListBtn" Content="Bestückungliste" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="400px" Height="200px" Grid.Column="1" Grid.Row="2" FontSize="25" Command="{Binding AssemblyListViewCommand}" />
-        
-        <Button x:Name="ImportExcelBtn" Content="Excel-Import" Margin="5" FontSize="25"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="400px" Height="200px" Grid.Column="2" Grid.Row="2" Command="{Binding ImportExcelViewCommand}" />
+
+        <Button x:Name="ImportExcelBtn" Content="Excel-Import" Margin="5" FontSize="25"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="400px" Height="200px" Grid.Column="2" Grid.Row="2" Command="{Binding ExcelViewCommand}" />
     
     </Grid>
 </UserControl>

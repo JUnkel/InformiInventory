@@ -9,7 +9,6 @@ namespace InformiInventory.ViewModels
 {
     public class AssemblyListViewModel :ViewModelBase
     {
-
         ObservableCollection<InformiInventory.Models.AssemblyListModel> _assemblies;
 
         ObservableCollection<InformiInventory.Models.AssemblyListModel> Assemblies
@@ -21,8 +20,6 @@ namespace InformiInventory.ViewModels
                 return _assemblies;
             }
         }
-
-
 
         string _store;
 

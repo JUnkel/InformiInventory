@@ -28,6 +28,8 @@ namespace InformiInventory.ViewModels
 
         public ICommand CloseCommand { get; set; }
 
+        public ICommand ExcelViewCommand { get; set; }
+
         private object _selectedViewModel;
 
         public object SelectedViewModel
@@ -52,6 +54,13 @@ namespace InformiInventory.ViewModels
             MenuCommand = new BaseCommand(OpenMenu);
 
             CloseCommand = new BaseCommand(CloseApp);
+
+            ExcelViewCommand = new BaseCommand(OpenExcelView); 
+        }
+
+        private void OpenExcelView(object obj)
+        {
+            MainWindow.Instance.MainWindowContentControl.Content = new ExcelListView();
         }
 
         private void OpenMenu(object obj)
@@ -63,22 +72,27 @@ namespace InformiInventory.ViewModels
         {
             MainWindow.Instance.MainWindowContentControl.Content = new DifferenceListView();
         }
+
         private void OpenInventory(object obj)
         {
             MainWindow.Instance.MainWindowContentControl.Content = new InventoryView();
         }
+
         private void OpenLogin(object obj)
         {
             MainWindow.Instance.MainWindowContentControl.Content = new LoginView();
         }
+
         private void OpenNavigationCommand(object obj)
         {
             MainWindow.Instance.MainWindowContentControl.Content = new MenuView();
         }
+
         private void OpenAssemblyListViewCommand(object obj)
         {
             MainWindow.Instance.MainWindowContentControl.Content = new AssemblyListView();
         }
+
         private void CloseApp(object obj)
         {
             MainWindow.Instance.Close();

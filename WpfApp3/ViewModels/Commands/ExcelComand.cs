@@ -20,12 +20,23 @@ namespace InformiInventory.Commands
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            var vm = (ExcelViewModel)parameter;
+
+            if (vm == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public void Execute(object parameter)
         {
             var vm = (ExcelViewModel)parameter;
+
+            vm.ImportExcel();
         }
 
         public event EventHandler CanExecuteChanged

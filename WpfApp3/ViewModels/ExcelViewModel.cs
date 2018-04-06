@@ -1,10 +1,15 @@
-﻿using Microsoft.Win32;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using InformiInventory.Commands;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
+using Telerik.Windows.Documents.Spreadsheet.Model;
 
 namespace InformiInventory.ViewModels
 {
@@ -12,7 +17,7 @@ namespace InformiInventory.ViewModels
     {
         private ICommand _importExcelCommand = null;
 
-        public ICommand ImportExcelCommand => _importExcelCommand ?? (_importExcelCommand = new _importExcelCommand(this));
+        public ICommand ImportExcelCommand => _importExcelCommand ?? (_importExcelCommand = new ExcelCommand(this));
 
         public void ImportExcel()
         {
@@ -20,10 +25,12 @@ namespace InformiInventory.ViewModels
 
             var result = fileDialog.ShowDialog();
 
+            var fileName = "";
+
             switch (result)
             {
                 case System.Windows.Forms.DialogResult.OK:
-                    var file = fileDialog.FileName;
+                    fileName = fileDialog.FileName;
                     //TxtFile.Text = file;
                     //TxtFile.ToolTip = file;
                     break;
@@ -35,9 +42,24 @@ namespace InformiInventory.ViewModels
             }
 
 
+            var provider = new (); 
 
+            Workbook workbook;
 
+            try
+            {
+                using (var stream = File.OpenRead(fileName))
+                {
+                    workbook = provider.Import(stream);
 
+                    stream.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                //("Fehler beim einlesen der Datei" + e.Message);
+                return;
+            }
 
             using (var db = new PetaPoco.Database("db"))
             {
