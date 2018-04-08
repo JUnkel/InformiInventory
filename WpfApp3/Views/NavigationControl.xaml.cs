@@ -1,5 +1,4 @@
-﻿using InformiInventory.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,20 +12,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Telerik.Windows.Controls.GridView;
-using Telerik.Windows.Data;
 
 namespace InformiInventory.Views
 {
-    public partial class AssemblyListView : UserControl
+    /// <summary>
+    /// Interaction logic for NavControl.xaml
+    /// </summary>
+    public partial class NavControl : UserControl
     {
-        public AssemblyListView()
+        public NavControl()
         {
+
+
+
             InitializeComponent();
-
-            DataContext = new RestockLineViewModel();
-
-            MainWindow.Instance.NavigationPanel.Visibility = Visibility.Visible;
         }
     }
 }

@@ -6,7 +6,8 @@
         WindowState="Maximized"
         Height="450"
         Width="800"
-        Icon="/Images/logo.ico">
+        Icon="/Images/logo.ico"
+        >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*"/>
@@ -19,27 +20,21 @@
             <ColumnDefinition Width="0.4*"/>
         </Grid.ColumnDefinitions>
 
-            
         <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="LightGray" x:Name="NavigationPanel" Visibility="Visible">
             
-            <Button Content="Home" Command="{Binding MenuCommand}" Width="100"/>
+            <Button Content="Menue" Command="{Binding MenuCommand}" Width="100"/>
             
             <Label Content="Filiale:" FontWeight="SemiBold" Margin="5" />
             
-            <Label Content="{Binding Store}" Width="100" Margin="5" />
-            
-            <Label Content="Datum:" FontWeight="SemiBold" Margin="5" />
-            
-            <Label Content="{Binding Dt, StringFormat={}{0:d}}" Width="100" Margin="5" />
+            <Label Content="{Binding StoreName}" Width="100" Margin="5" />
 
             <Label Content="Benutzer:" FontWeight="SemiBold" Margin="5" />
 
-            <Label Content="{Binding UserName}" DataContext="{Binding}" Width="100" Margin="5" />
+            <Label Content="{Binding CurrentUser.UserNamem}" Width="100" Margin="5" />
 
-            <Button Content="Schließen" Margin="5" Foreground="Red" Width="100" HorizontalAlignment="Right" Command="{Binding CloseCommand}"/>
+            <Button Content="Schließen" Margin="5" Background="DarkViolet" Width="100" HorizontalAlignment="Right" Command="{Binding CloseCommand}"/>
         </StackPanel>
-        
-        <ContentControl x:Name="MainWindowContentControl" Content="{Binding SelectedViewModel}" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <ContentControl x:Name="MainWindowContentControl" Grid.Row="1" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>
 

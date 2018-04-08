@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InformiInventory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,28 @@ using System.Threading.Tasks;
 
 namespace informiInventory
 {
-    public class User
+    public class User : INotifyPropertyChanged
     {
-        public int UserId { get; set; }
+        int _userId;
+        public int UserId
+        {
+            get { return _userId; }
+            set { SetProperty(ref _userId, value); }
+        }
 
-        public string Username { get; set; }
+        int _storeId;
+        public int StoreId
+        {
+            get { return _storeId; }
+            set { SetProperty(ref _storeId, value); }
+        }
 
-        public string KeyCode { get; set; }
+        string _userName;
+        public string UserName
+        {
+            get { return _userName; }
+            set { SetProperty(ref _userName, value); }
+        }
+
     }
 }

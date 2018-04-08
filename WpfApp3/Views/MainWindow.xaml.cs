@@ -22,18 +22,16 @@ namespace InformiInventory.Views
     {
         public static MainWindow Instance { get; private set; }
 
-        private object _selectedViewModel;
+        //private object _selectedViewModel;
 
-        public static User CurentUser { get; set; }
+        //public object SelectedViewModel
+        //{
+        //    get { return _selectedViewModel; }
 
-        public object SelectedViewModel
-        {
-            get { return _selectedViewModel; }
+        //    set { _selectedViewModel = value; }
+        //}
 
-            set { _selectedViewModel = value; }
-        }
-
-        public MainWindow()
+        public MainWindow() 
         {
             InitializeComponent();
 

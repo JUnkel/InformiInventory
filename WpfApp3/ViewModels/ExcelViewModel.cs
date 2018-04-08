@@ -1,15 +1,16 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
+using ExcelDataReader;
 using InformiInventory.Commands;
+using InformiInventory.Models;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
-using Telerik.Windows.Documents.Spreadsheet.Model;
 
 namespace InformiInventory.ViewModels
 {
@@ -41,28 +42,48 @@ namespace InformiInventory.ViewModels
                     break;
             }
 
+            var csvlist = new List<string[]>();
 
-            var provider = new (); 
-
-            Workbook workbook;
-
-            try
+            if (fileName.EndsWith(".csv"))
             {
-                using (var stream = File.OpenRead(fileName))
+                using (var stream = File.Open(fileName, FileMode.Open, FileAccess.Read))
                 {
-                    workbook = provider.Import(stream);
+                    try
+                    {
 
-                    stream.Close();
+                        using (var reader = ExcelReaderFactory.CreateCsvReader(stream,null))
+                        {
+                            do
+                            {
+
+                                while (reader.Read())
+                                {
+                                    var rslm = new RestockLineModel();
+                                    string[] stringArray = new string[reader.FieldCount];
+
+                                    for (var i = 0; i >= reader.FieldCount; i++)
+                                    {
+                                        var value = reader.GetValue(i);
+                                        stringArray[i] = value.ToString();
+                                    }
+                                    csvlist.Add(stringArray);
+
+                                }
+                            } while (reader.NextResult());
+
+
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+
                 }
             }
-            catch (Exception e)
+            else
             {
-                //("Fehler beim einlesen der Datei" + e.Message);
                 return;
-            }
-
-            using (var db = new PetaPoco.Database("db"))
-            {
             }
         }
     }

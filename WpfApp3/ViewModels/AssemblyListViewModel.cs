@@ -4,18 +4,19 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InformiInventory.Models;
 
 namespace InformiInventory.ViewModels
 {
-    public class AssemblyListViewModel :ViewModelBase
+    public class RestockLineViewModel :ViewModelBase
     {
-        ObservableCollection<InformiInventory.Models.AssemblyListModel> _assemblies;
+        ObservableCollection<RestockLineModel> _assemblies;
 
-        ObservableCollection<InformiInventory.Models.AssemblyListModel> Assemblies
+        ObservableCollection<RestockLineModel> Assemblies
         {
             get
             {
-                if (_assemblies == null) _assemblies = new ObservableCollection<Models.AssemblyListModel>();
+                if (_assemblies == null) _assemblies = new ObservableCollection<RestockLineModel>();
 
                 return _assemblies;
             }

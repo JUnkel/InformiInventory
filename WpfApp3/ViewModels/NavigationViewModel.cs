@@ -1,4 +1,5 @@
-﻿using InformiInventory.Views;
+﻿using informiInventory;
+using InformiInventory.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,21 @@ namespace InformiInventory.ViewModels
 {
     public class NavigationViewModel : ViewModelBase
     {
-        public string UserName { get; set; }
+        User _currentUser;
+        public User CurrentUser
+        {
+            get { return _currentUser; }
+            set { SetProperty(ref _currentUser, value); }
+
+        }
+
+        string _storeName;
+
+        public string StoreName
+        {
+            get { return _storeName; }
+            set { SetProperty(ref _storeName, value);}
+        }
 
         public ICommand DifferenceListCommand { get; set; }
 

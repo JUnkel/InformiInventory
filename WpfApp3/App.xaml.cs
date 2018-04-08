@@ -32,19 +32,28 @@ namespace InformiInventory
         }
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            var upgrader = DbUp.DeployChanges.To.SQLiteDatabase("Data Source=db.sqlite; Version=3;").WithScriptsAndCodeEmbeddedInAssembly(System.Reflection.Assembly.GetExecutingAssembly()).Build();
-
-            var result = upgrader.PerformUpgrade();
-
-            if (!result.Successful)
+            try
             {
-                MessageBox.Show("Datenbank konnte nicht aktualisiert werden:\n\n" + result.Error, "informiPos", MessageBoxButton.OK, MessageBoxImage.Error);
 
-                Shutdown(-1);
+                var upgrader = DbUp.DeployChanges.To.SQLiteDatabase("Data Source=db.sqlite; Version=3;").WithScriptsAndCodeEmbeddedInAssembly(System.Reflection.Assembly.GetExecutingAssembly()).Build();
+
+                var result = upgrader.PerformUpgrade();
+
+                if (!result.Successful)
+                {
+                    MessageBox.Show("Datenbank konnte nicht aktualisiert werden:\n\n" + result.Error, "informiPos", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    Shutdown(-1);
+                }
+                else
+                {
+                    this.MainWindow = new MainWindow();
+                }
             }
-            else
+            catch(Exception ex)
             {
-                this.MainWindow = new MainWindow();
+                MessageBox.Show("Datenbank konnte nicht aktualisiert werden:\n\n" + ex.Message, "informiPos", MessageBoxButton.OK, MessageBoxImage.Error);
+
             }
         }
     }

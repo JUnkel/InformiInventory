@@ -55,15 +55,32 @@ namespace InformiInventory.ViewModels
         {
             using (var db = new PetaPoco.Database("db"))
             {
-                var user = db.FirstOrDefault<User>("SELECT 1 UID, Username FROM Users WHERE KeyCode = @0 AND Username = @1", Password, Username);
+                var user = new User();
 
-                if (user == null)
+                try
                 {
-                    MessageBox.Show("Anmeldung fehlgeschlagen.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                    user = db.FirstOrDefault<User>("SELECT u.UserId AS UserId, u.UserName as UserName, u.StoreId as StoreId FROM Users u LEFT JOIN Stores s ON s.StoreId = u.StoreId WHERE KeyCode = @0 AND Username = @1", Password, Username);
+
+                    if (user == null)
+                    {
+                        MessageBox.Show("Anmeldung fehlgeschlagen.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        var currentStore = db.ExecuteScalar<string>("SELECT StoreName FROM Stores WHERE StoreId = @0",user.StoreId);
+
+                        var naviContext = (NavigationViewModel)MainWindow.Instance.NavigationPanel.DataContext;
+
+                        naviContext.CurrentUser = user;
+
+                        naviContext.StoreName = currentStore;
+
+                        MainWindow.Instance.MainWindowContentControl.Content = new MenuView();
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    MainWindow.Instance.MainWindowContentControl.Content = new MenuView();
+                    MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
                 }
             }
         }
