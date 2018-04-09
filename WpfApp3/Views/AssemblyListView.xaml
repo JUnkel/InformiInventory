@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
              mc:Ignorable="d"
              d:DesignHeight="712.549"
              d:DesignWidth="1166.82"
@@ -17,7 +18,7 @@
             <ColumnDefinition Width="0.25*"/>
         </Grid.ColumnDefinitions>
 
-        <DataGrid Grid.Row="0">
+        <!--<DataGrid Grid.Row="0" ItemsSource="{Binding RestockLineModels}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Index}" IsReadOnly="True" Header="Pos" Width="50" >
                     <DataGridTextColumn.CellStyle>
@@ -26,21 +27,15 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Index}"       Header="Pos" Width="100" />
-                <DataGridTextColumn Binding="{Binding Locatiion}"   Header="Stellplatz" Width="100"  />
-                <DataGridTextColumn Binding="{Binding Art}"         Header="Artikel" Width="200" />
-                <DataGridTextColumn Binding="{Binding AN}"          Header="Bezeichnung" Width="100" />
-                <DataGridTextColumn Binding="{Binding GTIN}"        Header="EAN" Width="100"  />
-                <DataGridTextColumn Binding="{Binding ActualStock}" Header="Bestand" Width="100"   />
-                <DataGridTextColumn Binding="{Binding OrderAmnt}" Header="Bestellmenge" Width="100"/>
+                <DataGridTextColumn Binding="{Binding Pos}"       Header="Pos" Width="100" />
+                <DataGridTextColumn Binding="{Binding GTIN}"        Header="Artikel-Nr." Width="100"  />
+                <DataGridTextColumn Binding="{Binding ADesc}"          Header="Bezeichnung" Width="100" />
+                <DataGridTextColumn Binding="{Binding StorageName}"   Header="Stellplatz" Width="100"  />
+                <DataGridTextColumn Binding="{Binding Amt}" Header="Bestellmenge" Width="100"/>
             </DataGrid.Columns>
-        </DataGrid>
+        </DataGrid>-->
 
-
-
-
-
-        <!--<telerik:RadGridView Grid.Row="1"
+        <telerik:RadGridView Grid.Row="1"
                              Grid.Column="0"
                              Grid.ColumnSpan="2"
                              Margin="5"
@@ -54,20 +49,18 @@
                              RowIndicatorVisibility="Collapsed"
                              CanUserFreezeColumns="False"
                              IsSynchronizedWithCurrentItem="True"
-                             ItemsSource="{Binding Differences}"
+                             ItemsSource="{Binding RestockLineModels}"
                              CanUserInsertRows="False"
                              CanUserDeleteRows="False"
-                             ShowGroupPanel="False">
+                             ShowGroupPanel="False"
+                             >
             <telerik:RadGridView.Columns >
-                < DataMemberBinding="{Binding Index}" IsReadOnly="True" Header="Pos" Width="50"/>
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding Location}" IsReadOnly="True" Header="Stellplatz" Width="100" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding Art}" IsReadOnly="True" Header="Artikel" Width="100" x:Name="ArtColumn" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding AN}" IsReadOnly="True" Header="Bezeichnung" Width="200" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}" x:Name="GTINColumn" Header="EAN" Width="100" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding TargetStock}" x:Name="TargetStockColumn" Header="Sollbestand" Width="100" TextAlignment="Right" HeaderTextAlignment="Right" DataFormatString="n2" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding ActualStock}" x:Name="ActualStockColumn" Header="Istbestand" Width="100" TextAlignment="Right" HeaderTextAlignment="Right" DataFormatString="n2" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding Difference}" x:Name="DifferenceColumn" Header="Differenz" Width="100" TextAlignment="Right" HeaderTextAlignment="Right" DataFormatString="n2" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Pos}" IsReadOnly="True" Header="Pos" Width="50"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}"  Header="Artikel-Nr" Width="100" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ArtDesc}" IsReadOnly="True" Header="Bezeichnung" Width="200" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding StorageName}" IsReadOnly="True" Header="Stellplatz" Width="100" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Amt}" Header="Bestellmenge" Width="100" TextAlignment="Right" HeaderTextAlignment="Right" DataFormatString="n2" />
             </telerik:RadGridView.Columns>
-        </telerik:RadGridView>-->
+        </telerik:RadGridView>
     </Grid>
 </UserControl>

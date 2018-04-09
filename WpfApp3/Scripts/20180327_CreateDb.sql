@@ -24,16 +24,16 @@ CREATE TABLE Storages
 (
 	StorageId INTEGER NOT NULL PRIMARY KEY,
 	
-	StoreName VARCHAR (40) NOT NULL Unique
+	StorerageName VARCHAR (40) NOT NULL Unique
 );
 
 
-INSERT INTO Storages(StoreName) VALUES('A');
-INSERT INTO Storages(StoreName) VALUES('B');
-INSERT INTO Storages(StoreName) VALUES('C');
-INSERT INTO Storages(StoreName) VALUES('D');
-INSERT INTO Storages(StoreName) VALUES('E');
-INSERT INTO Storages(StoreName) VALUES('F');
+INSERT INTO Storages(StorerageName) VALUES('A');
+INSERT INTO Storages(StorerageName) VALUES('B');
+INSERT INTO Storages(StorerageName) VALUES('C');
+INSERT INTO Storages(StorerageName) VALUES('D');
+INSERT INTO Storages(StorerageName) VALUES('E');
+INSERT INTO Storages(StorerageName) VALUES('F');
 
 
 
@@ -83,7 +83,11 @@ CREATE TABLE Articles
 	
 	GTIN VARCHAR(14) UNIQUE,
 	
-	ADesc VARCHAR(40)
+	ADesc VARCHAR(40),
+
+	StorageId int NULL,
+	FOREIGN KEY(StorageId) REFERENCES Storages(id)
+
 );
 
 INSERT INTO Articles(ADesc, GTIN) VALUES ('Pizza Thunfisch', '0123456789');
@@ -92,7 +96,7 @@ CREATE TABLE Restocks
 (
 		Id INTEGER NOT NULL PRIMARY KEY,		
 	
-        StoreId INTEGER NOT NULL UNIQUE,
+        StoreId INTEGER NOT NULL,
 
         Dt DateTime NOT NULL, 
 
@@ -113,7 +117,7 @@ CREATE TABLE RestockLines
 
 		ArtId VARCHAR(40) NOT NULL,
 		
-		Amnt DECIMAL NOT NULL DEFAULT(0),
+		Amt DECIMAL NOT NULL DEFAULT(0),
 
 		FOREIGN KEY(ArtId) REFERENCES Articles(Id),
 

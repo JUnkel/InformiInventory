@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace InformiInventory.Models
 {
-    //1;40069;Westfro Karottenwürfel 4x2,5 kg;;1;
     public class RestockModel : INotifyPropertyChanged
     {
-
-        string _store;
-
-        public string Store
+        string _storeName;
+        public string StoreName
         {
-            get { return _store; }
-            set { SetProperty(ref _store, value); }
+            get { return _storeName; }
+            set { SetProperty(ref _storeName, value); }
+        }
+
+        int _storeId;
+        public int StoreId
+        {
+            get { return _storeId; }
+            set { SetProperty(ref _storeId, value); }
         }
 
         DateTime _date;
@@ -43,6 +48,7 @@ namespace InformiInventory.Models
     public class RestockLineModel : INotifyPropertyChanged
     {
         //CSV Format 
+    
         //1;   40069;   Westfro Karottenwürfel 4x2, 5 kg    ;   ;1 ;
         //318; K115313; Häagen Dazs Pralines Cream 8x500 ml.;   ;0 ;E
 
@@ -75,13 +81,33 @@ namespace InformiInventory.Models
 
         }
 
-        string _storage;
-        public string Storage
+        string _storageName;
+        public string StorageName
         {
-            get { return _storage; }
-            set { SetProperty(ref _storage, value); }
+            get { return _storageName; }
+            set { SetProperty(ref _storageName, value); }
+        }
+
+        public List<RestockLineModel> GetRestockLineModels()
+        {
+            var items = new List<RestockLineModel>();
+
+            using (var db = new PetaPoco.Database("db"))
+            {
+                try
+                {
+                    items.AddRange(db.Fetch<RestockLineModel>("SELECT Pos, GTIN, Art, Desc, Amt, Storage FROM RestockLines"));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
+
+                }
+                return items;
+            }
         }
     }
+
 
     public class Article : INotifyPropertyChanged
     {

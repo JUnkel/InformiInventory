@@ -1,4 +1,5 @@
-﻿using InformiInventory.ViewModels;
+﻿using InformiInventory.Models;
+using InformiInventory.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,11 @@ namespace InformiInventory.Views
         {
             InitializeComponent();
 
-            DataContext = new RestockLineViewModel();
+            var rsvm = new RestockViewModel();
+
+            rsvm.GetRestockLineModels(rsvm);
+
+            DataContext = rsvm;
 
             MainWindow.Instance.NavigationPanel.Visibility = Visibility.Visible;
         }

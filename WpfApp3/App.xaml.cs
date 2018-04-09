@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Telerik.Windows.Controls;
 
 namespace InformiInventory
 {
@@ -32,6 +33,8 @@ namespace InformiInventory
         }
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            //StyleManager.ApplicationTheme = new Telerik.Windows.Controls.Windows8TouchTheme();
+
             try
             {
 
