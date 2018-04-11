@@ -37,11 +37,11 @@ namespace InformiInventory.Models
             set { SetProperty(ref _userId, value); }
         }
 
-        int _requestId;
-        public int RequestId
+        int _id;
+        public int Id
         {
-            get { return _requestId; }
-            set { SetProperty(ref _requestId, value); }
+            get { return _id; }
+            set { SetProperty(ref _id, value); }
         }
     }
 

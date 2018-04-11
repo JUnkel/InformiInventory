@@ -14,6 +14,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Telerik;
+using Telerik.Windows.Data;
 
 namespace InformiInventory.ViewModels
 {
@@ -31,15 +33,15 @@ namespace InformiInventory.ViewModels
 
         public ICommand DeleteImportedExcelRestockLinesCommand => _deleteImportedExcelRestockLinesCommand ?? (_deleteImportedExcelRestockLinesCommand = new DeleteImportedExcelRestockLinesCommand(this));
 
-        ObservableCollection<RestockLineModel> _restockModelLines;
+        RadObservableCollection<RestockLineModel> _restockModelLines;
 
-        public ObservableCollection<RestockLineModel> RestockModelLines
+        public RadObservableCollection<RestockLineModel> RestockModelLines
         {
             get
             {
                 if (_restockModelLines == null)
                 {
-                    _restockModelLines = new ObservableCollection<RestockLineModel>();
+                    _restockModelLines = new RadObservableCollection<RestockLineModel>();
 
                 }
                 return _restockModelLines;
@@ -137,7 +139,6 @@ namespace InformiInventory.ViewModels
             }
         }
 
-
         public void SaveImportedExcelRestockLines(ExcelViewModel vm)
         {
             var navContext = (NavigationViewModel)MainWindow.Instance.NavigationPanel.DataContext;
@@ -155,7 +156,7 @@ namespace InformiInventory.ViewModels
                 {
                     using (var scope = db.GetTransaction())
                     {
-                        var restockId = db.ExecuteScalar<int>("INSERT INTO Restocks(Dt, StoreId, UserId) VALUES(@0, @1, @2);SELECT last_insert_rowid();", restock.Date, restock.StoreId, restock.UserId);
+                        var restockId = db.ExecuteScalar<int>("INSERT INTO Restocks(Dt, StoreId, UserId, IsProcd, IsTemplate) VALUES(@0, @1, @2, @3, @4);SELECT last_insert_rowid();", restock.Date, restock.StoreId, restock.UserId, 0, 1);
 
                         foreach(var item in vm.RestockModelLines)
                         {
@@ -167,7 +168,7 @@ namespace InformiInventory.ViewModels
                             {
                                 ArtId = db.ExecuteScalar<int>("INSERT INTO Articles(GTIN, ADesc) VALUES(@0, @1); SELECT last_insert_rowid();", item.GTIN, item.ArtDesc);
                             }
-                            db.Execute("INSERT INTO RestockLines(RestockId, Pos,ArtId, Amt) VALUES(@0, @1, @2, @3);", restockId,item.Pos,ArtId,0);
+                            db.Execute("INSERT INTO RestockLines(RestockId, Pos, ArtId, Amt) VALUES(@0, @1, @2, @3);", restockId,item.Pos,ArtId,0);
                         }
 
                         scope.Complete();
@@ -179,6 +180,7 @@ namespace InformiInventory.ViewModels
                 MessageBox.Show(string.Format("Daten konnten nicht gespeichert werden:\n\n" + ex.Message), "Fehler");
             }
         }
+
         public void DeleteImportedExcelRestockLines()
         {
             RestockModelLines.Clear();

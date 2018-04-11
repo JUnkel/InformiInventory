@@ -19,15 +19,15 @@ using Telerik.Windows.Data;
 
 namespace InformiInventory.Views
 {
-    public partial class AssemblyListView : UserControl
+    public partial class RestocksView : UserControl
     {
-        public AssemblyListView()
+        public RestocksView()
         {
             InitializeComponent();
 
             var rsvm = new RestockViewModel();
 
-            rsvm.GetRestockLineModels(rsvm);
+            rsvm.GetRestockModels(rsvm);
 
             DataContext = rsvm;
 

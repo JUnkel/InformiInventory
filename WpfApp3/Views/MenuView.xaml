@@ -22,13 +22,6 @@
             <ColumnDefinition Width="0.25*"/>
         </Grid.ColumnDefinitions>
 
-        <!--<StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Background="Gray">
-            <Label Content="Filiale:" FontWeight="SemiBold" Margin="0 0 10 0" />
-            <Label Content="{Binding Store}" Width="100" />
-            <Label Content="Datum:" FontWeight="SemiBold" Margin="0 0 10 0" />
-            <Label Content="{Binding Dt, StringFormat={}{0:d}}" Width="100" />
-        </StackPanel>-->
-
         <Button x:Name="InventoryBtn" Content="Inventur erfassen" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="400px" Height="200px" Grid.Column="1" Grid.Row="1" FontSize="25" Command="{Binding InventoryCommand}"/>
 
         <Button x:Name="DifferenceListBtn" Content="Differenzliste" Margin="5"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="400px" Height="200px" Grid.Column="2" Grid.Row="1" FontSize="25" Command="{Binding DifferenceListCommand}"/>

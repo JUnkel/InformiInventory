@@ -105,7 +105,7 @@ namespace InformiInventory.ViewModels
 
         private void OpenAssemblyListViewCommand(object obj)
         {
-            MainWindow.Instance.MainWindowContentControl.Content = new AssemblyListView();
+            MainWindow.Instance.MainWindowContentControl.Content = new RestocksView();
         }
 
         private void CloseApp(object obj)
@@ -120,7 +120,17 @@ namespace InformiInventory.ViewModels
 
         private Action<object> _method;
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add
+            {
+                CommandManager.RequerySuggested += value;
+            }
+            remove
+            {
+                CommandManager.RequerySuggested -= value;
+            }
+        }
 
         public BaseCommand(Action<object> method)
             : this(method, null)

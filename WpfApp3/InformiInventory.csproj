@@ -150,11 +150,8 @@
     <Reference Include="Telerik.Windows.Data">
       <HintPath>..\packages\Telerik.Windows.Data.for.Wpf.2018.1.220\lib\net45\Telerik.Windows.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Windows.Themes.Fluent, Version=2018.1.220.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Telerik.Windows.Themes.Fluent.for.Wpf.2018.1.220\lib\net45\Telerik.Windows.Themes.Fluent.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Themes.Material">
-      <HintPath>..\packages\Telerik.Windows.Themes.Material.for.Wpf.2018.1.220\lib\net45\Telerik.Windows.Themes.Material.dll</HintPath>
+    <Reference Include="Telerik.Windows.Themes.Fluent">
+      <HintPath>..\packages\Telerik.Windows.Themes.Fluent.for.Wpf.2018.1.122\lib\net45\Telerik.Windows.Themes.Fluent.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="UIAutomationTypes" />
@@ -179,7 +176,7 @@
     <Compile Include="Models\InventoryModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\NavigationModel.cs" />
-    <Compile Include="ViewModels\Commands\BaseCommand.cs" />
+    <Compile Include="ViewModels\Commands\Generic\BaseCommand.cs" />
     <Compile Include="ViewModels\Commands\Generic\RelayCommandT.cs" />
     <Compile Include="ViewModels\Commands\InventoryCommand.cs" />
     <Compile Include="ViewModels\Commands\ExcelComand.cs" />
@@ -189,13 +186,13 @@
     <Compile Include="ViewModels\DifferenceListViewModel.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\NavigationViewModel.cs" />
-    <Compile Include="ViewModels\AssemblyListViewModel.cs" />
+    <Compile Include="ViewModels\RestockListViewModel.cs" />
     <Compile Include="ViewModels\ExcelViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase\ViewModelBase.cs" />
     <Compile Include="ViewModels\INotifyPropertyChanged\INotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="Views\ExcelListView.cs" />
-    <Compile Include="Views\AssemblyListView.xaml .cs" />
+    <Compile Include="Views\RestockListView.xaml .cs" />
     <Compile Include="Views\DifferenceListView.xaml.cs" />
     <Compile Include="Views\InventoryView.xaml.cs" />
     <Compile Include="Views\LoginView.xaml.cs" />
@@ -212,7 +209,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\AssemblyListView.xaml">
+    <Page Include="Views\RestockListView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
