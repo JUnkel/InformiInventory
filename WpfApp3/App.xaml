@@ -6,6 +6,7 @@
              Startup="Application_Startup"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
+        <x:PropertyDefinition x:Key="Settings" />
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Telerik.Windows.Themes.Fluent;component/Themes/System.Windows.xaml" />
@@ -22,5 +23,7 @@
             </ResourceDictionary.MergedDictionaries>
             <!--<Style TargetType="local:MainWindow" BasedOn="{StaticResource}" />-->
         </ResourceDictionary>
+
+
     </Application.Resources>
 </Application>

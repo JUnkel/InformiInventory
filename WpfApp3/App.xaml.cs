@@ -17,6 +17,10 @@ namespace InformiInventory
     {
         public App()
         {
+            this.Properties["UserName"] = null;
+            this.Properties["StoreId"] = null;
+            this.Properties["StoreName"] = null;
+
             var culture = System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag;
 
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(culture);

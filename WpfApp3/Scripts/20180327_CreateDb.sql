@@ -27,15 +27,15 @@ CREATE TABLE Storages
 (
 	Id INTEGER NOT NULL PRIMARY KEY,
 	
-	StorerageName VARCHAR (40) NOT NULL Unique
+	StorageName VARCHAR (40) NOT NULL Unique
 );
 
-INSERT INTO Storages(StorerageName) VALUES('A');
-INSERT INTO Storages(StorerageName) VALUES('B');
-INSERT INTO Storages(StorerageName) VALUES('C');
-INSERT INTO Storages(StorerageName) VALUES('D');
-INSERT INTO Storages(StorerageName) VALUES('E');
-INSERT INTO Storages(StorerageName) VALUES('F');
+INSERT INTO Storages(StorageName) VALUES('A');
+INSERT INTO Storages(StorageName) VALUES('B');
+INSERT INTO Storages(StorageName) VALUES('C');
+INSERT INTO Storages(StorageName) VALUES('D');
+INSERT INTO Storages(StorageName) VALUES('E');
+INSERT INTO Storages(StorageName) VALUES('F');
 
 CREATE TABLE  Inventories
 (

@@ -16,8 +16,11 @@ namespace InformiInventory.ViewModels
 {
     public class RestockViewModel : ViewModelBase
     {
-        public int selectedRestock { get; set; }
+        public RestockLineModel SelectedRestockLineModel { get; set; }
 
+        public RestockModel SelectedRestockModel { get; set; }
+
+        public int SelectedRestock { get; set; }
 
         RadObservableCollection<RestockModel> _storeRestockModels;
 
@@ -25,7 +28,7 @@ namespace InformiInventory.ViewModels
         {
             get
             {
-                if (_storeRestockModels == null) _restockModels = new RadObservableCollection<RestockModel>();
+                if (_storeRestockModels == null) _storeRestockModels = new RadObservableCollection<RestockModel>();
 
                 return _storeRestockModels;
             }
@@ -61,13 +64,15 @@ namespace InformiInventory.ViewModels
 
         public ICommand GetRestockLineModelsCommand => _getRestockLineModelsCommand ?? (_getRestockLineModelsCommand = new GetRestockLineModelsCommand(this));
 
-        public void GetRestockLineModels(RestockViewModel vm)
+        public void GetRestockLineModels()
         {
             using (var db = new PetaPoco.Database("db"))
             {
                 try
                 {
-                    RestockLineModels.AddRange(db.Fetch<RestockLineModel>("SELECT a.GTIN AS GTIN, rsl.Pos AS POS, a.ADesc AS ArtDesc FROM RestockLines rsl INNER JOIN Articles a ON rsl.ArtId = a.Id INNER JOIN Restocks r ON rsl.RestockId = r.Id WHERE r.Id = @0 INNER JOIN Storages s ON s.Id = r.StoreId",vm.selectedRestock));
+                    RestockLineModels.Clear();
+                    
+                    RestockLineModels.AddRange(db.Fetch<RestockLineModel>("SELECT a.GTIN AS GTIN, rsl.Pos AS POS, a.ADesc AS ArtDesc, s.StorageName AS StorageName  FROM RestockLines rsl INNER JOIN Articles a ON rsl.ArtId = a.Id INNER JOIN Restocks r ON rsl.RestockId = r.Id LEFT JOIN Storages s ON s.Id = a.StorageId WHERE r.Id = @0 ", SelectedRestock));
                 }
                 catch (Exception ex)
                 {
@@ -80,13 +85,54 @@ namespace InformiInventory.ViewModels
 
         public ICommand GetRestockModelsCommand => _getRestockModelsCommand ?? (_getRestockModelsCommand = new GetRestockModelsCommand(this));
 
-        public void GetRestockModels(RestockViewModel vm)
+        public void GetRestockModels()
         {
             using (var db = new PetaPoco.Database("db"))
             {
                 try
                 {
+                    RestockModels.Clear();
+
                     RestockModels.AddRange(db.Fetch<RestockModel>("SELECT Id AS Id, Dt AS DATE FROM Restocks WHERE IsTemplate = 1"));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
+                }
+            }
+        }
+
+        private ICommand _saveRestockLineCommand = null;
+
+        public ICommand SaveStoreRestockLineCommand => _saveRestockLineCommand ?? (_saveRestockLineCommand = new SaveRestockLineCommand(this));
+
+        public void SaveRestockLine(object parameter)
+        {
+            using (var db = new PetaPoco.Database("db"))
+            {
+                try
+                {
+                    var vm = (RestockViewModel)parameter;
+
+                    var storeid = Application.Current.Properties["StoreId"];
+
+                    var storename = App.Current.Properties["StoreName"];
+
+                    var username = Application.Current.Properties["UserId"];
+
+                    var userid = Application.Current.Properties["UserName"];
+
+                    if (vm.SelectedRestockModel.StoreId == null)
+                    {
+                        var user = new informiInventory.User()
+                        {
+                            StoreId = 1,
+                            UserId = 1,
+                            UserName = "user"
+                        };
+                        db.Execute(sql: "INSERT INTO Restocks(Dt, StoreId, UserId) VALUES(date('now'), @0, @1, @2, @3);SELECT last_insert_rowid();", user.StoreId, user.UserId ) ;
+                    };
+
                 }
                 catch (Exception ex)
                 {

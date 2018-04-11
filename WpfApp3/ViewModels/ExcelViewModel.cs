@@ -166,7 +166,9 @@ namespace InformiInventory.ViewModels
 
                             if(ArtId == null)
                             {
-                                ArtId = db.ExecuteScalar<int>("INSERT INTO Articles(GTIN, ADesc) VALUES(@0, @1); SELECT last_insert_rowid();", item.GTIN, item.ArtDesc);
+                                var storageId = db.ExecuteScalar<int?>("Select Id FROM Storages WHERE StorageName = @0", item.StorageName);
+
+                                ArtId = db.ExecuteScalar<int>("INSERT INTO Articles(GTIN, ADesc, StorageId) VALUES(@0, @1, @2); SELECT last_insert_rowid();", item.GTIN, item.ArtDesc, storageId);
                             }
                             db.Execute("INSERT INTO RestockLines(RestockId, Pos, ArtId, Amt) VALUES(@0, @1, @2, @3);", restockId,item.Pos,ArtId,0);
                         }

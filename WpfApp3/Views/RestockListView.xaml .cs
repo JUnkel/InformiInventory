@@ -27,7 +27,7 @@ namespace InformiInventory.Views
 
             var rsvm = new RestockViewModel();
 
-            rsvm.GetRestockModels(rsvm);
+            rsvm.GetRestockModels();
 
             DataContext = rsvm;
 

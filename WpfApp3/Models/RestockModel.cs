@@ -16,8 +16,8 @@ namespace InformiInventory.Models
             set { SetProperty(ref _storeName, value); }
         }
 
-        int _storeId;
-        public int StoreId
+        int? _storeId;
+        public int? StoreId
         {
             get { return _storeId; }
             set { SetProperty(ref _storeId, value); }

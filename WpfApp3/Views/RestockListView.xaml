@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:commands="clr-namespace:InformiInventory.ViewModels.Commands"
              SnapsToDevicePixels="True"
              mc:Ignorable="d"
              d:DesignHeight="712.549"
@@ -20,23 +21,37 @@
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="0.25*"/>
         </Grid.ColumnDefinitions>
+        
 
             
         <StackPanel  HorizontalAlignment="Stretch" Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Stretch" >
             <Button Command="{Binding ImportExcelRestockLinesCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=ExcelImportBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Excel-Import" x:Name="ExcelImportBtn" Background="WhiteSmoke" Margin="1"/>
             <Button Command="{Binding SaveImportedExcelRestockLinesCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=SaveExcelImportBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Speichern" x:Name="SaveExcelImportBtn" Background="GreenYellow" Margin="1"/>
             <Button Command="{Binding DeleteImportedExcelRestockLinesCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=SaveExcelImportBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Abbrechen" x:Name="DeleteExcelImportBtn" Background="Red" Margin="1"/>
+
+            <telerik:RadNumericUpDown Value="{Binding ElementName=AmntColumn,Path=DataMemberBinding}" Minimum="10000" Maximum="100000" SmallChange="1000"  >
+                <telerik:EventToCommandBehavior.EventBindings>
+                    <telerik:EventBinding Command="{Binding SaveRestockLine}" EventName="ValueChanged" />
+                </telerik:EventToCommandBehavior.EventBindings>
+            </telerik:RadNumericUpDown>
+
+
             <Label Content="Offen" Margin="1"/>
-            <telerik:RadListBox ItemsSource="{Binding StoreRestockModels}" DisplayMemberPath="Date" Margin="1" SelectedValue="Id" Command="{Binding GetRestockLineModels}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=SRestocksRadListBox}" x:Name="SRestocksRadListBox"/>
+            <telerik:RadListBox ItemsSource="{Binding StoreRestockModels}" DisplayMemberPath="Date" Margin="1" SelectedValue="Id" Command="{Binding GetRestockLineModelsCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=SRestocksRadListBox}" x:Name="SRestocksRadListBox"/>
             <Label Content="Vorlagen" Margin="1"/>
-            <telerik:RadListBox ItemsSource="{Binding RestockModels}" DisplayMemberPath="Date" Margin="1" SelectedValue="Id"  Command="{Binding GetRestockLineModels}" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=RestockModelsRadListBpx,Path=SelectedItem}" x:Name="RestockModelsRadListBpx"/>
-            <Button  Content="RefreshList" Margin="1"  Command="{Binding GetRestockModels}" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=btn,Path=}" x:Name="btn"/>
+
+            <telerik:RadListBox ItemsSource="{Binding RestockModels}" DisplayMemberPath="Date" Margin="1" SelectedValuePath="Id" SelectedValue="{Binding SelectedRestock, Mode=TwoWay}"  Command="{Binding GetRestockLineModelsCommand}" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=RestockModelsRadListBpx}" x:Name="RestockModelsRadListBpx" ItemStringFormat="d" SelectedItem="{Binding SelectedRestockModel}">
+                <telerik:EventToCommandBehavior.EventBindings>
+                    <telerik:EventBinding Command="{Binding GetRestockLineModelsCommand}" EventName="SelectionChanged" />
+                </telerik:EventToCommandBehavior.EventBindings>
+            </telerik:RadListBox>
+            <Button  Content="RefreshList" Margin="1"  Command="{Binding GetRestockLineModels}" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=btn}" x:Name="btn"/>
 
         </StackPanel>
 
         <telerik:RadGridView Grid.Row="1"
                              Grid.Column="0"
-                             x:Name="ExcelLinesGrid"
+                             x:Name="RestockLinesGrid"
                              AlternationCount="2"
                              GroupRenderMode="Flat"
                              IsFilteringAllowed="False"
@@ -46,19 +61,25 @@
                              RowIndicatorVisibility="Visible"
                              CanUserFreezeColumns="False"
                              IsSynchronizedWithCurrentItem="True"
-                             ItemsSource="{Binding RestockModelLines}"
+                             ItemsSource="{Binding RestockLineModels}"
                              CanUserInsertRows="False"
                              CanUserDeleteRows="False"
+                             SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
                              ShowGroupPanel="False"
+                             SelectionMode="Single"
                              Margin="5"
                              VerticalAlignment="Stretch"
                              >
             <telerik:RadGridView.Columns>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Pos}"             Header="Pos"            Width="100" IsReadOnly="True"/>
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}"            Header="Artikel-Nr."    Width="100" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding ArtDesc}"         Header="Bezeichnung"    Width="250" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding StorageName}"     Header="Ort"            Width="50"/>
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding Amt}"             Header="Bestellmenge"   Width="100"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}"            Header="Artikel-Nr."    Width="100" IsReadOnly="True"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ArtDesc}"         Header="Bezeichnung"    Width="250" IsReadOnly="True"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding StorageName}"     Header="Ort"            Width="50"  IsReadOnly="True"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Amt}"             Header="Bestellmenge"   Width="100" IsReadOnly="False" x:Name="AmntColumn">
+                        <telerik:EventToCommandBehavior.EventBindings>
+                        <telerik:EventBinding Command="{Binding SaveStoreRestockLineCommand}" CommandParameter="{Binding}"  EventName="CellEditEnded" />
+                        </telerik:EventToCommandBehavior.EventBindings>
+                </telerik:GridViewDataColumn>
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
     </Grid>
