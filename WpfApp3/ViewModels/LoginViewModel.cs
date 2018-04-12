@@ -73,11 +73,16 @@ namespace InformiInventory.ViewModels
 
                         naviContext.CurrentUser = user;
 
+
                         naviContext.StoreName = currentStore;
                         App.Current.Properties["UserName"] = user.UserName;
-                        App.Current.Properties["UserName"] = user.UserName;
-                        App.Current.Properties["StoreId"] = null;
-                        App.Current.Properties["StoreName"] = null;
+                        App.Current.Properties["UserId"] = user.UserId;
+                        App.Current.Properties["StoreId"] = user.StoreId;
+                        App.Current.Properties["StoreName"] = currentStore;
+
+                        var props = App.Current.Properties;
+
+                        string uid = Application.Current.Properties["UserId"].ToString();
 
 
                         MainWindow.Instance.MainWindowContentControl.Content = new MenuView();

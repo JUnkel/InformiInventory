@@ -25,11 +25,11 @@ namespace InformiInventory.Views
         {
             InitializeComponent();
 
-            var rsvm = new RestockViewModel();
+            //var rsvm = new RestockViewModel();
 
-            rsvm.GetRestockModels();
+            //rsvm.GetRestockModels();
 
-            DataContext = rsvm;
+            //DataContext = rsvm;
 
             MainWindow.Instance.NavigationPanel.Visibility = Visibility.Visible;
         }

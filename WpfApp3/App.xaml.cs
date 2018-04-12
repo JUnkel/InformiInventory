@@ -15,11 +15,10 @@ namespace InformiInventory
     /// </summary>
     public partial class App : Application
     {
+
         public App()
         {
-            this.Properties["UserName"] = null;
-            this.Properties["StoreId"] = null;
-            this.Properties["StoreName"] = null;
+           
 
             var culture = System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag;
 
@@ -37,7 +36,14 @@ namespace InformiInventory
         }
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            //StyleManager.ApplicationTheme = new Telerik.Windows.Controls.Windows8TouchTheme();
+            StyleManager.ApplicationTheme = new Telerik.Windows.Controls.Windows8TouchTheme();
+
+            //Application.Current.Properties["Settings"] = "SettingsPropertyValue";
+            this.Properties["UserName"] = null;
+            this.Properties["UserId"] = null;
+            this.Properties["StoreId"] = null;
+            this.Properties["StoreName"] = null;
+
 
             try
             {

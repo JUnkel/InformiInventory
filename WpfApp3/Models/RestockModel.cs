@@ -43,12 +43,26 @@ namespace InformiInventory.Models
             get { return _id; }
             set { SetProperty(ref _id, value); }
         }
+
+        bool _isTemplate;
+        public bool IsTemplate
+        {
+            get { return _isTemplate; }
+            set { SetProperty(ref _isTemplate, value); }
+        }
+
+        bool _isProcd;
+        public bool IsProcd
+        {
+            get { return _isProcd; }
+            set { SetProperty(ref _isProcd, value); }
+        }
     }
 
     public class RestockLineModel : INotifyPropertyChanged
     {
         //CSV Format 
-    
+
         //1;   40069;   Westfro Karottenwürfel 4x2, 5 kg    ;   ;1 ;
         //318; K115313; Häagen Dazs Pralines Cream 8x500 ml.;   ;0 ;E
 
@@ -73,6 +87,14 @@ namespace InformiInventory.Models
             set { SetProperty(ref _artDesc, value); }
         }
 
+        int _artId;
+        public int ArtId
+        {
+            get { return _artId; }
+            set { SetProperty(ref _artId, value); }
+        }
+
+
         int _amt;
         public int Amt
         {
@@ -87,26 +109,27 @@ namespace InformiInventory.Models
             get { return _storageName; }
             set { SetProperty(ref _storageName, value); }
         }
-
-        public List<RestockLineModel> GetRestockLineModels()
-        {
-            var items = new List<RestockLineModel>();
-
-            using (var db = new PetaPoco.Database("db"))
-            {
-                try
-                {
-                    items.AddRange(db.Fetch<RestockLineModel>("SELECT Pos, GTIN, Art, Desc, Amt, Storage FROM RestockLines"));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
-
-                }
-                return items;
-            }
-        }
     }
+
+    //    public List<RestockLineModel> GetRestockLineModels()
+    //    {
+    //        var items = new List<RestockLineModel>();
+
+    //        using (var db = new PetaPoco.Database("db"))
+    //        {
+    //            try
+    //            {
+    //                items.AddRange(db.Fetch<RestockLineModel>("SELECT Pos, GTIN, Art, Desc, Amt, Storage,  FROM RestockLines"));
+    //            }
+    //            catch (Exception ex)
+    //            {
+    //                MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
+
+    //            }
+    //            return items;
+    //        }
+    //    }
+    //}
 
 
     public class Article : INotifyPropertyChanged

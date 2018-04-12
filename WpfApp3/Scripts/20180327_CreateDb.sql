@@ -6,12 +6,12 @@
 	
 	KeyCode VARCHAR(40) UNIQUE NOT NULL,
 
-	StoreId INT,
+	StoreId INT NULL,
 
 	FOREIGN KEY(StoreId) REFERENCES Stores(Id)
 );
 
-INSERT INTO Users (Username, KeyCode) VALUES ('admin', 'prosoft');
+INSERT INTO Users (Username, KeyCode, StoreId) VALUES ('admin', 'prosoft',null);
 INSERT INTO Users (Username, KeyCode, StoreId) VALUES ('user', 'test', '1');
 
 CREATE TABLE Stores
@@ -88,8 +88,6 @@ CREATE TABLE Articles
 
 );
 
-INSERT INTO Articles(ADesc, GTIN) VALUES ('Pizza Thunfisch', '0123456789');
-
 CREATE TABLE Restocks
 (
 		Id INTEGER NOT NULL PRIMARY KEY,		
@@ -104,24 +102,29 @@ CREATE TABLE Restocks
 
 		IsTemplate INTEGER NOT NULL DEFAULT(0),
 
+		TemplateId INTEGER NULL,
+
 		FOREIGN KEY(UserId) REFERENCES Users(Id),
 
-		FOREIGN KEY(StoreId) REFERENCES Stores(Id)
+		FOREIGN KEY(StoreId) REFERENCES Stores(Id),
+
+		FOREIGN KEY(TemplateId) REFERENCES Restocks(Id)
+
 );
 
-CREATE TABLE RestockLines
+CREATE TABLE RestockLines 
 (
-		Id INTEGER NOT NULL PRIMARY KEY,		
+	Id INTEGER NOT NULL PRIMARY KEY,		
 		
-		RestockId INTEGER NOT NULL,
+	RestockId INTEGER NOT NULL,
 
-        Pos INTEGER NULL,
+    Pos INTEGER NULL,
 
-		ArtId VARCHAR(40) NOT NULL,
-		
-		Amt INTEGER NOT NULL DEFAULT(0),
+	ArtId VARCHAR(40) NOT NULL,
+	
+	Amt INTEGER NOT NULL DEFAULT(0),
 
-		FOREIGN KEY(ArtId) REFERENCES Articles(Id),
+	FOREIGN KEY(ArtId) REFERENCES Articles(Id),
 
-		FOREIGN KEY(RestockId) REFERENCES Restocks(Id)
+	FOREIGN KEY(RestockId) REFERENCES Restocks(Id)
 );

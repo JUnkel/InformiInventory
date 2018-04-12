@@ -24,6 +24,10 @@ namespace InformiInventory.ViewModels.Commands
             {
                 return false;
             }
+            else if (vm.RestockModels.Count == 0)
+            {
+                return false;
+            }
             else
             {
                 return true;
@@ -83,11 +87,11 @@ namespace InformiInventory.ViewModels.Commands
             }
         }
 
-        public class SaveRestockLineCommand : ICommand
+        public class SaveStoreRestockLineCommand : ICommand
         {
             RestockViewModel _vm;
 
-            public SaveRestockLineCommand(RestockViewModel vm)
+            public SaveStoreRestockLineCommand(RestockViewModel vm)
             {
                 _vm = vm;
             }
@@ -109,7 +113,7 @@ namespace InformiInventory.ViewModels.Commands
             public void Execute(object parameter)
             {
                 var vm = (RestockViewModel)parameter;
-                vm.SaveRestockLine();
+                vm.SaveRestockLine(vm);
             }
 
             public event EventHandler CanExecuteChanged
@@ -120,5 +124,46 @@ namespace InformiInventory.ViewModels.Commands
             }
         }
 
+    
 
+    public class CreateNewRestockModelCommand : ICommand
+    {
+        RestockViewModel _vm;
+
+        public CreateNewRestockModelCommand(RestockViewModel vm)
+        {
+           _vm = vm;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+           var vm = (RestockViewModel)parameter;
+
+            if(vm == null)
+            {
+                return false;
+            }
+            else if (vm.SelectedRestockModel == null || !vm.SelectedRestockModel.IsTemplate)
+            {
+                return false;
+            }
+            else
+            {
+               return true;
+            }
+        }
+
+        public void Execute(object parameter)
+        {
+           var vm = (RestockViewModel)parameter;
+           vm.CreateNewRestockModel(vm);
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+           add => CommandManager.RequerySuggested += value;
+
+           remove => CommandManager.RequerySuggested -= value;
+        }
+    }
 }
