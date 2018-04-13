@@ -185,6 +185,7 @@
     <Compile Include="ViewModels\Commands\LoginCommand.cs" />
     <Compile Include="ViewModels\Commands\Generic\RelayCommand.cs" />
     <Compile Include="ViewModels\Commands\RestockCommand.cs" />
+    <Compile Include="ViewModels\Converter\Converter.cs" />
     <Compile Include="ViewModels\DifferenceListViewModel.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\NavigationViewModel.cs" />

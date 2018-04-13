@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using InformiInventory.Models;
 using InformiInventory.ViewModels.Commands;
@@ -18,53 +19,59 @@ namespace InformiInventory.ViewModels
     {
         public RestockViewModel()
         {
-           GetRestockModels();
+            GetRestockModels();
+            var view = new CollectionViewSource();
+            view.GroupDescriptions.Add(new PropertyGroupDescription("IsTemplate"));
+            view.Source = RestockModels;
+            RestocksView = view;
         }
 
-        int _selectedIndexStoreRestockModels;
-        public int SelectedIndexStoreRestockModels
-        {
-            get { return _selectedIndexStoreRestockModels; }
-            set
-            {
-                _selectedIndexStoreRestockModels = value;
-                _selectedIndexStoreRestockModels = -1;
-                SetProperty(ref _selectedIndexStoreRestockModels,value);
-            }
-        }
+        //int _selectedIndexStoreRestockModels = ;
+        //public int SelectedIndexStoreRestockModels
+        //{
+        //    get { return _selectedIndexStoreRestockModels; }
+        //    set
+        //    {
+        //        _selectedIndexStoreRestockModels = value;
+        //        _selectedIndexTemplateRestockModels = -1;
+        //        SetProperty(ref _selectedIndexStoreRestockModels,value);
+        //    }
+        //}
 
-        int _selectedIndexTemplateRestockModels;
-        public int SelectedIndexTemplateRestockModels
-        {
-            get { return _selectedIndexTemplateRestockModels; }
-            set
-            {
-                _selectedIndexTemplateRestockModels = value;
-                _selectedIndexTemplateRestockModels = -1;
-                SetProperty(ref _selectedIndexTemplateRestockModels, value);
-            }
-        }
+        //int _selectedIndexTemplateRestockModels;
+        //public int SelectedIndexTemplateRestockModels
+        //{
+        //    get { return _selectedIndexTemplateRestockModels; }
+        //    set
+        //    {
+        //        _selectedIndexTemplateRestockModels = value;
+        //        _selectedIndexStoreRestockModels = -1;
+        //        SetProperty(ref _selectedIndexTemplateRestockModels, value);
+        //    }
+        //}
 
-
+        //RestockLineModel _selectedRestockLineModel;
         public RestockLineModel SelectedRestockLineModel { get; set; }
 
+        //RestockModel _selectedRestockModel;
         public RestockModel SelectedRestockModel { get; set; }
 
         public int SelectedRestock { get; set; }
 
-        RadObservableCollection<RestockModel> _storeRestockModels;
+        //RadObservableCollection<RestockModel> _storeRestockModels;
 
-        public RadObservableCollection<RestockModel> StoreRestockModels
-        {
-            get
-            {
-                if (_storeRestockModels == null) _storeRestockModels = new RadObservableCollection<RestockModel>();
+        //public RadObservableCollection<RestockModel> StoreRestockModels
+        //{
+        //    get
+        //    {
+        //        if (_storeRestockModels == null) _storeRestockModels = new RadObservableCollection<RestockModel>();
 
-                return _storeRestockModels;
-            }
-          
-        }
+        //        return _storeRestockModels;
+        //    }
 
+        //}
+
+        public CollectionViewSource RestocksView { get; set; }
 
         RadObservableCollection<RestockModel> _restockModels;
 
@@ -76,7 +83,7 @@ namespace InformiInventory.ViewModels
 
                 return _restockModels;
             }
-        } 
+        }
 
         RadObservableCollection<RestockLineModel> _restockLineModels;
 
@@ -100,9 +107,11 @@ namespace InformiInventory.ViewModels
             {
                 try
                 {
+                    if (SelectedRestockModel == null) return;
+
                     RestockLineModels.Clear();
-                    
-                    RestockLineModels.AddRange(db.Fetch<RestockLineModel>("SELECT a.GTIN AS GTIN, rsl.Pos AS POS, a.ADesc AS ArtDesc, s.StorageName AS StorageName, rsl.ArtId AS ArtId  FROM RestockLines rsl INNER JOIN Articles a ON rsl.ArtId = a.Id INNER JOIN Restocks r ON rsl.RestockId = r.Id LEFT JOIN Storages s ON s.Id = a.StorageId WHERE r.Id = @0 ", SelectedRestockModel.Id));
+
+                    RestockLineModels.AddRange(db.Fetch<RestockLineModel>("SELECT a.GTIN AS GTIN, rsl.Pos AS POS, a.ADesc AS ArtDesc, s.StorageName AS StorageName, rsl.ArtId AS ArtId,rsl.Amt AS Amnt FROM RestockLines rsl INNER JOIN Articles a ON rsl.ArtId = a.Id INNER JOIN Restocks r ON rsl.RestockId = r.Id LEFT JOIN Storages s ON s.Id = a.StorageId WHERE r.Id = @0 ", SelectedRestockModel.Id));
                 }
                 catch (Exception ex)
                 {
@@ -121,10 +130,6 @@ namespace InformiInventory.ViewModels
             {
                 try
                 {
-                    RestockModels.Clear();
-
-                    RestockModels.AddRange(db.Fetch<RestockModel>("SELECT Id AS Id, Dt AS DATE,IsTemplate AS IsTemplate, IsProcd AS IsProcd FROM Restocks WHERE IsTemplate = 1"));
-
                     int? storeId = null;
                     var isStoreId = int.TryParse(App.Current.Properties["StoreId"].ToString(), out int resultStoreId);
 
@@ -133,7 +138,9 @@ namespace InformiInventory.ViewModels
                         storeId = resultStoreId;
                     }
 
-                    StoreRestockModels.AddRange(db.Fetch<RestockModel>("SELECT Id AS Id, Dt AS DATE,IsTemplate AS IsTemplate, IsProcd AS IsProcd FROM Restocks WHERE IsTemplate = 0 AND StoreId= @0", storeId));
+                    RestockModels.Clear();
+
+                    RestockModels.AddRange(db.Fetch<RestockModel>("SELECT Id AS Id, Dt AS DATE,IsTemplate AS IsTemplate, IsProcd AS IsProcd, StoreId AS StoreId, TemplateId AS TemplateId FROM Restocks WHERE IsTemplate = 1 OR StoreID = @0", storeId));
 
                 }
                 catch (Exception ex)
@@ -156,50 +163,12 @@ namespace InformiInventory.ViewModels
                     var vm = (RestockViewModel)parameter;
 
                     if (vm == null) return;
-
-                    int userId;
-                    var isUserId = int.TryParse(App.Current.Properties["UserId"].ToString(), out int resultUserId);
-
-                    if(isUserId)
-                    {
-                        userId = resultUserId;
-                    }
-                    else
-                    {
-                        throw new Exception("Vorgang nicht möglich, da kein Benutzer angemeld.");
-                    }
-
-
-                    var userName = App.Current.Properties["UserName"].ToString();
-
-                    int storeId;
-                    var isStoreId = int.TryParse(App.Current.Properties["StoreId"].ToString(), out int resultStoreId);
-
-                    if(isStoreId)
-                    {
-                        storeId = resultStoreId;
-                    }
-                    else
-                    {
-                        throw new Exception("Vorgang nicht möglich, Benutzer ist keiner Filiale zugeordnet.");
-                    }
-
-
-                    var storeName = App.Current.Properties["StoreName"];
-
-                    int? restockId = null;
-
-                    if (vm.SelectedRestockModel.IsTemplate)
-                    {
-                        restockId =  db.Execute(sql: "INSERT INTO Restocks(Dt, StoreId, UserId, IsTemplate) VALUES(date('now'), @0, @1,@3); SELECT last_insert_rowid();", storeId, userId, 1 ) ;
-                    }
-
                     //DB Restocks: Id ,RestockId,Pos,ArtId, Amt
-                    db.Execute(sql: "INSERT INTO RestockLines(RestockId, Pos, ArtId, Amt) VALUES(@0, @1, @2, @3);SELECT last_insert_rowid();", restockId.HasValue? restockId : vm.SelectedRestockModel.Id , vm.SelectedRestockLineModel.Pos ,vm.SelectedRestockLineModel.ArtId, vm.SelectedRestockLineModel.Amt);
+                    db.Execute(sql: "INSERT INTO RestockLines(RestockId, Pos, ArtId, Amt) VALUES(@0, @1, @2, @3);", SelectedRestockModel.Id, vm.SelectedRestockLineModel.Pos, vm.SelectedRestockLineModel.ArtId, vm.SelectedRestockLineModel.Amt);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
+                    MessageBox.Show(string.Format("Daten konnten nicht gespeichert werden:\n\n" + ex.Message), "Fehler", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                 }
             }
         }
@@ -210,6 +179,80 @@ namespace InformiInventory.ViewModels
 
         public void CreateNewRestockModel(object parameter)
         {
+            var vm = (RestockViewModel)parameter;
+
+            if (vm == null) return;
+
+            if (SelectedRestockModel == null) throw new Exception("Keine Bestückungsliste ausgewählt");
+
+            int? storeId = null;
+            var isStoreId = int.TryParse(App.Current.Properties["StoreId"].ToString(), out int resultStoreId);
+
+            if (isStoreId)
+            {
+                storeId = resultStoreId;
+            }
+            else
+            {
+                throw new Exception("Vorgang nicht möglich:\n\nBenutzer ist keiner Filiale zugeordnet.");
+            }
+
+            if (RestockModels.Any(x => x.IsTemplate == false && x.StoreId == storeId && x.IsProcd == false)) throw new Exception("Vorgang nicht möglich:\n\n Bitte zunächst die leste Bestückungsliste abschließen.");
+
+            if (SelectedRestockModel.IsTemplate == false) throw new Exception("Neue Bestückslisten können nur aus einer Vorlage heraus erstellt werden.");
+
+            int userId;
+
+            var isUserId = int.TryParse(App.Current.Properties["UserId"].ToString(), out int resultUserId);
+
+            if (isUserId)
+            {
+                userId = resultUserId;
+            }
+            else
+            {
+                throw new Exception("Vorgang nicht möglich:\n\nUnbekannter Benutzer.");
+            }
+
+            try
+            {
+                using (var db = new PetaPoco.Database("db"))
+                {
+                    using (var scope = db.GetTransaction())
+                    {
+                        var rowId = db.ExecuteScalar<int>("INSERT INTO Restocks(Dt, StoreId, UserId, IsTemplate, TemplateId) VALUES(date('now'), @0, @1, @2, @3);SELECT last_insert_rowid();", storeId, userId, 0, SelectedRestockModel.Id);
+
+                        var restock = new RestockModel()
+                        {
+                            Date = DateTime.Now,
+                            Id = rowId,
+                            IsProcd = false,
+                            IsTemplate = false,
+                            StoreId = storeId,
+                            UserId = userId,
+                            TemplateId = SelectedRestockModel.Id
+                        };
+
+                        scope.Complete();
+
+                        RestockModels.Add(restock);
+                    }
+                } 
+            }
+            catch (Exception ex)
+            {
+                    MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
+            }
+        }
+
+       private ICommand _deleteRestockModelCommand = null;
+
+        public ICommand DeleteRestockModelCommand => _deleteRestockModelCommand ?? (_deleteRestockModelCommand = new DeleteRestockModelCommand(this));
+
+        public void DeleteRestockModel(object parameter)
+        {
+            if(MessageBox.Show("Soll die ausgewählte Bestückungsliste gelöscht werden?","Frage",MessageBoxButton.OKCancel,MessageBoxImage.Question) == MessageBoxResult.Cancel ) return ;
+
             using (var db = new PetaPoco.Database("db"))
             {
                 try
@@ -218,31 +261,18 @@ namespace InformiInventory.ViewModels
 
                     if (vm == null) return;
 
-                    int userId;
-                    var isUserId = int.TryParse(App.Current.Properties["UserId"].ToString(), out int resultUserId);
+                    if (vm.SelectedRestockModel == null) return;
 
-                    if (isUserId)
-                    {
-                        userId = resultUserId;
-                    }
-                    else
-                    {
-                        throw new Exception("Vorgang nicht möglich, da kein Benutzer angemeld.");
-                    }
+                    db.Execute(sql: "DELETE FROM Restocks WHERE Id =@0;", SelectedRestockModel.Id);
 
-                    int storeId;
-                    var isStoreId = int.TryParse(App.Current.Properties["StoreId"].ToString(), out int resultStoreId);
+                    db.Execute(sql: "DELETE FROM RestockLines WHERE RestockId =@0;", SelectedRestockModel.Id);
 
-                    if (isStoreId)
-                    {
-                        storeId = resultStoreId;
-                    }
-                    else
-                    {
-                        throw new Exception("Vorgang nicht möglich, Benutzer ist keiner Filiale zugeordnet.");
-                    }
+                    RestockModels.Remove(SelectedRestockModel);
 
-                    db.Execute(sql: "INSERT INTO Restocks(Dt, StoreId, UserId, IsTemplate, TemplateId) VALUES(date('now'), @0, @1, @2, @3); SELECT last_insert_rowid();", storeId, userId, 0 ,SelectedRestockModel.Id);
+                    RestockLineModels.Clear();
+
+                    MessageBox.Show("Ausgewählte Bestückungsliste wurde gelöscht.");
+
                 }
                 catch (Exception ex)
                 {

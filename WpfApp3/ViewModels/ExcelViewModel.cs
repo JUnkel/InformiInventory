@@ -130,7 +130,7 @@ namespace InformiInventory.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(string.Format("Fehler beim Importieren:\n\n{0}", ex.Message));
+                    MessageBox.Show(string.Format("Fehler beim Importieren:\n\n{0}", ex.Message),"Fehler",MessageBoxButton.OK,MessageBoxImage.Error);
                 }
             }
             else
@@ -141,32 +141,58 @@ namespace InformiInventory.ViewModels
 
         public void SaveImportedExcelRestockLines(ExcelViewModel vm)
         {
-            var navContext = (NavigationViewModel)MainWindow.Instance.NavigationPanel.DataContext;
-
-            var restock = new RestockModel()
-            {
-                Date = DateTime.Now,
-                UserId = navContext.CurrentUser.UserId,
-                StoreId = navContext.CurrentUser.StoreId
-            };
-
+            //var navContext = (NavigationViewModel)MainWindow.Instance.NavigationPanel.DataContext;
             try
             {
+
+                var storeId = App.Current.Properties["StoreId"].ToString();
+
+                int resultStoreId;
+                int.TryParse(storeId, out resultStoreId);
+
+                if (resultStoreId == 0) throw new Exception("Benutzer ist keine Filiale zu geordnet.");
+
+                var userId = App.Current.Properties["UserId"].ToString();
+                int resultUserId;
+                int.TryParse(userId, out resultUserId);
+
+                if (resultUserId == 0) throw new Exception("Unbekannter Benutzer.");
+
                 using (var db = new PetaPoco.Database("db"))
                 {
                     using (var scope = db.GetTransaction())
                     {
-                        var restockId = db.ExecuteScalar<int>("INSERT INTO Restocks(Dt, StoreId, UserId, IsProcd, IsTemplate) VALUES(@0, @1, @2, @3, @4);SELECT last_insert_rowid();", restock.Date, restock.StoreId, restock.UserId, 0, 1);
+                        var storages = from rsml in vm.RestockModelLines
+                                     group rsml by rsml.StorageName into rsmlGroup
+                                     orderby rsmlGroup.Key
+                                     select rsmlGroup.Key;
+
+                        var list = storages.ToList();
+
+
+                        //var storagelist =  vm.RestockModelLines.Where(x => string.IsNullOrWhiteSpace(x.StorageName) == false).GroupBy(x => x.StorageName).ToList();
+
+                        foreach(var storageName in list)
+                        {
+                            var storageId = db.FirstOrDefault<int?>("SELECT Id From Storages WHERE StorageName = @0;", storageName);
+
+                            if(storageId == null)
+                            {
+                                db.Execute("INSERT INTO Storages(StorageName) VALUES(@0);", storageName);
+                            }
+                        }
+
+                        var restockId = db.ExecuteScalar<int>("INSERT INTO Restocks(Dt, StoreId, UserId, IsTemplate) VALUES(Date('now'),@0, @1, @2);SELECT last_insert_rowid();", resultStoreId , resultStoreId, 1);
 
                         foreach(var item in vm.RestockModelLines)
                         {
                             //db.Execute("INSERT INTO RestockLines(, StoreId, UserId) VALUES(@0, @1, @2)", restock.Date, restock.StoreId, restock.UserId);
 
-                            var ArtId = db.FirstOrDefault<int?>("SELECT Id From Articles WHERE GTIN = @0", item.GTIN);
+                            var ArtId = db.FirstOrDefault<int?>("SELECT Id From Articles WHERE GTIN = @0;", item.GTIN);
 
                             if(ArtId == null)
                             {
-                                var storageId = db.ExecuteScalar<int?>("Select Id FROM Storages WHERE StorageName = @0", item.StorageName);
+                                var storageId = db.ExecuteScalar<int?>("Select Id FROM Storages WHERE StorageName = @0;", item.StorageName);
 
                                 ArtId = db.ExecuteScalar<int>("INSERT INTO Articles(GTIN, ADesc, StorageId) VALUES(@0, @1, @2); SELECT last_insert_rowid();", item.GTIN, item.ArtDesc, storageId);
                             }
@@ -176,6 +202,8 @@ namespace InformiInventory.ViewModels
                         scope.Complete();
                     }
                 }
+                MessageBox.Show("Daten wurden erfolgreich importiert.", "Hinweis", MessageBoxButton.OK, MessageBoxImage.Information);
+                vm.RestockModelLines.Clear();
             }
             catch (Exception ex)
             {

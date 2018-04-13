@@ -25,12 +25,6 @@ namespace InformiInventory.Views
         {
             InitializeComponent();
 
-            //var rsvm = new RestockViewModel();
-
-            //rsvm.GetRestockModels();
-
-            //DataContext = rsvm;
-
             MainWindow.Instance.NavigationPanel.Visibility = Visibility.Visible;
         }
     }

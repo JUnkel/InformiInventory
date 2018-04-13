@@ -9,12 +9,12 @@ namespace InformiInventory.Models
 {
     public class RestockModel : INotifyPropertyChanged
     {
-        string _storeName;
-        public string StoreName
-        {
-            get { return _storeName; }
-            set { SetProperty(ref _storeName, value); }
-        }
+        //string _storeName;
+        //public string StoreName
+        //{
+        //    get { return _storeName; }
+        //    set { SetProperty(ref _storeName, value); }
+        //}
 
         int? _storeId;
         public int? StoreId
@@ -42,6 +42,13 @@ namespace InformiInventory.Models
         {
             get { return _id; }
             set { SetProperty(ref _id, value); }
+        }
+
+        int _templateId;
+        public int TemplateId
+        {
+            get { return _templateId; }
+            set { SetProperty(ref _templateId, value); }
         }
 
         bool _isTemplate;

@@ -1,6 +1,6 @@
 ﻿CREATE TABLE Users
 (
-	Id INTEGER NOT NULL PRIMARY KEY,
+	Id INTEGER NOT NULL PRIMARY KEY DEFAULT(1),
 	
 	UserName VARCHAR(40) UNIQUE NOT NULL,
 	
@@ -16,7 +16,7 @@ INSERT INTO Users (Username, KeyCode, StoreId) VALUES ('user', 'test', '1');
 
 CREATE TABLE Stores
 (
-	Id INTEGER NOT NULL PRIMARY KEY,
+	Id INTEGER NOT NULL PRIMARY KEY DEFAULT(1),
 	
 	StoreName VARCHAR (40) NOT NULL Unique
 );
@@ -25,21 +25,14 @@ INSERT INTO Stores (StoreName) VALUES ('Iserlohn');
 
 CREATE TABLE Storages
 (
-	Id INTEGER NOT NULL PRIMARY KEY,
+	Id INTEGER NOT NULL PRIMARY KEY DEFAULT(1),
 	
 	StorageName VARCHAR (40) NOT NULL Unique
 );
 
-INSERT INTO Storages(StorageName) VALUES('A');
-INSERT INTO Storages(StorageName) VALUES('B');
-INSERT INTO Storages(StorageName) VALUES('C');
-INSERT INTO Storages(StorageName) VALUES('D');
-INSERT INTO Storages(StorageName) VALUES('E');
-INSERT INTO Storages(StorageName) VALUES('F');
-
 CREATE TABLE  Inventories
 (
-		Id INTEGER NOT NULL PRIMARY KEY,		
+		Id INTEGER NOT NULL PRIMARY KEY DEFAULT(1),		
 	
         StoreId INTEGER NOT NULL,
 
@@ -52,11 +45,10 @@ CREATE TABLE  Inventories
 		FOREIGN KEY(StoreId) REFERENCES Stores(Id)
 );
 
-INSERT INTO Inventories(StoreId, Dt, UserId, UserId) VALUES (0,date('now'),0,0);
 
 CREATE TABLE InventoryLines
 (
-		Id INTEGER NOT NULL PRIMARY KEY,		
+		Id INTEGER NOT NULL PRIMARY KEY DEFAULT(1),		
 	
         InventoryId INTEGER NOT NULL,
 
@@ -73,15 +65,14 @@ CREATE TABLE InventoryLines
 		FOREIGN KEY(InventoryId) REFERENCES Inventories(Id)
 );
 
-INSERT INTO InventoryLines(InventoryId, UserId, ArtId, Amnt, TargetStock) VALUES (0,0,0,5,10);
 
 CREATE TABLE Articles
 (
-	Id INTEGER PRIMARY KEY,
+	Id INTEGER  PRIMARY KEY DEFAULT(1),
 	
 	GTIN VARCHAR(14) UNIQUE,
 	
-	ADesc VARCHAR(40),
+	ADesc VARCHAR(200),
 
 	StorageId int NULL,
 	FOREIGN KEY(StorageId) REFERENCES Storages(Id)
@@ -90,7 +81,7 @@ CREATE TABLE Articles
 
 CREATE TABLE Restocks
 (
-		Id INTEGER NOT NULL PRIMARY KEY,		
+		Id INTEGER NOT NULL PRIMARY KEY DEFAULT(1),		
 	
         StoreId INTEGER NOT NULL,
 
@@ -114,7 +105,7 @@ CREATE TABLE Restocks
 
 CREATE TABLE RestockLines 
 (
-	Id INTEGER NOT NULL PRIMARY KEY,		
+	Id INTEGER NOT NULL PRIMARY KEY DEFAULT(1),		
 		
 	RestockId INTEGER NOT NULL,
 

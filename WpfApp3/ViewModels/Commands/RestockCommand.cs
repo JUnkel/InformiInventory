@@ -87,42 +87,46 @@ namespace InformiInventory.ViewModels.Commands
             }
         }
 
-        public class SaveStoreRestockLineCommand : ICommand
+    public class SaveStoreRestockLineCommand : ICommand
+    {
+        RestockViewModel _vm;
+
+        public SaveStoreRestockLineCommand(RestockViewModel vm)
         {
-            RestockViewModel _vm;
+            _vm = vm;
+        }
 
-            public SaveStoreRestockLineCommand(RestockViewModel vm)
+        public bool CanExecute(object parameter)
+        {
+        var vm = (RestockViewModel)parameter;
+
+            if (vm == null)
             {
-                _vm = vm;
+                return false;
             }
-
-            public bool CanExecute(object parameter)
+            else if(vm.SelectedRestockLineModel == null)
             {
-                var vm = (RestockViewModel)parameter;
-
-                if (vm == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return false;
             }
-
-            public void Execute(object parameter)
+            else
             {
-                var vm = (RestockViewModel)parameter;
-                vm.SaveRestockLine(vm);
-            }
-
-            public event EventHandler CanExecuteChanged
-            {
-                add => CommandManager.RequerySuggested += value;
-
-                remove => CommandManager.RequerySuggested -= value;
+                return true;
             }
         }
+
+        public void Execute(object parameter)
+        {
+            var vm = (RestockViewModel)parameter;
+            vm.SaveRestockLine(vm);
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+
+            remove => CommandManager.RequerySuggested -= value;
+        }
+    }
 
     
 
@@ -143,10 +147,10 @@ namespace InformiInventory.ViewModels.Commands
             {
                 return false;
             }
-            else if (vm.SelectedRestockModel == null || !vm.SelectedRestockModel.IsTemplate)
-            {
-                return false;
-            }
+            //else if (vm.SelectedRestockModel.IsTemplate == false)
+            //{
+            //    return false;
+            //}
             else
             {
                return true;
@@ -164,6 +168,44 @@ namespace InformiInventory.ViewModels.Commands
            add => CommandManager.RequerySuggested += value;
 
            remove => CommandManager.RequerySuggested -= value;
+        }
+    }
+
+
+    public class DeleteRestockModelCommand : ICommand
+    {
+        RestockViewModel _vm;
+
+        public DeleteRestockModelCommand(RestockViewModel vm)
+        {
+            _vm = vm;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            var vm = (RestockViewModel)parameter;
+
+            if (vm == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public void Execute(object parameter)
+        {
+            var vm = (RestockViewModel)parameter;
+            vm.DeleteRestockModel(vm);
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+
+            remove => CommandManager.RequerySuggested -= value;
         }
     }
 }
