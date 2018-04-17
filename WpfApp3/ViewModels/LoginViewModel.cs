@@ -59,7 +59,7 @@ namespace InformiInventory.ViewModels
 
                 try
                 {
-                    user = db.FirstOrDefault<User>("SELECT u.Id AS UserId, u.UserName as UserName, u.StoreId as StoreId FROM Users u LEFT JOIN Stores s ON s.Id = u.StoreId WHERE KeyCode = @0 AND Username = @1", Password, Username);
+                    user = db.FirstOrDefault<User>("SELECT u.UserId AS UserId, u.UserName as UserName, u.StoreId as StoreId FROM Users u LEFT JOIN Stores s ON s.StoreId = u.StoreId WHERE KeyCode = @0 AND Username = @1", Password, Username);
 
                     if (user == null)
                     {
@@ -67,14 +67,11 @@ namespace InformiInventory.ViewModels
                     }
                     else
                     {
-                        var currentStore = db.ExecuteScalar<string>("SELECT StoreName FROM Stores WHERE Id = @0",user.StoreId);
+                        //var naviContext = (NavigationViewModel)MainWindow.Instance.NavigationPanel.DataContext;
+                        //naviContext.CurrentUser = user;
+                        //naviContext.StoreName = currentStore;
 
-                        var naviContext = (NavigationViewModel)MainWindow.Instance.NavigationPanel.DataContext;
-
-                        naviContext.CurrentUser = user;
-
-
-                        naviContext.StoreName = currentStore;
+                        var currentStore = db.ExecuteScalar<string>("SELECT StoreName FROM Stores WHERE StoreId = @0",user.StoreId);
                         App.Current.Properties["UserName"] = user.UserName;
                         App.Current.Properties["UserId"] = user.UserId;
                         App.Current.Properties["StoreId"] = user.StoreId;
@@ -83,7 +80,6 @@ namespace InformiInventory.ViewModels
                         var props = App.Current.Properties;
 
                         string uid = Application.Current.Properties["UserId"].ToString();
-
 
                         MainWindow.Instance.MainWindowContentControl.Content = new MenuView();
                     }

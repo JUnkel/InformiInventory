@@ -11,16 +11,16 @@ namespace InformiInventory.Commands
 {
     public class ImportExcelRestockLinesCommand : ICommand
     {
-        private ExcelViewModel _excelViewModel;
+        private ExcelImportViewModel _excelViewModel;
 
-        public ImportExcelRestockLinesCommand(ExcelViewModel vm)
+        public ImportExcelRestockLinesCommand(ExcelImportViewModel vm)
         {
             _excelViewModel = vm;
         }
 
         public bool CanExecute(object parameter)
         {
-            var vm = (ExcelViewModel)parameter;
+            var vm = (ExcelImportViewModel)parameter;
 
             if (vm == null)
             {
@@ -34,7 +34,7 @@ namespace InformiInventory.Commands
 
         public void Execute(object parameter)
         {
-            var vm = (ExcelViewModel)parameter;
+            var vm = (ExcelImportViewModel)parameter;
 
             vm.ImportExcel();
         }
@@ -49,16 +49,16 @@ namespace InformiInventory.Commands
 
     public class SaveImportedExcelRestockLinesCommand : ICommand
     {
-        private ExcelViewModel _excelViewModel;
+        private ExcelImportViewModel _excelViewModel;
 
-        public SaveImportedExcelRestockLinesCommand(ExcelViewModel vm)
+        public SaveImportedExcelRestockLinesCommand(ExcelImportViewModel vm)
         {
             _excelViewModel = vm;
         }
 
         public bool CanExecute(object parameter)
         {
-            var vm = (ExcelViewModel)parameter;
+            var vm = (ExcelImportViewModel)parameter;
 
             if (vm == null)
             {
@@ -76,7 +76,7 @@ namespace InformiInventory.Commands
 
         public void Execute(object parameter)
         {
-            var vm = (ExcelViewModel)parameter;
+            var vm = (ExcelImportViewModel)parameter;
 
             vm.SaveImportedExcelRestockLines(vm);
         }
@@ -91,16 +91,16 @@ namespace InformiInventory.Commands
 
     public class DeleteImportedExcelRestockLinesCommand : ICommand
     {
-        private ExcelViewModel _excelViewModel;
+        private ExcelImportViewModel _excelViewModel;
 
-        public DeleteImportedExcelRestockLinesCommand(ExcelViewModel vm)
+        public DeleteImportedExcelRestockLinesCommand(ExcelImportViewModel vm)
         {
             _excelViewModel = vm;
         }
 
         public bool CanExecute(object parameter)
         {
-            var vm = (ExcelViewModel)parameter;
+            var vm = (ExcelImportViewModel)parameter;
 
             if (vm == null)
             {
@@ -118,7 +118,7 @@ namespace InformiInventory.Commands
 
         public void Execute(object parameter)
         {
-            var vm = (ExcelViewModel)parameter;
+            var vm = (ExcelImportViewModel)parameter;
 
             vm.DeleteImportedExcelRestockLines();
         }

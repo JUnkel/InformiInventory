@@ -39,9 +39,9 @@
             <Button  Content="RefreshList" Margin="1"  Command="{Binding GetRestockLineModelsCommand}" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=RefreshBtn}" x:Name="RefreshBtn"/>
             <Button  Content="Neue Bestückungsliste" Margin="1" Command="{Binding CreateNewRestockModelCommand}" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=NewRestockModelBtn}" x:Name="NewRestockModelBtn"/>
 
-            <telerik:RadNumericUpDown Value="{Binding SelectedRestockLineModel.Amt}" Minimum="0" Maximum="100" SmallChange="1">
+            <telerik:RadNumericUpDown Value="{Binding SelectedRestockLineModel.Amt}" Minimum="0" Maximum="100" SmallChange="1" x:Name="AmtRadNumericDown">
                 <telerik:EventToCommandBehavior.EventBindings>
-                    <telerik:EventBinding Command="{Binding SaveStoreRestockLineCommand}" CommandParameter="{Binding}" EventName="ValueChanged" />
+                    <telerik:EventBinding Command="{Binding SaveStoreRestockLineCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=AmtRadNumericDown}" EventName="ValueChanged" />
                 </telerik:EventToCommandBehavior.EventBindings>
             </telerik:RadNumericUpDown>
                 
@@ -64,7 +64,6 @@
                 </telerik:RadListBox>
         </StackPanel>
 
-
         <telerik:RadGridView Grid.Row="1"
                              Grid.Column="0"
                              x:Name="RestockLinesGrid"
@@ -86,15 +85,18 @@
                              Margin="5"
                              VerticalAlignment="Stretch"
                              >
+            <!--<telerik:EventToCommandBehavior.EventBindings>
+                <telerik:EventBinding Command="{Binding SaveStoreRestockLineCommand}" CommandParameter="{Binding}" EventName="PropertyChanged" />
+            </telerik:EventToCommandBehavior.EventBindings>-->
             <telerik:RadGridView.Columns>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Pos}"             Header="Pos"            Width="100" IsReadOnly="True"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}"            Header="Artikel-Nr."    Width="100" IsReadOnly="True"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding ArtDesc}"         Header="Bezeichnung"    Width="250" IsReadOnly="True"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding StorageName}"     Header="Ort"            Width="50"  IsReadOnly="True"/>
                 <telerik:GridViewMaskedInputColumn DataMemberBinding="{Binding Amt}"      Header="Bestellmenge"   Width="100" IsReadOnly="False"  x:Name="AmntColumn" MaskType="Numeric" DataFormatString="d"   >
-                        <telerik:EventToCommandBehavior.EventBindings>
-                        <telerik:EventBinding Command="{Binding SaveStoreRestockLineCommand}" CommandParameter="{Binding}"  EventName="PropertyChanged" />
-                        </telerik:EventToCommandBehavior.EventBindings>
+                        <!--<telerik:EventToCommandBehavior.EventBindings>
+                        <telerik:EventBinding Command="{Binding SaveStoreRestockLineCommand}" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=AmntColumn}" EventName="PropertyChanged" />
+                        </telerik:EventToCommandBehavior.EventBindings>-->
                 </telerik:GridViewMaskedInputColumn>
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>

@@ -18,13 +18,13 @@ using Telerik.Windows.Data;
 
 namespace InformiInventory.Views
 {
-    public partial class ExcelListView : UserControl
+    public partial class ExcelImportView : UserControl
     {
-        public ExcelListView()
+        public ExcelImportView()
         {
             InitializeComponent();
 
-            DataContext = new ExcelViewModel();
+            DataContext = new ExcelImportViewModel();
 
             MainWindow.Instance.NavigationPanel.Visibility = Visibility.Visible;
         }

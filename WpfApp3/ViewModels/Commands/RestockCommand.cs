@@ -100,18 +100,15 @@ namespace InformiInventory.ViewModels.Commands
         {
         var vm = (RestockViewModel)parameter;
 
-            if (vm == null)
-            {
-                return false;
-            }
-            else if(vm.SelectedRestockLineModel == null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            if (vm == null)  return false;
+            
+            else if (vm.SelectedRestockModel.IsProcd || vm.SelectedRestockModel.TemplateId == null) return false;
+
+            else if (vm.SelectedRestockLineModel == null || vm.SelectedRestockLineModel.Amt == 0) return false;
+
+            else if (vm.SelectedRestockModel.StoreId == null) return false;
+            
+            else  return true;
         }
 
         public void Execute(object parameter)
@@ -141,16 +138,15 @@ namespace InformiInventory.ViewModels.Commands
 
         public bool CanExecute(object parameter)
         {
-           var vm = (RestockViewModel)parameter;
+            var vm = (RestockViewModel)parameter;
 
-            if(vm == null)
+            if (vm == null)
             {
                 return false;
             }
-            //else if (vm.SelectedRestockModel.IsTemplate == false)
-            //{
-            //    return false;
-            //}
+
+            else if (vm.RestockModels.Any(x => x.TemplateId != null && x.IsProcd == false)) return false;
+
             else
             {
                return true;

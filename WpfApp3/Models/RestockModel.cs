@@ -44,19 +44,19 @@ namespace InformiInventory.Models
             set { SetProperty(ref _id, value); }
         }
 
-        int _templateId;
-        public int TemplateId
+        int? _templateId;
+        public int? TemplateId
         {
             get { return _templateId; }
             set { SetProperty(ref _templateId, value); }
         }
 
-        bool _isTemplate;
-        public bool IsTemplate
-        {
-            get { return _isTemplate; }
-            set { SetProperty(ref _isTemplate, value); }
-        }
+        //bool _isTemplate;
+        //public bool IsTemplate
+        //{
+        //    get { return _isTemplate; }
+        //    set { SetProperty(ref _isTemplate, value); }
+        //}
 
         bool _isProcd;
         public bool IsProcd

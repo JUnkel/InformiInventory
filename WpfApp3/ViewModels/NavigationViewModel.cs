@@ -75,7 +75,7 @@ namespace InformiInventory.ViewModels
 
         private void OpenExcelView(object obj)
         {
-            MainWindow.Instance.MainWindowContentControl.Content = new ExcelListView();
+            MainWindow.Instance.MainWindowContentControl.Content = new ExcelImportView();
         }
 
         private void OpenMenu(object obj)

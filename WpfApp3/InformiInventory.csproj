@@ -189,12 +189,12 @@
     <Compile Include="ViewModels\DifferenceListViewModel.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\NavigationViewModel.cs" />
-    <Compile Include="ViewModels\RestockListViewModel.cs" />
-    <Compile Include="ViewModels\ExcelViewModel.cs" />
+    <Compile Include="ViewModels\RestockViewModel.cs" />
+    <Compile Include="ViewModels\ExcelImportViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase\ViewModelBase.cs" />
     <Compile Include="ViewModels\INotifyPropertyChanged\INotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="Views\ExcelListView.cs" />
+    <Compile Include="Views\ExcelImportView.cs" />
     <Compile Include="Views\RestockListView.xaml .cs" />
     <Compile Include="Views\DifferenceListView.xaml.cs" />
     <Compile Include="Views\InventoryView.xaml.cs" />
@@ -208,7 +208,7 @@
     <Compile Include="Views\NavigationControl.xaml.cs">
       <DependentUpon>NavigationControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\ExcelListView.xaml">
+    <Page Include="Views\ExcelImportView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

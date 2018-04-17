@@ -4,10 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:local="clr-namespace:InformiInventory.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="712.549"
              d:DesignWidth="1166.82"
              FocusManager.FocusedElement="{Binding ElementName=UserNameTextBox}">
+    <UserControl.DataContext>
+        <local:LoginViewModel/>
+    </UserControl.DataContext>
     <Grid Margin="1">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*"/>

@@ -1,15 +1,19 @@
-﻿<UserControl x:Class="InformiInventory.Views.ExcelListView"
+﻿<UserControl x:Class="InformiInventory.Views.ExcelImportView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:local="clr-namespace:InformiInventory.ViewModels"
              SnapsToDevicePixels="True"
              mc:Ignorable="d"
              d:DesignHeight="712.549"
              d:DesignWidth="1166.82"
              FontSize="25"
              >
+    <UserControl.DataContext>
+        <local:ExcelImportViewModel/>
+    </UserControl.DataContext>
     <Grid Margin="1" >
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*"/>
@@ -50,7 +54,7 @@
             <telerik:RadGridView.Columns>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Pos}"             Header="Pos"            Width="100" IsReadOnly="True"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}"            Header="Artikel-Nr."    Width="100" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding ArtDesc}"         Header="Bezeichnung"    Width="250" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ArtDesc}"         Header="Bezeichnung"    Width="400" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding StorageName}"     Header="Ort"            Width="50"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Amt}"             Header="Bestellmenge"   Width="100"/>
             </telerik:RadGridView.Columns>

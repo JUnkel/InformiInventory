@@ -19,7 +19,7 @@ using Telerik.Windows.Data;
 
 namespace InformiInventory.ViewModels
 {
-    public class ExcelViewModel : ViewModelBase
+    public class ExcelImportViewModel : ViewModelBase
     {
         private ICommand _importExcelRestockLinesCommand = null;
 
@@ -139,7 +139,7 @@ namespace InformiInventory.ViewModels
             }
         }
 
-        public void SaveImportedExcelRestockLines(ExcelViewModel vm)
+        public void SaveImportedExcelRestockLines(ExcelImportViewModel vm)
         {
             //var navContext = (NavigationViewModel)MainWindow.Instance.NavigationPanel.DataContext;
             try
@@ -174,7 +174,7 @@ namespace InformiInventory.ViewModels
 
                         foreach(var storageName in list)
                         {
-                            var storageId = db.FirstOrDefault<int?>("SELECT Id From Storages WHERE StorageName = @0;", storageName);
+                            var storageId = db.FirstOrDefault<int?>("SELECT StorageId From Storages WHERE StorageName = @0;", storageName);
 
                             if(storageId == null)
                             {
@@ -182,17 +182,17 @@ namespace InformiInventory.ViewModels
                             }
                         }
 
-                        var restockId = db.ExecuteScalar<int>("INSERT INTO Restocks(Dt, StoreId, UserId, IsTemplate) VALUES(Date('now'),@0, @1, @2);SELECT last_insert_rowid();", resultStoreId , resultStoreId, 1);
+                        var restockId = db.ExecuteScalar<int>("INSERT INTO Restocks(Dt, UserId) VALUES(Date('now'),@0);SELECT last_insert_rowid();", resultUserId);
 
                         foreach(var item in vm.RestockModelLines)
                         {
                             //db.Execute("INSERT INTO RestockLines(, StoreId, UserId) VALUES(@0, @1, @2)", restock.Date, restock.StoreId, restock.UserId);
 
-                            var ArtId = db.FirstOrDefault<int?>("SELECT Id From Articles WHERE GTIN = @0;", item.GTIN);
+                            var ArtId = db.FirstOrDefault<int?>("SELECT ArticleId From Articles WHERE GTIN = @0;", item.GTIN);
 
                             if(ArtId == null)
                             {
-                                var storageId = db.ExecuteScalar<int?>("Select Id FROM Storages WHERE StorageName = @0;", item.StorageName);
+                                var storageId = db.ExecuteScalar<int?>("Select StorageId FROM Storages WHERE StorageName = @0;", item.StorageName);
 
                                 ArtId = db.ExecuteScalar<int>("INSERT INTO Articles(GTIN, ADesc, StorageId) VALUES(@0, @1, @2); SELECT last_insert_rowid();", item.GTIN, item.ArtDesc, storageId);
                             }

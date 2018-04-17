@@ -21,7 +21,7 @@ namespace InformiInventory.ViewModels
         {
             GetRestockModels();
             var view = new CollectionViewSource();
-            view.GroupDescriptions.Add(new PropertyGroupDescription("IsTemplate"));
+            view.GroupDescriptions.Add(new PropertyGroupDescription("StoreId"));
             view.Source = RestockModels;
             RestocksView = view;
         }
@@ -111,7 +111,25 @@ namespace InformiInventory.ViewModels
 
                     RestockLineModels.Clear();
 
-                    RestockLineModels.AddRange(db.Fetch<RestockLineModel>("SELECT a.GTIN AS GTIN, rsl.Pos AS POS, a.ADesc AS ArtDesc, s.StorageName AS StorageName, rsl.ArtId AS ArtId,rsl.Amt AS Amnt FROM RestockLines rsl INNER JOIN Articles a ON rsl.ArtId = a.Id INNER JOIN Restocks r ON rsl.RestockId = r.Id LEFT JOIN Storages s ON s.Id = a.StorageId WHERE r.Id = @0 ", SelectedRestockModel.Id));
+                    RestockLineModels.AddRange(db.Fetch<RestockLineModel>("SELECT a.GTIN AS GTIN, rsl.Pos AS POS, a.ADesc AS ArtDesc, s.StorageName AS StorageName, rsl.ArtId AS ArtId, sum(rsl.Amt) AS Amt FROM RestockLines rsl INNER JOIN Articles a ON rsl.ArtId = a.ArticleId INNER JOIN Storages s ON s.StorageId = a.StorageId Group by rsl.Pos", SelectedRestockModel.Id,SelectedRestockModel.TemplateId));
+
+                    //if(SelectedRestockModel.TemplateId != null)
+                    //{
+                    //    var tempRestock = db.Fetch<RestockLineModel>("SELECT a.GTIN AS GTIN, rsl.Pos AS POS, a.ADesc AS ArtDesc, s.StorageName AS StorageName, rsl.ArtId AS ArtId, rsl.Amt AS Amt FROM RestockLines rsl INNER JOIN Articles a ON rsl.ArtId = a.ArticleId INNER JOIN Restocks r ON rsl.RestockId = r.RestockId LEFT JOIN Storages s ON s.StorageId = a.StorageId WHERE r.RestockId = @0", SelectedRestockModel.TemplateId);
+
+                    //    foreach(var restock in tempRestock)
+                    //    {
+                    //        var found = RestockLineModels.FirstOrDefault(x => x.ArtId == restock.ArtId);
+
+                    //        if(found != null)
+                    //        {
+                    //            restock.Amt = found.Amt;
+                    //        }
+                    //    }
+                    //    RestockLineModels.Clear();
+
+                    //    RestockLineModels.AddRange(tempRestock);
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -140,7 +158,7 @@ namespace InformiInventory.ViewModels
 
                     RestockModels.Clear();
 
-                    RestockModels.AddRange(db.Fetch<RestockModel>("SELECT Id AS Id, Dt AS DATE,IsTemplate AS IsTemplate, IsProcd AS IsProcd, StoreId AS StoreId, TemplateId AS TemplateId FROM Restocks WHERE IsTemplate = 1 OR StoreID = @0", storeId));
+                    RestockModels.AddRange(db.Fetch<RestockModel>("SELECT RestockId AS Id, Dt AS DATE, IsProcd AS IsProcd, StoreId AS StoreId, TemplateId AS TemplateId FROM Restocks WHERE (StoreId IS NULL OR StoreId = @0)", storeId));
 
                 }
                 catch (Exception ex)
@@ -197,9 +215,9 @@ namespace InformiInventory.ViewModels
                 throw new Exception("Vorgang nicht möglich:\n\nBenutzer ist keiner Filiale zugeordnet.");
             }
 
-            if (RestockModels.Any(x => x.IsTemplate == false && x.StoreId == storeId && x.IsProcd == false)) throw new Exception("Vorgang nicht möglich:\n\n Bitte zunächst die leste Bestückungsliste abschließen.");
+            if (RestockModels.Any(x => x.StoreId == storeId && x.IsProcd == false)) throw new Exception("Vorgang nicht möglich:\n\n Bitte zunächst die offene Bestückungsliste abschließen.");
 
-            if (SelectedRestockModel.IsTemplate == false) throw new Exception("Neue Bestückslisten können nur aus einer Vorlage heraus erstellt werden.");
+            if (SelectedRestockModel.StoreId !=  null) throw new Exception("Neue Bestückslisten können nur aus einer Vorlage heraus erstellt werden.");
 
             int userId;
 
@@ -220,14 +238,13 @@ namespace InformiInventory.ViewModels
                 {
                     using (var scope = db.GetTransaction())
                     {
-                        var rowId = db.ExecuteScalar<int>("INSERT INTO Restocks(Dt, StoreId, UserId, IsTemplate, TemplateId) VALUES(date('now'), @0, @1, @2, @3);SELECT last_insert_rowid();", storeId, userId, 0, SelectedRestockModel.Id);
+                        var rowId = db.ExecuteScalar<int>("INSERT INTO Restocks(Dt, StoreId, UserId, TemplateId) VALUES(date('now'), @0, @1, @2);SELECT last_insert_rowid();", storeId, userId, SelectedRestockModel.Id);
 
                         var restock = new RestockModel()
                         {
                             Date = DateTime.Now,
                             Id = rowId,
                             IsProcd = false,
-                            IsTemplate = false,
                             StoreId = storeId,
                             UserId = userId,
                             TemplateId = SelectedRestockModel.Id
@@ -263,7 +280,7 @@ namespace InformiInventory.ViewModels
 
                     if (vm.SelectedRestockModel == null) return;
 
-                    db.Execute(sql: "DELETE FROM Restocks WHERE Id =@0;", SelectedRestockModel.Id);
+                    db.Execute(sql: "DELETE FROM Restocks WHERE RestockId =@0;", SelectedRestockModel.Id);
 
                     db.Execute(sql: "DELETE FROM RestockLines WHERE RestockId =@0;", SelectedRestockModel.Id);
 
