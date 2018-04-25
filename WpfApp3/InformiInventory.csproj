@@ -179,7 +179,6 @@
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\NavigationModel.cs" />
     <Compile Include="ViewModels\Commands\Generic\BaseCommand.cs" />
-    <Compile Include="ViewModels\Commands\Generic\RelayCommandT.cs" />
     <Compile Include="ViewModels\Commands\InventoryCommand.cs" />
     <Compile Include="ViewModels\Commands\ExcelComand.cs" />
     <Compile Include="ViewModels\Commands\LoginCommand.cs" />
@@ -195,7 +194,7 @@
     <Compile Include="ViewModels\INotifyPropertyChanged\INotifyPropertyChanged.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="Views\ExcelImportView.cs" />
-    <Compile Include="Views\RestockListView.xaml .cs" />
+    <Compile Include="Views\RestockView.xaml .cs" />
     <Compile Include="Views\DifferenceListView.xaml.cs" />
     <Compile Include="Views\InventoryView.xaml.cs" />
     <Compile Include="Views\LoginView.xaml.cs" />
@@ -212,7 +211,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\RestockListView.xaml">
+    <Page Include="Views\RestockView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

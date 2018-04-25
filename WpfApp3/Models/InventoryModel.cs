@@ -8,16 +8,147 @@ using System.Windows.Controls;
 
 namespace InformiInventory.Models
 {
-    public class InventoryModel : INotifyPropertyChanged
+
+    public class InventoryLineModel : ViewModelBase
     {
-        public string Store { get; set; }
+        protected virtual bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
+        }
 
-        public DateTime Dt { get; set; }
+        //CSV Format 
 
-        public int Id { get; set; }
-        
-        public int CrUserId { get; set; }
+        //1;   40069;   Westfro Karottenwürfel 4x2, 5 kg    ;   ;1 ;
+        //318; K115313; Häagen Dazs Pralines Cream 8x500 ml.;   ;0 ;E
 
-        public int InventoryUserId { get; set; }
+        int _inventoryId;
+        public int InventoryId
+        {
+            get { return _inventoryId; }
+            set { SetProperty(ref _inventoryId, value); }
+        }
+
+        int _inventoryLineId;
+        public int InventoryLineId
+        {
+            get { return _inventoryLineId; }
+            set { SetProperty(ref _inventoryLineId, value); }
+        }
+
+        int _pos;
+        public int Pos
+        {
+            get { return _pos; }
+            set { SetProperty(ref _pos, value); }
+        }
+
+        string _gtin;
+        public string GTIN
+        {
+            get { return _gtin; }
+            set { SetProperty(ref _gtin, value); }
+        }
+
+        string _artDesc;
+        public string ArtDesc
+        {
+            get { return _artDesc; }
+            set { SetProperty(ref _artDesc, value); }
+        }
+
+        int _artId;
+        public int ArtId
+        {
+            get { return _artId; }
+            set { SetProperty(ref _artId, value); }
+        }
+
+        int _amt;
+        public int Amt
+        {
+            get { return _amt; }
+            set { SetProperty(ref _amt, value); }
+
+        }
+
+        int _storageId;
+        public int StorageId
+        {
+            get { return _storageId; }
+            set { SetProperty(ref _storageId, value); }
+
+        }
+    }
+
+    public class InventoryModel : ViewModelBase
+    {
+        //string _storeName;
+        //public string StoreName
+        //{
+        //    get { return _storeName; }
+        //    set { SetProperty(ref _storeName, value); }
+        //}
+
+        protected virtual bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            this.OnPropertyChanged(propertyName);
+
+            return true;
+        }
+
+        int? _storeId;
+        public int? StoreId
+        {
+            get { return _storeId; }
+            set { SetProperty(ref _storeId, value); }
+        }
+
+        DateTime _date;
+        public DateTime Date
+        {
+            get { return _date; }
+            set { SetProperty(ref _date, value); }
+        }
+
+        int _userId;
+        public int UserId
+        {
+            get { return _userId; }
+            set { SetProperty(ref _userId, value); }
+        }
+
+        int _id;
+        public int Id
+        {
+            get { return _id; }
+            set { SetProperty(ref _id, value); }
+        }
+
+        int? _templateId;
+        public int? TemplateId
+        {
+            get { return _templateId; }
+            set { SetProperty(ref _templateId, value); }
+        }
+
+        //bool _isTemplate;
+        //public bool IsTemplate
+        //{
+        //    get { return _isTemplate; }
+        //    set { SetProperty(ref _isTemplate, value); }
+        //}
+
+        bool _isProcd;
+
+        public bool IsProcd
+        {
+            get { return _isProcd; }
+            set { SetProperty(ref _isProcd, value); }
+        }
     }
 }

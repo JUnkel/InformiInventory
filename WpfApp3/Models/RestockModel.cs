@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using System.Windows;
 
 namespace InformiInventory.Models
 {
-    public class RestockModel : INotifyPropertyChanged
+    public class RestockModel : ViewModelBase
     {
         //string _storeName;
         //public string StoreName
@@ -15,6 +16,17 @@ namespace InformiInventory.Models
         //    get { return _storeName; }
         //    set { SetProperty(ref _storeName, value); }
         //}
+
+
+
+        protected virtual bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            this.OnPropertyChanged(propertyName);
+
+            return true;
+        }
 
         int? _storeId;
         public int? StoreId
@@ -59,6 +71,8 @@ namespace InformiInventory.Models
         //}
 
         bool _isProcd;
+
+
         public bool IsProcd
         {
             get { return _isProcd; }
@@ -66,12 +80,36 @@ namespace InformiInventory.Models
         }
     }
 
-    public class RestockLineModel : INotifyPropertyChanged
+    public class RestockLineModel : ViewModelBase
     {
+        protected virtual bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
+        }
+
         //CSV Format 
 
         //1;   40069;   Westfro Karottenwürfel 4x2, 5 kg    ;   ;1 ;
         //318; K115313; Häagen Dazs Pralines Cream 8x500 ml.;   ;0 ;E
+
+
+        int _restockId;
+        public int RestockId
+        {
+            get { return _restockId; }
+            set { SetProperty(ref _restockId, value); }
+        }
+
+        int _restockLineId;
+        public int RestockLineId
+        {
+            get { return _restockLineId; }
+            set { SetProperty(ref _restockLineId, value); }
+        }
+
 
         int _pos;
         public int Pos
@@ -111,6 +149,8 @@ namespace InformiInventory.Models
         }
 
         string _storageName;
+
+
         public string StorageName
         {
             get { return _storageName; }
@@ -118,29 +158,16 @@ namespace InformiInventory.Models
         }
     }
 
-    //    public List<RestockLineModel> GetRestockLineModels()
-    //    {
-    //        var items = new List<RestockLineModel>();
-
-    //        using (var db = new PetaPoco.Database("db"))
-    //        {
-    //            try
-    //            {
-    //                items.AddRange(db.Fetch<RestockLineModel>("SELECT Pos, GTIN, Art, Desc, Amt, Storage,  FROM RestockLines"));
-    //            }
-    //            catch (Exception ex)
-    //            {
-    //                MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
-
-    //            }
-    //            return items;
-    //        }
-    //    }
-    //}
-
-
-    public class Article : INotifyPropertyChanged
+    public class Article : ViewModelBase
     {
+        protected virtual bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
+        }
+ 
         string _gtin;
         public string GTIN
         {
@@ -163,10 +190,13 @@ namespace InformiInventory.Models
         }
 
         string _storage;
+
+
         public string Storage
         {
             get { return _storage; }
             set { SetProperty(ref _storage, value); }
         }
     }
+
 }

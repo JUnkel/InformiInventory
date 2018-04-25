@@ -28,9 +28,8 @@
         <StackPanel  HorizontalAlignment="Stretch" Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Stretch" >
             <Button Command="{Binding ImportExcelRestockLinesCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=ExcelImportBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Excel-Import" x:Name="ExcelImportBtn" Background="WhiteSmoke" Margin="1"/>
             <Button Command="{Binding SaveImportedExcelRestockLinesCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=SaveExcelImportBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Speichern" x:Name="SaveExcelImportBtn" Background="GreenYellow" Margin="1"/>
-            <Button Command="{Binding DeleteImportedExcelRestockLinesCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=SaveExcelImportBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Abbrechen" x:Name="DeleteExcelImportBtn" Background="Red" Margin="1"/>
+            <Button Command="{Binding DeleteImportedExcelRestockLinesCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=DeleteExcelImportBtn}"  Grid.Row="0" Grid.Column="1" Width="Auto" Content="Abbrechen" x:Name="DeleteExcelImportBtn" Background="Red" Margin="1"/>
         </StackPanel>
-        
 
         <telerik:RadGridView Grid.Row="1"
                              Grid.Column="0"
@@ -56,7 +55,7 @@
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}"            Header="Artikel-Nr."    Width="100" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding ArtDesc}"         Header="Bezeichnung"    Width="400" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding StorageName}"     Header="Ort"            Width="50"/>
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding Amt}"             Header="Bestellmenge"   Width="100"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Amt}"   Header="Bestellmenge"   Width="100"/>
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>
     </Grid>

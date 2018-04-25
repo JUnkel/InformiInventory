@@ -2,6 +2,7 @@
 using ExcelDataReader;
 using InformiInventory.Commands;
 using InformiInventory.Models;
+using InformiInventory.ViewModels.Commands;
 using InformiInventory.Views;
 using Microsoft.Win32;
 using System;
@@ -21,20 +22,14 @@ namespace InformiInventory.ViewModels
 {
     public class ExcelImportViewModel : ViewModelBase
     {
-        private ICommand _importExcelRestockLinesCommand = null;
-
-        public ICommand ImportExcelRestockLinesCommand => _importExcelRestockLinesCommand ?? (_importExcelRestockLinesCommand = new ImportExcelRestockLinesCommand(this));
-
-        private ICommand _saveImportedExcelRestockLinesCommand = null;
-
-        public ICommand SaveImportedExcelRestockLinesCommand => _saveImportedExcelRestockLinesCommand ?? (_saveImportedExcelRestockLinesCommand = new SaveImportedExcelRestockLinesCommand(this));
-
-        private ICommand _deleteImportedExcelRestockLinesCommand = null;
-
-        public ICommand DeleteImportedExcelRestockLinesCommand => _deleteImportedExcelRestockLinesCommand ?? (_deleteImportedExcelRestockLinesCommand = new DeleteImportedExcelRestockLinesCommand(this));
+        public ExcelImportViewModel()
+        {
+            ImportExcelRestockLinesCommand = new RelayCommand(ImportExcel, CanExecute_ImportExcelRestockLinesCommand);
+            SaveImportedExcelRestockLinesCommand = new RelayCommand(SaveImportedExcelRestockLines, CanExecute_SaveImportedExcelRestockLinesCommand);
+            DeleteImportedExcelRestockLinesCommand = new RelayCommand(DeleteImportedExcelRestockLines, CanExecute_DeleteImportedExcelRestockLinesCommand);
+        }
 
         RadObservableCollection<RestockLineModel> _restockModelLines;
-
         public RadObservableCollection<RestockLineModel> RestockModelLines
         {
             get
@@ -48,7 +43,21 @@ namespace InformiInventory.ViewModels
             }
         }
 
-        public void ImportExcel()
+        public RelayCommand ImportExcelRestockLinesCommand { get; private set; }
+
+        public bool CanExecute_ImportExcelRestockLinesCommand(object parameter)
+        {
+            var vm = (ExcelImportViewModel)parameter;
+
+            if (vm == null) return false;
+
+            else
+            {
+                return true;
+            }
+        }
+
+        public void ImportExcel(object parameter)
         {
             var fileDialog = new System.Windows.Forms.OpenFileDialog();
 
@@ -139,11 +148,29 @@ namespace InformiInventory.ViewModels
             }
         }
 
-        public void SaveImportedExcelRestockLines(ExcelImportViewModel vm)
+        public RelayCommand SaveImportedExcelRestockLinesCommand { get; private set; }
+
+        public bool CanExecute_SaveImportedExcelRestockLinesCommand(object parameter)
+        {
+            var vm = (ExcelImportViewModel)parameter;
+
+            if (vm == null) return false;
+
+            if (vm.RestockModelLines.Count == 0) return false;
+
+            else
+            {
+                return true;
+            }
+        }
+
+        public void SaveImportedExcelRestockLines(object parameter)
         {
             //var navContext = (NavigationViewModel)MainWindow.Instance.NavigationPanel.DataContext;
             try
             {
+
+                var vm = (ExcelImportViewModel)parameter;
 
                 var storeId = App.Current.Properties["StoreId"].ToString();
 
@@ -211,9 +238,24 @@ namespace InformiInventory.ViewModels
             }
         }
 
-        public void DeleteImportedExcelRestockLines()
+        public RelayCommand DeleteImportedExcelRestockLinesCommand { get; private set; }
+
+        public bool CanExecute_DeleteImportedExcelRestockLinesCommand(object parameter)
         {
-            RestockModelLines.Clear();
+            var vm = (ExcelImportViewModel)parameter;
+
+            if (vm == null) return false;
+
+            else
+            {
+                return true;
+            }
+        }
+
+        public void DeleteImportedExcelRestockLines(object parameter)
+        {
+            var vm = (ExcelImportViewModel)parameter;
+            vm.RestockModelLines.Clear();
         }
     }
 }

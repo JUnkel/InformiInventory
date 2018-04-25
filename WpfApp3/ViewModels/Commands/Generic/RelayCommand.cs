@@ -5,29 +5,53 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Telerik.Windows.Controls;
 
 namespace InformiInventory.ViewModels.Commands
 {
-    public class RelayCommand : CommandBase
+    public class RelayCommand : ICommand
     {
-        private readonly Action _execute;
+        private readonly Action<object> _execute;
+        private readonly Predicate<object> _canExecute;
 
-        private readonly Func<bool> _canExecute;
 
-        public RelayCommand() { }
-
-        public RelayCommand(Action execute) : this(execute, null) { }
-
-        public RelayCommand(Action execute, Func<bool> canExecute)
+        public RelayCommand(Action<object> execute, Predicate<object> canExecute )
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            if (execute == null) throw new NullReferenceException("execute");
+
+            _execute = execute;
             _canExecute = canExecute;
         }
 
-        public override bool CanExecute(object parameter) => _canExecute == null || _canExecute();
+        public RelayCommand(Action<object> execute) : this(execute, null)
+        {
 
-        public override void Execute(object parameter) { _execute(); }
+
+        }
+
+        event EventHandler ICommand.CanExecuteChanged
+        {
+            add
+            {
+                CommandManager.RequerySuggested += value;
+            }
+
+            remove
+            {
+                CommandManager.RequerySuggested -= value;
+            }
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return _canExecute == null ? true : _canExecute(parameter);
+        }
+
+        public void Execute(object parameter)
+        {
+            _execute.Invoke(parameter);
+        }
+
     }
-
 }
 

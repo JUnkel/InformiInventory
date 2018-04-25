@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,24 +20,24 @@ namespace InformiInventory.ViewModels
     {
         public RestockViewModel()
         {
-            GetRestockModels();
             var view = new CollectionViewSource();
             view.GroupDescriptions.Add(new PropertyGroupDescription("StoreId"));
             view.Source = RestockModels;
             RestocksView = view;
+            GetRestockLinesCommand = new RelayCommand(GetRestockLines, CanExecute_GetRestockLinesCommand);
+            GetRestocksCommand = new RelayCommand(GetRestocks, CanExecute_GetRestocksCommand);
+            CreateRestockCommand = new RelayCommand(CreateRestock, CanExecute_CreateRestockCommand);
+            DeleteRestockCommand = new RelayCommand(DeleteRestock, CanExecute_DeleteRestockCommand);
+            CreateRestockLineCommand = new RelayCommand(CreateRestockLine, CanExecute_CreateRestockLineCommand);
         }
 
-        //int _selectedIndexStoreRestockModels = ;
-        //public int SelectedIndexStoreRestockModels
-        //{
-        //    get { return _selectedIndexStoreRestockModels; }
-        //    set
-        //    {
-        //        _selectedIndexStoreRestockModels = value;
-        //        _selectedIndexTemplateRestockModels = -1;
-        //        SetProperty(ref _selectedIndexStoreRestockModels,value);
-        //    }
-        //}
+        protected virtual bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
+        }
 
         //int _selectedIndexTemplateRestockModels;
         //public int SelectedIndexTemplateRestockModels
@@ -97,52 +98,10 @@ namespace InformiInventory.ViewModels
             }
         }
 
-        private ICommand _getRestockLineModelsCommand = null;
 
-        public ICommand GetRestockLineModelsCommand => _getRestockLineModelsCommand ?? (_getRestockLineModelsCommand = new GetRestockLineModelsCommand(this));
+        public RelayCommand GetRestocksCommand { get; private set; }
 
-        public void GetRestockLineModels()
-        {
-            using (var db = new PetaPoco.Database("db"))
-            {
-                try
-                {
-                    if (SelectedRestockModel == null) return;
-
-                    RestockLineModels.Clear();
-
-                    RestockLineModels.AddRange(db.Fetch<RestockLineModel>("SELECT a.GTIN AS GTIN, rsl.Pos AS POS, a.ADesc AS ArtDesc, s.StorageName AS StorageName, rsl.ArtId AS ArtId, sum(rsl.Amt) AS Amt FROM RestockLines rsl INNER JOIN Articles a ON rsl.ArtId = a.ArticleId INNER JOIN Storages s ON s.StorageId = a.StorageId Group by rsl.Pos", SelectedRestockModel.Id,SelectedRestockModel.TemplateId));
-
-                    //if(SelectedRestockModel.TemplateId != null)
-                    //{
-                    //    var tempRestock = db.Fetch<RestockLineModel>("SELECT a.GTIN AS GTIN, rsl.Pos AS POS, a.ADesc AS ArtDesc, s.StorageName AS StorageName, rsl.ArtId AS ArtId, rsl.Amt AS Amt FROM RestockLines rsl INNER JOIN Articles a ON rsl.ArtId = a.ArticleId INNER JOIN Restocks r ON rsl.RestockId = r.RestockId LEFT JOIN Storages s ON s.StorageId = a.StorageId WHERE r.RestockId = @0", SelectedRestockModel.TemplateId);
-
-                    //    foreach(var restock in tempRestock)
-                    //    {
-                    //        var found = RestockLineModels.FirstOrDefault(x => x.ArtId == restock.ArtId);
-
-                    //        if(found != null)
-                    //        {
-                    //            restock.Amt = found.Amt;
-                    //        }
-                    //    }
-                    //    RestockLineModels.Clear();
-
-                    //    RestockLineModels.AddRange(tempRestock);
-                    //}
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
-                }
-            }
-        }
-
-        private ICommand _getRestockModelsCommand = null;
-
-        public ICommand GetRestockModelsCommand => _getRestockModelsCommand ?? (_getRestockModelsCommand = new GetRestockModelsCommand(this));
-
-        public void GetRestockModels()
+        public void GetRestocks(object patameter)
         {
             using (var db = new PetaPoco.Database("db"))
             {
@@ -168,77 +127,98 @@ namespace InformiInventory.ViewModels
             }
         }
 
-        private ICommand _saveRestockLineCommand = null;
-
-        public ICommand SaveStoreRestockLineCommand => _saveRestockLineCommand ?? (_saveRestockLineCommand = new SaveStoreRestockLineCommand(this));
-
-        public void SaveRestockLine(object parameter)
+        public bool CanExecute_GetRestocksCommand(object parameter)
         {
+            var vm = (RestockViewModel)parameter;
+
+            if (vm == null) return false;
+            else
+            {
+                return true;
+            }
+        }
+
+
+        public RelayCommand GetRestockLinesCommand { get; private set; }
+
+        public bool CanExecute_GetRestockLinesCommand(object parameter)
+        {
+            var selectedRestockModel = (RestockModel)parameter;
+
+            if (selectedRestockModel == null) return false;
+            else
+            {
+                return true;
+            }
+        }
+
+        public void GetRestockLines(object parameter)
+        {
+            var selectedRestock = (RestockModel)parameter;
+
+            if (selectedRestock == null) return;
+
             using (var db = new PetaPoco.Database("db"))
             {
                 try
                 {
-                    var vm = (RestockViewModel)parameter;
+                    RestockLineModels.Clear();
 
-                    if (vm == null) return;
-                    //DB Restocks: Id ,RestockId,Pos,ArtId, Amt
-                    db.Execute(sql: "INSERT INTO RestockLines(RestockId, Pos, ArtId, Amt) VALUES(@0, @1, @2, @3);", SelectedRestockModel.Id, vm.SelectedRestockLineModel.Pos, vm.SelectedRestockLineModel.ArtId, vm.SelectedRestockLineModel.Amt);
+                    RestockLineModels.AddRange(db.Fetch<RestockLineModel>("SELECT a.GTIN AS GTIN, rsl.Pos AS POS, a.ADesc AS ArtDesc, s.StorageName AS StorageName, rsl.ArtId AS ArtId, rsl.Amt AS Amt, r.RestockId AS RestockId,rsl.RestockLineId AS RestockLineId FROM RestockLines rsl INNER JOIN Restocks r ON (rsl.RestockId = r.RestockId) OR (r.TemplateId) INNER JOIN Articles a ON rsl.ArtId = a.ArticleId INNER JOIN Storages s ON s.StorageId = a.StorageId WHERE r.RestockId = @0 OR r.TemplateId = @1 GROUP BY rsl.Pos, rsl.ArtId ORDER BY rsl.Pos ", selectedRestock.Id, selectedRestock.TemplateId));
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(string.Format("Daten konnten nicht gespeichert werden:\n\n" + ex.Message), "Fehler", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                    MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
                 }
             }
         }
 
-        private ICommand _createNewRestockModelCommand = null;
 
-        public ICommand CreateNewRestockModelCommand => _createNewRestockModelCommand ?? (_createNewRestockModelCommand = new CreateNewRestockModelCommand(this));
+        public RelayCommand CreateRestockCommand { get; private set; }
 
-        public void CreateNewRestockModel(object parameter)
+        public void CreateRestock(object paramater)
         {
-            var vm = (RestockViewModel)parameter;
+            var selectedRestock = (RestockModel)paramater;
 
-            if (vm == null) return;
-
-            if (SelectedRestockModel == null) throw new Exception("Keine Bestückungsliste ausgewählt");
-
-            int? storeId = null;
-            var isStoreId = int.TryParse(App.Current.Properties["StoreId"].ToString(), out int resultStoreId);
-
-            if (isStoreId)
-            {
-                storeId = resultStoreId;
-            }
-            else
-            {
-                throw new Exception("Vorgang nicht möglich:\n\nBenutzer ist keiner Filiale zugeordnet.");
-            }
-
-            if (RestockModels.Any(x => x.StoreId == storeId && x.IsProcd == false)) throw new Exception("Vorgang nicht möglich:\n\n Bitte zunächst die offene Bestückungsliste abschließen.");
-
-            if (SelectedRestockModel.StoreId !=  null) throw new Exception("Neue Bestückslisten können nur aus einer Vorlage heraus erstellt werden.");
-
-            int userId;
-
-            var isUserId = int.TryParse(App.Current.Properties["UserId"].ToString(), out int resultUserId);
-
-            if (isUserId)
-            {
-                userId = resultUserId;
-            }
-            else
-            {
-                throw new Exception("Vorgang nicht möglich:\n\nUnbekannter Benutzer.");
-            }
+            if (selectedRestock == null) return;
 
             try
             {
+                if (selectedRestock.TemplateId != null) throw new Exception("Neue Bestückslisten können nur aus Vorlagen erstellt werden.");
+
+                int? storeId = null;
+
+                var isStoreId = int.TryParse(App.Current.Properties["StoreId"].ToString(), out int resultStoreId);
+
+                if (isStoreId)
+                {
+                    storeId = resultStoreId;
+                }
+                else
+                {
+                    throw new Exception("Vorgang nicht möglich:\n\nBenutzer ist keiner Filiale zugeordnet.");
+                }
+
+                if (RestockModels.Any(x => x.StoreId == storeId && x.IsProcd == false)) throw new Exception("Vorgang nicht möglich:\n\n Bitte zunächst die offene Bestückungsliste abschließen.");
+
+                int userId;
+
+                var isUserId = int.TryParse(App.Current.Properties["UserId"].ToString(), out int resultUserId);
+
+                if (isUserId)
+                {
+                    userId = resultUserId;
+                }
+                else
+                {
+                    throw new Exception("Vorgang nicht möglich:\n\nUnbekannter Benutzer.");
+                }
+
                 using (var db = new PetaPoco.Database("db"))
                 {
                     using (var scope = db.GetTransaction())
                     {
-                        var rowId = db.ExecuteScalar<int>("INSERT INTO Restocks(Dt, StoreId, UserId, TemplateId) VALUES(date('now'), @0, @1, @2);SELECT last_insert_rowid();", storeId, userId, SelectedRestockModel.Id);
+                        var rowId = db.ExecuteScalar<int>("INSERT INTO Restocks(Dt, StoreId, UserId, TemplateId) VALUES(date('now'), @0, @1, @2);SELECT last_insert_rowid();", storeId, userId, selectedRestock.Id);
 
                         var restock = new RestockModel()
                         {
@@ -247,55 +227,148 @@ namespace InformiInventory.ViewModels
                             IsProcd = false,
                             StoreId = storeId,
                             UserId = userId,
-                            TemplateId = SelectedRestockModel.Id
+                            TemplateId = selectedRestock.Id
                         };
 
                         scope.Complete();
 
                         RestockModels.Add(restock);
                     }
-                } 
+                }
             }
             catch (Exception ex)
             {
-                    MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
+                MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
             }
         }
 
-       private ICommand _deleteRestockModelCommand = null;
-
-        public ICommand DeleteRestockModelCommand => _deleteRestockModelCommand ?? (_deleteRestockModelCommand = new DeleteRestockModelCommand(this));
-
-        public void DeleteRestockModel(object parameter)
+        public bool CanExecute_CreateRestockCommand(object parameter)
         {
-            if(MessageBox.Show("Soll die ausgewählte Bestückungsliste gelöscht werden?","Frage",MessageBoxButton.OKCancel,MessageBoxImage.Question) == MessageBoxResult.Cancel ) return ;
+            var selectedRestockModel = (RestockModel)parameter;
 
-            using (var db = new PetaPoco.Database("db"))
+            if (selectedRestockModel == null) return false;
+
+            else if (selectedRestockModel.TemplateId != null) return false;
+
+            else
             {
-                try
+                return true;
+            }
+        }
+
+
+        public RelayCommand DeleteRestockCommand { get; private set; }
+
+        public bool CanExecute_DeleteRestockCommand(object parameter)
+        {
+            var selectedRestockModel = (RestockModel)parameter;
+
+            if (selectedRestockModel == null) return false;
+
+            else
+            {
+                return true;
+            }
+        }
+
+        public void DeleteRestock(object parameter)
+        {
+            var selectedRestock = (RestockModel)parameter;
+
+            if (selectedRestock == null) return;
+
+            if (MessageBox.Show("Soll die ausgewählte Bestückungsliste gelöscht werden?", "Frage", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.Cancel) return;
+
+            try
+            {
+
+                using (var db = new PetaPoco.Database("db"))
                 {
-                    var vm = (RestockViewModel)parameter;
 
-                    if (vm == null) return;
+                    db.Execute(sql: "DELETE FROM Restocks WHERE RestockId =@0;", selectedRestock.Id);
 
-                    if (vm.SelectedRestockModel == null) return;
+                    db.Execute(sql: "DELETE FROM RestockLines WHERE RestockId =@0;", selectedRestock.Id);
 
-                    db.Execute(sql: "DELETE FROM Restocks WHERE RestockId =@0;", SelectedRestockModel.Id);
-
-                    db.Execute(sql: "DELETE FROM RestockLines WHERE RestockId =@0;", SelectedRestockModel.Id);
-
-                    RestockModels.Remove(SelectedRestockModel);
+                    RestockModels.Remove(selectedRestock);
 
                     RestockLineModels.Clear();
 
                     MessageBox.Show("Ausgewählte Bestückungsliste wurde gelöscht.");
-
                 }
-                catch (Exception ex)
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
+            }
+        }
+
+
+        public RelayCommand CreateRestockLineCommand { get; private set; }
+
+        public bool CanExecute_CreateRestockLineCommand(object parameter)
+        {
+            var vm = (RestockViewModel)parameter;
+
+            if (vm == null) return false;
+
+            else
+            {
+                var id = SelectedRestockLineModel.RestockLineId;
+
+                if(SelectedRestockLineModel.Amt != vm.RestockLineModels.FirstOrDefault(x => x.RestockLineId == id).Amt) return true;
+                else
                 {
-                    MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
+                    return false;
                 }
             }
         }
+
+        public void CreateRestockLine(object parameter)
+        {
+            using (var db = new PetaPoco.Database("db"))
+            {
+                try
+                {
+                    var selectedRestockLine = (RestockLineModel)parameter;
+                    
+                    if (selectedRestockLine == null) return;
+                    //DB Restocks: Id ,RestockId,Pos,ArtId, Amt
+
+                    if (selectedRestockLine.Amt == 0) db.Execute("DELETE FROM RestockLines WHERE RestockLineId = @0"); 
+
+                    var changes = db.ExecuteScalar<int>("Update RestockLines SET Amt = @0 WHERE RestockLineId = @1 AND RestockId =@2;Select Changes()", selectedRestockLine.Amt, selectedRestockLine.RestockLineId, selectedRestockLine.RestockId);
+
+                    if (changes == 0)
+                    {
+                        var lastid = db.ExecuteScalar<int>("Select MAX(RestockLineId) FROM RestockLines");
+
+                        selectedRestockLine.RestockLineId = db.ExecuteScalar<int>("Insert Into RestockLines(RestockLineId,RestockId, Pos, ArtId, Amt) VALUES(@0, @1, @2, @3,@4);SELECT last_insert_rowid();", lastid + 1,selectedRestockLine.RestockId, selectedRestockLine.Pos, selectedRestockLine.ArtId, selectedRestockLine.Amt);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(string.Format("Daten konnten nicht gespeichert werden:\n\n" + ex.Message), "Fehler", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                }
+            }
+        }
+
+        public RelayCommand DeleteRestockModelCommand { get; private set; }
+        
+        //private ICommand _getRestockLineModelsCommand = null;
+
+        //public ICommand GetRestockLineModelsCommand => _getRestockLineModelsCommand ?? (_getRestockLineModelsCommand = new RestockCommand(this));
+
+        //private ICommand _getRestockModelsCommand = null;
+
+        //public RelayCommand GetRestockModelsCommand { get; private set; }
+
+        //private ICommand _createNewRestockModelCommand = null;
+
+        //public ICommand CreateNewRestockModelCommand { get; private set; }
+
+        //private ICommand _deleteRestockModelCommand = null;
+
+        //public ICommand DeleteRestockModelCommand => _deleteRestockModelCommand ?? (_deleteRestockModelCommand = new DeleteRestockModelCommand(this));
+
+        }
     }
-}

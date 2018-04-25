@@ -11,6 +11,14 @@ namespace InformiInventory.ViewModels
 {
     public class DifferenceListViewModel : ViewModelBase
     {
+        protected virtual bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
+        }
+
         ObservableCollection<InformiInventory.Models.DifferenceListModel> _differences;
 
         ObservableCollection<InformiInventory.Models.DifferenceListModel> Differences

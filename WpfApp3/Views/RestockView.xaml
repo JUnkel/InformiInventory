@@ -35,14 +35,15 @@
         <StackPanel  HorizontalAlignment="Stretch" Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Stretch" >
             <!--<Button Command="{Binding ImportExcelRestockLinesCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=ExcelImportBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Excel-Import" x:Name="ExcelImportBtn" Background="WhiteSmoke" Margin="1"/>-->
             <Button Command="{Binding SaveStoreRestockLineCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=SaveRestockLineBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Speichern" x:Name="SaveRestockLineBtn" Background="GreenYellow" Margin="1"/>
-            <Button Command="{Binding DeleteRestockModelCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=DeleteRestockBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Löschen" x:Name="DeleteRestockBtn" Background="Red" Margin="1" />
-            <Button  Content="RefreshList" Margin="1"  Command="{Binding GetRestockLineModelsCommand}" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=RefreshBtn}" x:Name="RefreshBtn"/>
-            <Button  Content="Neue Bestückungsliste" Margin="1" Command="{Binding CreateNewRestockModelCommand}" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=NewRestockModelBtn}" x:Name="NewRestockModelBtn"/>
+            <Button Command="{Binding DeleteRestockCommand}" CommandParameter="{Binding ElementName=RestocksRadListBox, Path=SelectedItem}" CommandTarget="{Binding ElementName=DeleteRestockBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Löschen" x:Name="DeleteRestockBtn" Background="Red" Margin="1" />
+            <Button  Content="RefreshLines" Margin="1"  Command="{Binding GetRestockLinesCommand}" CommandParameter="{Binding ElementName=RestocksRadListBox,Path=SelectedItem}"  CommandTarget="{Binding ElementName=RefreshRestockLinesBtn}" x:Name="RefreshRestockLinesBtn"/>
+            <Button  Content="RefreshRestocks" Margin="1"  Command="{Binding GetRestocksCommand}" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=RefreshRestockLinesBtn}" x:Name="RefreshRestocksBtn"/>
+            <Button  Content="Neue Bestückungsliste erstellen" Margin="1" Command="{Binding CreateRestockCommand}" CommandParameter="{Binding ElementName=RestocksRadListBox,Path=SelectedItem}"  CommandTarget="{Binding ElementName=NewRestockModelBtn}" x:Name="NewRestockModelBtn"/>
 
-            <telerik:RadNumericUpDown Value="{Binding SelectedRestockLineModel.Amt}" Minimum="0" Maximum="100" SmallChange="1" x:Name="AmtRadNumericDown">
-                <telerik:EventToCommandBehavior.EventBindings>
-                    <telerik:EventBinding Command="{Binding SaveStoreRestockLineCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=AmtRadNumericDown}" EventName="ValueChanged" />
-                </telerik:EventToCommandBehavior.EventBindings>
+            <telerik:RadNumericUpDown  Value="{Binding SelectedRestockLineModel.Amt}" Minimum="0" Maximum="100" SmallChange="1" x:Name="AmtRadNumericDown">
+                <!--<telerik:EventToCommandBehavior.EventBindings>
+                    <telerik:EventBinding Command="{Binding SaveStoreRestockLineCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=AmtRadNumericDown}" EventName=""  RaiseOnHandledEvents="True"/>
+                </telerik:EventToCommandBehavior.EventBindings>-->
             </telerik:RadNumericUpDown>
                 
                 <!--<Label Content="Offen" Margin="1"/>-->
@@ -54,12 +55,12 @@
 
                 <!--<Label Content="Vorlagen" Margin="1"/>-->
 
-            <telerik:RadListBox  ItemStringFormat="d" SelectedItem="{Binding SelectedRestockModel, Mode=TwoWay}" ItemsSource="{Binding RestocksView.View}"  DisplayMemberPath="Date" Margin="1" SelectedValue="Id" Command="{Binding GetRestockLineModelsCommand}" CommandParameter="{Binding}"  x:Name="RestocksRadListBox">
+            <telerik:RadListBox  ItemStringFormat="d" SelectedItem="{Binding SelectedRestockModel, Mode=TwoWay}" ItemsSource="{Binding RestocksView.View}"  DisplayMemberPath="Date" Margin="1" SelectedValue="Id" x:Name="RestocksRadListBox">
                 <telerik:RadListBox.GroupStyle>
                     <GroupStyle/>
                 </telerik:RadListBox.GroupStyle>
                 <telerik:EventToCommandBehavior.EventBindings>
-                        <telerik:EventBinding Command="{Binding GetRestockLineModelsCommand}" CommandParameter="{Binding}" EventName="SelectionChanged" />
+                    <telerik:EventBinding Command="{Binding GetRestockLinesCommand}" CommandParameter="{Binding ElementName=RestocksRadListBox,Path=SelectedItem}" EventName="SelectionChanged" />
                 </telerik:EventToCommandBehavior.EventBindings>
                 </telerik:RadListBox>
         </StackPanel>
@@ -68,6 +69,7 @@
                              Grid.Column="0"
                              x:Name="RestockLinesGrid"
                              AlternationCount="2"
+                             CanUserSearch="True"
                              GroupRenderMode="Flat"
                              IsFilteringAllowed="False"
                              CanUserReorderColumns="False"
@@ -79,24 +81,24 @@
                              ItemsSource="{Binding RestockLineModels}"
                              CanUserInsertRows="False"
                              CanUserDeleteRows="False"
-                             SelectedItem="{Binding SelectedRestockLineModel,Mode=TwoWay}"
+                             SelectedItem="{Binding SelectedRestockLineModel,NotifyOnTargetUpdated=True}"
                              ShowGroupPanel="False"
                              SelectionMode="Single"
                              Margin="5"
                              VerticalAlignment="Stretch"
                              >
-            <!--<telerik:EventToCommandBehavior.EventBindings>
-                <telerik:EventBinding Command="{Binding SaveStoreRestockLineCommand}" CommandParameter="{Binding}" EventName="PropertyChanged" />
-            </telerik:EventToCommandBehavior.EventBindings>-->
+                    <telerik:EventToCommandBehavior.EventBindings>
+                <telerik:EventBinding Command="{Binding CreateRestockLineCommand}" CommandParameter="{Binding SelectedRestockLineModel}"  CommandTarget="{Binding SelectedRestockLineModel.Amt}" EventName="PropertyChanged"/>
+                    </telerik:EventToCommandBehavior.EventBindings>
             <telerik:RadGridView.Columns>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Pos}"             Header="Pos"            Width="100" IsReadOnly="True"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}"            Header="Artikel-Nr."    Width="100" IsReadOnly="True"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding ArtDesc}"         Header="Bezeichnung"    Width="250" IsReadOnly="True"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding StorageName}"     Header="Ort"            Width="50"  IsReadOnly="True"/>
-                <telerik:GridViewMaskedInputColumn DataMemberBinding="{Binding Amt}"      Header="Bestellmenge"   Width="100" IsReadOnly="False"  x:Name="AmntColumn" MaskType="Numeric" DataFormatString="d"   >
-                        <!--<telerik:EventToCommandBehavior.EventBindings>
-                        <telerik:EventBinding Command="{Binding SaveStoreRestockLineCommand}" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=AmntColumn}" EventName="PropertyChanged" />
-                        </telerik:EventToCommandBehavior.EventBindings>-->
+                <telerik:GridViewMaskedInputColumn DataMemberBinding="{Binding Amt}" Header="Bestellmenge"   Width="100" IsReadOnly="False"  x:Name="AmtColumn"  DataFormatString="d" >
+                    <telerik:EventToCommandBehavior.EventBindings>
+                        <telerik:EventBinding  Command="{Binding CreateRestockLineCommand}" CommandParameter="{Binding }" CommandTarget="{Binding SelectedRestockLineModel.Amt}" EventName="PropertyChanged"/>
+                    </telerik:EventToCommandBehavior.EventBindings>
                 </telerik:GridViewMaskedInputColumn>
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>

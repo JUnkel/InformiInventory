@@ -18,6 +18,15 @@ namespace InformiInventory.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
+        protected virtual bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
+        }
+
+
         #region Properties
         string _username;
 

@@ -24,8 +24,6 @@ namespace InformiInventory.Views
         {
             InitializeComponent();
 
-            DataContext = new InventoryViewModel();
-
             MainWindow.Instance.NavigationPanel.Visibility = Visibility.Visible;
         }
     }
