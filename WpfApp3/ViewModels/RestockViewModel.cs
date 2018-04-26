@@ -20,6 +20,7 @@ namespace InformiInventory.ViewModels
     {
         public RestockViewModel()
         {
+            GetRestocks(this);
             var view = new CollectionViewSource();
             view.GroupDescriptions.Add(new PropertyGroupDescription("StoreId"));
             view.Source = RestockModels;
