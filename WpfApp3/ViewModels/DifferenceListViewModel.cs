@@ -1,4 +1,6 @@
-﻿using System;
+﻿using InformiInventory.Models;
+using InformiInventory.ViewModels.Commands;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Telerik.Windows.Data;
 
 namespace InformiInventory.ViewModels
 {
@@ -19,73 +22,53 @@ namespace InformiInventory.ViewModels
             return true;
         }
 
-        ObservableCollection<InformiInventory.Models.DifferenceListModel> _differences;
+        
 
-        ObservableCollection<InformiInventory.Models.DifferenceListModel> Differences
+        RadObservableCollection<DifferenceModel> _differences;
+
+        public RadObservableCollection<DifferenceModel> Differences
         {
             get
             {
-                if (_differences == null) _differences = new ObservableCollection<Models.DifferenceListModel>();
+                if (_differences == null) _differences = new RadObservableCollection<DifferenceModel>();
 
                 return _differences;
             }
         }
 
-        string _store;
+        public RelayCommand GetDifferenceInventoryLinesCommand { get; private set; }
 
-        public string Store
+        public bool CanExecute_GetDifferenceInventoryLinesCommand(object parameter)
         {
-            get { return _store; }
-            set { SetProperty(ref _store, value); }
+            var vm = (DifferenceListViewModel)parameter;
+
+            if (vm == null) return false;
+
+            else
+            {
+                return true;
+            }
         }
 
-        DateTime _dt = DateTime.Now.Date;
-
-        public DateTime Dt
+        public void GetGetDifferenceInventoryLines(object parameter)
         {
-            get { return _dt; }
-            set { SetProperty(ref _dt, value); }
-        }
+            var selectedinventory = (InventoryModel)parameter;
 
-        string _art;
+            if (selectedinventory == null) return;
 
-        public string Art
-        {
-            get { return _art; }
-            set { SetProperty(ref _art, value); }
-        }
+            using (var db = new PetaPoco.Database("db"))
+            {
+                try
+                {
+                    Differences.Clear();
 
-        string _an;
-
-        public string AN
-        {
-            get { return _an; }
-            set { SetProperty(ref _an, value); }
-        }
-
-        string _gtin;
-
-        public string GTIN
-        {
-            get { return _gtin; }
-            set { SetProperty(ref _gtin, value); }
-        }
-
-
-        decimal _difference;
-
-        public decimal Difference
-        {
-            get { return _difference; }
-            set { SetProperty(ref _difference, value); }
-        }
-
-        int _userId;
-
-        public int UserId
-        {
-            get { return _userId; }
-            set { SetProperty(ref _userId, value); }
+                    Differences.AddRange(db.Fetch<DifferenceModel>("SELECT a.GTIN AS GTIN, a.ADesc AS ArtDesc, s.StorageName AS StorageName, a.ArticleId AS ArtId, il.Amt AS Amt, il.InventoryId AS InventoryId, il.InventoryLineId AS InventoryLineId FROM Articles a LEFT JOIN Storages s ON a.StorageId = s.StorageId LEFT JOIN InventoryLines il ON a.ArticleId = il.ArtId LEFT JOIN Inventories i ON i.InventoryId = il.InventoryId  WHERE (il.inventoryId = @0 OR il.inventoryId IS NULL) AND il.Amt <> 0 ORDER BY i.Dt "));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
+                }
+            }
         }
 
     }

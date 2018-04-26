@@ -141,7 +141,7 @@
       <HintPath>..\packages\Telerik.Windows.Themes.Fluent.for.Wpf.2018.1.122\lib\net45\Telerik.Windows.Themes.Fluent.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.Windows.Themes.Windows8Touch">
-      <HintPath>..\packages\Telerik.Windows.Themes.Windows8Touch.for.Wpf.2018.1.220\lib\net45\Telerik.Windows.Themes.Windows8Touch.dll</HintPath>
+      <HintPath>..\packages\Telerik.Windows.Themes.Windows8Touch.for.Wpf.2018.1.122\lib\net45\Telerik.Windows.Themes.Windows8Touch.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="UIAutomationTypes" />
