@@ -28,7 +28,8 @@ namespace InformiInventory.ViewModels
             GetRestocksCommand = new RelayCommand(GetRestocks, CanExecute_GetRestocksCommand);
             CreateRestockCommand = new RelayCommand(CreateRestock, CanExecute_CreateRestockCommand);
             DeleteRestockCommand = new RelayCommand(DeleteRestock, CanExecute_DeleteRestockCommand);
-            CreateRestockLineCommand = new RelayCommand(CreateRestockLine, CanExecute_CreateRestockLineCommand);
+            SaveRestockLineCommand = new RelayCommand(SaveRestockLine, CanExecute_SaveRestockLineCommand);
+            BookRestockCommand = new RelayCommand(BookRestock, CanExecute_BookRestockCommand);
         }
 
         protected virtual bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
@@ -303,54 +304,113 @@ namespace InformiInventory.ViewModels
         }
 
 
-        public RelayCommand CreateRestockLineCommand { get; private set; }
+        public RelayCommand SaveRestockLineCommand { get; private set; }
 
-        public bool CanExecute_CreateRestockLineCommand(object parameter)
+        public bool CanExecute_SaveRestockLineCommand(object parameter)
+        {
+            var vm = (RestockViewModel)parameter;
+
+            if (vm == null) return false;
+            
+            if (vm.SelectedRestockModel == null) return false;
+
+            if (vm.SelectedRestockModel.IsProcd) return false;
+
+            if (vm.SelectedRestockLineModel == null) return false;
+
+            else
+            {
+                return true;
+            }
+        }
+
+        public void SaveRestockLine(object parameter)
+        {
+            try
+            {
+                using (var db = new PetaPoco.Database("db"))
+                {
+                    using (var scope = db.GetTransaction())
+                    {
+
+                        var vm = (RestockViewModel)parameter;
+
+                        if (vm.SelectedRestockLineModel == null) return;
+
+                        var selectedRL = vm.SelectedRestockLineModel;
+
+                        if (selectedRL.Amt == 0) db.Execute("DELETE FROM RestockLines WHERE RestockLineId = @0", selectedRL.RestockLineId);
+
+                        var changes = db.ExecuteScalar<int>("Update RestockLines SET Amt = @0 WHERE RestockLineId = @1 AND RestockId =@2;Select Changes()", selectedRL.Amt, selectedRL.RestockLineId, selectedRL.RestockId);
+
+                        if (changes == 0)
+                        {
+                            var lastid = db.ExecuteScalar<int>("Select MAX(RestockLineId) FROM RestockLines");
+
+                            selectedRL.RestockLineId = db.ExecuteScalar<int>("Insert Into RestockLines(RestockLineId,RestockId, Pos, ArtId, Amt) VALUES(@0, @1, @2, @3,@4);SELECT last_insert_rowid();", lastid + 1, selectedRL.RestockId, selectedRL.Pos, selectedRL.ArtId, selectedRL.Amt);
+                        }
+                        scope.Complete();
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Daten konnten nicht gespeichert werden:\n\n" + ex.Message), "Fehler", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+            }
+        }
+
+
+        public RelayCommand BookRestockCommand { get; private set; }
+
+        public bool CanExecute_BookRestockCommand(object parameter)
         {
             var vm = (RestockViewModel)parameter;
 
             if (vm == null) return false;
 
+            if (vm.SelectedRestockModel == null) return false;
+
+            if (vm.SelectedRestockModel.IsProcd) return false;
+
             else
             {
-                var id = SelectedRestockLineModel.RestockLineId;
-
-                if(SelectedRestockLineModel.Amt != vm.RestockLineModels.FirstOrDefault(x => x.RestockLineId == id).Amt) return true;
-                else
-                {
-                    return false;
-                }
+                return true;
             }
         }
 
-        public void CreateRestockLine(object parameter)
+        public void BookRestock(object parameter)
         {
-            using (var db = new PetaPoco.Database("db"))
+            var vm = (RestockViewModel)parameter;
+
+            if(vm == null) return;
+
+            if (vm.SelectedRestockModel == null) return;
+
+            if (MessageBox.Show("Soll die ausgewählte Bestückungsliste abgeschlossen werden?", "Frage", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.Cancel) return;
+
+            try
             {
-                try
+
+                using (var db = new PetaPoco.Database("db"))
                 {
-                    var selectedRestockLine = (RestockLineModel)parameter;
-                    
-                    if (selectedRestockLine == null) return;
-                    //DB Restocks: Id ,RestockId,Pos,ArtId, Amt
+                    db.Execute(sql: "Update Restocks SET IsProcd = 1 WHERE RestockId =@0;", vm.SelectedRestockModel.Id);
 
-                    if (selectedRestockLine.Amt == 0) db.Execute("DELETE FROM RestockLines WHERE RestockLineId = @0"); 
+                    vm.SelectedRestockModel.IsProcd = true;
 
-                    var changes = db.ExecuteScalar<int>("Update RestockLines SET Amt = @0 WHERE RestockLineId = @1 AND RestockId =@2;Select Changes()", selectedRestockLine.Amt, selectedRestockLine.RestockLineId, selectedRestockLine.RestockId);
+                    RestockLineModels.Clear();
 
-                    if (changes == 0)
-                    {
-                        var lastid = db.ExecuteScalar<int>("Select MAX(RestockLineId) FROM RestockLines");
-
-                        selectedRestockLine.RestockLineId = db.ExecuteScalar<int>("Insert Into RestockLines(RestockLineId,RestockId, Pos, ArtId, Amt) VALUES(@0, @1, @2, @3,@4);SELECT last_insert_rowid();", lastid + 1,selectedRestockLine.RestockId, selectedRestockLine.Pos, selectedRestockLine.ArtId, selectedRestockLine.Amt);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(string.Format("Daten konnten nicht gespeichert werden:\n\n" + ex.Message), "Fehler", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                    MessageBox.Show("Ausgewählte Bestückungsliste wurde abgeschlossen.");
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Daten konnten nicht abgerufen werden:\n\n" + ex.Message), "Fehler");
+            }
         }
+
+
+
 
         public RelayCommand DeleteRestockModelCommand { get; private set; }
         

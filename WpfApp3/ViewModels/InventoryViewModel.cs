@@ -20,14 +20,16 @@ namespace InformiInventory.ViewModels
     {
         public InventoryViewModel()
         {
-            var view = new CollectionViewSource();
-            view.GroupDescriptions.Add(new PropertyGroupDescription("StoreId"));
-            view.Source = InventoryModels;
-            InventoriesView = view;
+            //var view = new CollectionViewSource();
+            //view.GroupDescriptions.Add(new PropertyGroupDescription("StoreId"));
+            GetInventories(this);
+            //view.Source = InventoryModels;
+            //InventoriesView = view;
             GetInventoryLinesCommand = new RelayCommand(GetInventoryLines, CanExecute_GetinventoryLinesCommand);
             CreateInventoryCommand = new RelayCommand(CreateInventory, CanExecute_CreateInventoryCommand);
             DeleteInventoryCommand = new RelayCommand(DeleteInventory, CanExecute_DeleteInventoryCommand);
-            SaveInventoryLineCommand = new RelayCommand(SaveInventoryLine, CanExecute_SaveInventoryLinesCommand);
+            SaveInventoryLineCommand = new RelayCommand(SaveInventoryLine, CanExecute_SaveInventoryLineCommand);
+            BookInventoryCommand = new RelayCommand(BookInventory, CanExecute_BookInventoryCommand);
         }
 
         protected virtual bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
@@ -88,7 +90,7 @@ namespace InformiInventory.ViewModels
 
                     InventoryModels.Clear();
 
-                    InventoryModels.AddRange(db.Fetch<InventoryModel>("SELECT InventoryId AS Id, Dt AS DATE, IsProcd AS IsProcd, StoreId AS StoreId, TemplateId AS TemplateId FROM Inventories WHERE (StoreId IS NULL OR StoreId = @0)", storeId));
+                    InventoryModels.AddRange(db.Fetch<InventoryModel>("SELECT InventoryId AS Id, Dt AS DATE, IsProcd AS IsProcd, StoreId AS StoreId FROM Inventories WHERE StoreId = @0", storeId));
 
                 }
                 catch (Exception ex)
@@ -108,6 +110,7 @@ namespace InformiInventory.ViewModels
                 return true;
             }
         }
+
 
         public RelayCommand GetInventoryLinesCommand { get; private set; }
 
@@ -134,7 +137,7 @@ namespace InformiInventory.ViewModels
                 {
                     InventoryLineModels.Clear();
 
-                    InventoryLineModels.AddRange(db.Fetch<InventoryLineModel>("SELECT a.GTIN AS GTIN, rsl.Pos AS POS, a.ADesc AS ArtDesc, s.StorageName AS StorageName, rsl.ArtId AS ArtId, rsl.Amt AS Amt, r.inventoryId AS inventoryId,rsl.inventoryLineId AS inventoryLineId FROM inventoryLines rsl INNER JOIN inventorys r ON (rsl.inventoryId = r.inventoryId) OR (r.TemplateId) INNER JOIN Articles a ON rsl.ArtId = a.ArticleId INNER JOIN Storages s ON s.StorageId = a.StorageId WHERE r.inventoryId = @0 OR r.TemplateId = @1 GROUP BY rsl.Pos, rsl.ArtId ORDER BY rsl.Pos ",selectedinventory.Id, selectedinventory.TemplateId));
+                    InventoryLineModels.AddRange(db.Fetch<InventoryLineModel>("SELECT a.GTIN AS GTIN, a.ADesc AS ArtDesc, s.StorageName AS StorageName, a.ArticleId AS ArtId, il.Amt AS Amt, il.InventoryId AS InventoryId, il.InventoryLineId AS InventoryLineId FROM Articles a LEFT JOIN Storages s ON a.StorageId = s.StorageId LEFT JOIN InventoryLines il ON a.ArticleId = il.ArtId LEFT JOIN Inventories i ON i.InventoryId = il.InventoryId  WHERE (il.inventoryId = @0 OR il.inventoryId IS NULL) ORDER BY a.GTIN", selectedinventory.Id));
                 }
                 catch (Exception ex)
                 {
@@ -143,39 +146,59 @@ namespace InformiInventory.ViewModels
             }
         }
 
+
         public RelayCommand CreateInventoryCommand { get; private set; }
 
         public void CreateInventory(object paramater)
         {
-            var selectedinventory = (InventoryModel)paramater;
-
-            if (selectedinventory == null) return;
-
             try
             {
+                var vm = (InventoryViewModel)paramater;
+
+                if (vm == null) return;
+
+                int? storeId = null;
+                var isStoreId = int.TryParse(App.Current.Properties["StoreId"].ToString(), out int resultStoreId);
+
+                if (isStoreId)
+                {
+                    storeId = resultStoreId;
+                }
+
+                int userId;
+
+                var isUserId = int.TryParse(App.Current.Properties["UserId"].ToString(), out int resultUserId);
+
+                if (isUserId)
+                {
+                    userId = resultUserId;
+                }
+                else
+                {
+                    throw new Exception("Vorgang nicht möglich:\n\nUnbekannter Benutzer.");
+                }
+
                 using (var db = new PetaPoco.Database("db"))
                 {
                     using (var scope = db.GetTransaction())
                     {
-                        //var rowId = db.ExecuteScalar<int>("INSERT INTO inventorys(Dt, StoreId, UserId, TemplateId) VALUES(date('now'), @0, @1, @2);SELECT last_insert_rowid();", storeId, userId, selectedinventory.Id);
+                        var rowId = db.ExecuteScalar<int>("INSERT INTO Inventories(Dt, StoreId, UserId, IsProcd) VALUES(date('now'), @0, @1,@2);SELECT last_insert_rowid();", storeId, userId, 0);
 
-                        //var inventory = new InventoryModel()
-                        //{
-                        //    Date = DateTime.Now,
-                        //    Id = rowId,
-                        //    IsProcd = false,
-                        //    StoreId = storeId,
-                        //    UserId = userId,
-                        //    TemplateId = selectedinventory.Id
-                        //};
-
-                        //scope.Complete();
+                        var inventory = new InventoryModel()
+                        {
+                            Date = DateTime.Now,
+                            Id = rowId,
+                            IsProcd = false,
+                            StoreId = storeId,
+                            UserId = userId,
+                        };
 
                         //InventoryModels.Add(inventory);
+                        //InventoryLineModels.AddRange(db.Fetch<InventoryLineModel>("SELECT a.GTIN AS GTIN, a.ADesc AS ArtDesc, s.StorageName AS StorageName, a.ArticleId AS ArtId FROM Articles a LEFT JOIN Storages s ON a.StorageId = s.StorageId ORDER BY a.GTIN"));
 
-                        InventoryLineModels.AddRange(db.Fetch<InventoryLineModel>("SELECT ArticleId AS ArtId, GTIN, ADesc AS ArtDesc, StorageId"));
-                        InventoryModels.Add(new InventoryModel() { Date = DateTime.Now,IsProcd = false});
+                        InventoryModels.Add(inventory);
 
+                        scope.Complete();
                     }
                 }
             }
@@ -187,11 +210,9 @@ namespace InformiInventory.ViewModels
 
         public bool CanExecute_CreateInventoryCommand(object parameter)
         {
-            var selectedinventoryModel = (InventoryModel)parameter;
+            var vm = (InventoryViewModel)parameter;
 
-            if (selectedinventoryModel == null) return false;
-
-            else if (selectedinventoryModel.TemplateId != null) return false;
+            if (vm == null) return false;
 
             else
             {
@@ -199,9 +220,8 @@ namespace InformiInventory.ViewModels
             }
         }
 
-        public RelayCommand DeleteInventoryCommand { get; private set; }
 
-        public RelayCommand SaveInventoryLineCommand { get; private set; }
+        public RelayCommand DeleteInventoryCommand { get; private set; }
 
         public bool CanExecute_DeleteInventoryCommand(object parameter)
         {
@@ -221,20 +241,20 @@ namespace InformiInventory.ViewModels
 
             if (selectedInventory == null) return;
 
-            if (MessageBox.Show("Soll die ausgewählte Bestückungsliste gelöscht werden?", "Frage", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.Cancel) return;
+            if (MessageBox.Show("Soll die ausgewählte Inventurliste gelöscht werden?", "Frage", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.Cancel) return;
 
             try
             {
                 using (var db = new PetaPoco.Database("db"))
                 {
 
-                    db.Execute(sql: "DELETE FROM inventorys WHERE inventoryId =@0;", selectedInventory.Id);
+                    db.Execute(sql: "DELETE FROM Inventories WHERE inventoryId =@0;", selectedInventory.Id);
 
-                    db.Execute(sql: "DELETE FROM inventoryLines WHERE inventoryId =@0;", selectedInventory.Id);
+                    db.Execute(sql: "DELETE FROM InventoryLines WHERE InventoryId =@0;", selectedInventory.Id);
 
                     InventoryModels.Remove(selectedInventory);
 
-                    InventoryModels.Clear();
+                    InventoryLineModels.Clear();
 
                     MessageBox.Show("Ausgewählte Bestückungsliste wurde gelöscht.");
                 }
@@ -245,23 +265,27 @@ namespace InformiInventory.ViewModels
             }
         }
 
-        public RelayCommand SaveInventoryLinesCommand { get; private set; }
 
-        public bool CanExecute_SaveInventoryLinesCommand(object parameter)
+        public RelayCommand SaveInventoryLineCommand { get; private set; }
+
+        public bool CanExecute_SaveInventoryLineCommand(object parameter)
         {
             var vm = (InventoryViewModel)parameter;
 
             if (vm == null) return false;
 
+            if (vm.SelectedInventoryModel == null) return false;
+
+            if (vm.SelectedInventoryModel.IsProcd == true)
+            {
+                return false;
+            }
+
+            if (vm.SelectedInventoryLineModel == null) return false;
+
             else
             {
-                var id = SelectedInventoryLineModel.InventoryLineId;
-
-                if (SelectedInventoryLineModel.Amt != vm.InventoryLineModels.FirstOrDefault(x => x.InventoryLineId == id).Amt) return true;
-                else
-                {
-                    return false;
-                }
+                return true;
             }
         }
 
@@ -271,20 +295,57 @@ namespace InformiInventory.ViewModels
             {
                 try
                 {
-                    var selectedinventoryLine = (InventoryLineModel)parameter;
+                    int? storeId = null;
+                    var isStoreId = int.TryParse(App.Current.Properties["StoreId"].ToString(), out int resultStoreId);
 
-                    if (selectedinventoryLine == null) return;
-                    //DB inventorys: Id ,inventoryId,Pos,ArtId, Amt
-
-                    if (selectedinventoryLine.Amt == 0) db.Execute("DELETE FROM inventoryLines WHERE inventoryLineId = @0");
-
-                    var changes = db.ExecuteScalar<int>("Update inventoryLines SET Amt = @0 WHERE inventoryLineId = @1 AND inventoryId =@2;Select Changes()", selectedinventoryLine.Amt, selectedinventoryLine.InventoryLineId, selectedinventoryLine.InventoryId);
-
-                    if (changes == 0)
+                    if (isStoreId)
                     {
-                        var lastid = db.ExecuteScalar<int>("Select MAX(inventoryLineId) FROM inventoryLines");
+                        storeId = resultStoreId;
+                    }
 
-                        selectedinventoryLine.InventoryLineId = db.ExecuteScalar<int>("Insert Into inventoryLines(inventoryLineId,inventoryId, Pos, ArtId, Amt) VALUES(@0, @1, @2, @3,@4);SELECT last_insert_rowid();", lastid + 1, selectedinventoryLine.InventoryLineId, selectedinventoryLine.Pos, selectedinventoryLine.ArtId, selectedinventoryLine.Amt);
+                    int userId;
+
+                    var isUserId = int.TryParse(App.Current.Properties["UserId"].ToString(), out int resultUserId);
+
+                    if (isUserId)
+                    {
+                        userId = resultUserId;
+                    }
+                    else
+                    {
+                        throw new Exception("Vorgang nicht möglich:\n\nUnbekannter Benutzer.");
+                    }
+
+                    using (var scope = db.GetTransaction())
+                    {
+
+                        var vm = (InventoryViewModel)parameter;
+
+                        if (vm == null) return;
+
+                        if (vm.SelectedInventoryModel == null) return;
+
+                        var iLM = vm.SelectedInventoryLineModel;
+
+
+                        if (iLM == null) return;
+
+                        if (iLM.Amt <= 0)
+                        {
+                            db.Execute("DELETE FROM InventoryLines WHERE InventoryLineId = @0", iLM.InventoryLineId);
+                        }
+                        else
+                        {
+                            var changes = db.ExecuteScalar<int>("Update InventoryLines SET Amt = @0 WHERE InventoryLineId = @1 AND InventoryId =@2 AND ArtId = @3  ; Select Changes()", iLM.Amt, iLM.InventoryLineId, SelectedInventoryModel.Id,iLM.ArtId);
+
+                            if (changes == 0)
+                            {
+                                var lastid = db.ExecuteScalar<int?>("Select MAX(InventoryLineId) FROM InventoryLines");
+
+                                iLM.InventoryLineId = db.ExecuteScalar<int>("Insert Into InventoryLines(InventoryLineId,InventoryId, ArtId, Amt, UserId) VALUES(@0, @1, @2, @3,@4);SELECT last_insert_rowid();", lastid == null? 1 : lastid + 1, SelectedInventoryModel.Id, iLM.ArtId, iLM.Amt, userId);
+                            }
+                        }
+                        scope.Complete();
                     }
                 }
                 catch (Exception ex)
@@ -294,22 +355,53 @@ namespace InformiInventory.ViewModels
             }
         }
 
-        public RelayCommand DeleteInventoryModelCommand { get; private set; }
 
-        //private ICommand _getinventoryLineModelsCommand = null;
+        public RelayCommand BookInventoryCommand { get; private set; }
 
-        //public ICommand GetinventoryLineModelsCommand => _getinventoryLineModelsCommand ?? (_getinventoryLineModelsCommand = new inventoryCommand(this));
+        public bool CanExecute_BookInventoryCommand(object parameter)
+        {
+            var vm = (InventoryViewModel)parameter;
 
-        //private ICommand _getinventoryModelsCommand = null;
+            if (vm == null) return false;
 
-        //public RelayCommand GetinventoryModelsCommand { get; private set; }
+            if (vm.SelectedInventoryModel == null) return false;
 
-        //private ICommand _createNewinventoryModelCommand = null;
+            if (vm.SelectedInventoryModel.IsProcd == true) return false;
 
-        //public ICommand CreateNewinventoryModelCommand { get; private set; }
+            else
+            {
+                return true;
+            }
+        }
 
-        //private ICommand _deleteinventoryModelCommand = null;
+        public void BookInventory(object parameter)
+        {
+            var vm = (InventoryViewModel)parameter;
 
-        //public ICommand DeleteinventoryModelCommand => _deleteinventoryModelCommand ?? (_deleteinventoryModelCommand = new DeleteinventoryModelCommand(this));
+            if (vm == null) return;
+
+            if (vm.SelectedInventoryModel == null) return;
+
+            if (MessageBox.Show("Soll die ausgewählte Inventurliste gelöscht werden?", "Frage", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.Cancel) return;
+
+            try
+            {
+                using (var db = new PetaPoco.Database("db"))
+                {
+                    db.Execute(sql: "Update Inventories SET IsProcd = 1 WHERE InventoryId =@0;", vm.SelectedInventoryModel.Id);
+
+                    InventoryLineModels.Clear();
+
+                    vm.SelectedInventoryModel.IsProcd = true;
+
+                    MessageBox.Show("Ausgewählte Inventurliste wurde abgeschlossen.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Daten konnten nicht gespeichert werden:\n\n" + ex.Message), "Fehler");
+            }
+        }
+
     }
 }

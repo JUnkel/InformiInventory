@@ -38,7 +38,9 @@ CREATE TABLE  Inventories
 
         Dt DateTime NOT NULL, 
 
-        UserId INTEGER NOT NULL, 
+        UserId INTEGER NOT NULL,
+
+		IsProcd INTEGER NOT NULL, 
 
 		FOREIGN KEY(UserId) REFERENCES Users(Id),
 
@@ -48,7 +50,7 @@ CREATE TABLE  Inventories
 
 CREATE TABLE InventoryLines
 (
-		InevntoryLineId INTEGER NOT NULL PRIMARY KEY DEFAULT(1),		
+		InventoryLineId INTEGER NOT NULL PRIMARY KEY DEFAULT(1),		
 	
         InventoryId INTEGER NOT NULL,
 
@@ -56,7 +58,7 @@ CREATE TABLE InventoryLines
 
 		ArtId VARCHAR(40) NOT NULL,
 		
-		Amnt DECIMAL NOT NULL DEFAULT(0),
+		Amt DECIMAL NOT NULL DEFAULT(0),
 
 		TargetStock DECIMAL NOT NULL NULL DEFAULT(0),
 
@@ -68,7 +70,7 @@ CREATE TABLE InventoryLines
 
 CREATE TABLE Articles
 (
-	ArticleId INTEGER  PRIMARY KEY DEFAULT(1),
+	ArticleId INTEGER PRIMARY KEY,
 	
 	GTIN VARCHAR(14) UNIQUE,
 	
@@ -81,7 +83,7 @@ CREATE TABLE Articles
 
 CREATE TABLE Restocks
 (
-		RestockId INTEGER NOT NULL PRIMARY KEY DEFAULT(1),		
+		RestockId INTEGER NOT NULL PRIMARY KEY ,		
 	
         StoreId INTEGER NULL,
 

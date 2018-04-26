@@ -74,11 +74,11 @@ namespace InformiInventory.Models
 
         }
 
-        int _storageId;
-        public int StorageId
+        string _storageName;
+        public string StorageName
         {
-            get { return _storageId; }
-            set { SetProperty(ref _storageId, value); }
+            get { return _storageName; }
+            set { SetProperty(ref _storageName, value); }
 
         }
     }
