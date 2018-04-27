@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:InformiInventory.ViewModels"
              SnapsToDevicePixels="True"
              mc:Ignorable="d"
+             Margin="1"
              d:DesignHeight="712.549"
              d:DesignWidth="1166.82"
              FontSize="25"
@@ -16,7 +17,6 @@
     </UserControl.DataContext>
     <Grid Margin="1" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 

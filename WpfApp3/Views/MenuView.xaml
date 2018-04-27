@@ -7,6 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="712.549"
              d:DesignWidth="1166.82"
+             Name="Menu"
              >
     <UserControl.DataContext>
         <local:NavigationViewModel/>

@@ -44,8 +44,6 @@ namespace InformiInventory.Views
             var image = new BitmapImage(uri);
 
             Instance.Background = new ImageBrush(image);
-
-            Instance.NavigationPanel.DataContext = new NavigationViewModel();
         }
     }
 }

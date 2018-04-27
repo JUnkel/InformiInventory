@@ -1,12 +1,18 @@
-﻿<UserControl x:Class="InformiInventory.Views.DifferenceListView"
+﻿<UserControl x:Class="InformiInventory.Views.InventoryDifferenceView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:InformiInventory.ViewModels"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
              mc:Ignorable="d"
+             Margin="1"
              d:DesignHeight="712.549"
              d:DesignWidth="1166.82"
              >
+    <UserControl.DataContext>
+        <local:InventoryDifferenceViewModel/>
+    </UserControl.DataContext>
     <Grid Margin="1">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -17,33 +23,15 @@
             <ColumnDefinition Width="0.25*"/>
         </Grid.ColumnDefinitions>
 
-        <DataGrid Grid.Row="1" Margin="5" >
-            <DataGrid.Columns       >
-                <DataGridTextColumn Binding="{Binding Index}" IsReadOnly="True" Header="Pos" Width="50" >
-                    <DataGridTextColumn.CellStyle>
-                        <Style>
-                            <Setter Property="FrameworkElement.HorizontalAlignment" Value="Right"/>
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Location}" IsReadOnly="True" Header="Stellplatz" Width="100" />
-                <DataGridTextColumn Binding="{Binding Art}" IsReadOnly="True" Header="Artikel" Width="100" x:Name="ArtColumn" />
-                <DataGridTextColumn Binding="{Binding AN}" IsReadOnly="True" Header="Bezeichnung" Width="200" />
-                <DataGridTextColumn Binding="{Binding GTIN}" x:Name="GTINColumn" Header="EAN" Width="100" />
-                <DataGridTextColumn Binding="{Binding TargetStock}" x:Name="TargetStockColumn" Header="Sollbestand" Width="100"  />
-                <DataGridTextColumn Binding="{Binding ActualStock}" x:Name="ActualStockColumn" Header="Istbestand" Width="100"   />
-                <DataGridTextColumn Binding="{Binding Difference}" x:Name="DifferenceColumn" Header="Differenz" Width="100"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <StackPanel Margin="1" Orientation="Vertical" Grid.Column="1">
+            <Button  Content="Positionen Aktualisieren" Margin="1"  Command="{Binding GetInventoryDifferencesCommand}" CommandParameter="{Binding }"  CommandTarget="{Binding ElementName=RefreshBtn}" x:Name="RefreshBtn"/>
+        </StackPanel>
 
 
-
-
-
-        <!--<telerik:RadGridView Grid.Row="1"
+        <telerik:RadGridView Grid.Row="1"
                              Grid.Column="0"
-                             Grid.ColumnSpan="2"
-                             Margin="5"
+                             Grid.ColumnSpan="1"
+                             Margin="1"
                              x:Name="DifferenceLinesGrid"
                              AlternationCount="2"
                              GroupRenderMode="Flat"
@@ -54,20 +42,19 @@
                              RowIndicatorVisibility="Collapsed"
                              CanUserFreezeColumns="False"
                              IsSynchronizedWithCurrentItem="True"
-                             ItemsSource="{Binding Differences}"
+                             ItemsSource="{Binding InventoryDifferences}"
                              CanUserInsertRows="False"
                              CanUserDeleteRows="False"
                              ShowGroupPanel="False">
             <telerik:RadGridView.Columns >
-                < DataMemberBinding="{Binding Index}" IsReadOnly="True" Header="Pos" Width="50"/>
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding Location}" IsReadOnly="True" Header="Stellplatz" Width="100" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding Art}" IsReadOnly="True" Header="Artikel" Width="100" x:Name="ArtColumn" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding AN}" IsReadOnly="True" Header="Bezeichnung" Width="200" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}" x:Name="GTINColumn" Header="EAN" Width="100" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding TargetStock}" x:Name="TargetStockColumn" Header="Sollbestand" Width="100" TextAlignment="Right" HeaderTextAlignment="Right" DataFormatString="n2" />
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding ActualStock}" x:Name="ActualStockColumn" Header="Istbestand" Width="100" TextAlignment="Right" HeaderTextAlignment="Right" DataFormatString="n2" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}" x:Name="GTINColumn" Header="Artikel-Nr." Width="100" HeaderTextAlignment="Left" TextAlignment="Left"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ArtDesc}" IsReadOnly="True" Header="Bezeichnung" Width="200"  HeaderTextAlignment="Left" TextAlignment="Left"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding StorageName}" IsReadOnly="True" Header="Stellplatz" Width="100" HeaderTextAlignment="Left" TextAlignment="Left"/>
+                <!--<telerik:GridViewDataColumn DataMemberBinding="{Binding Art}" IsReadOnly="True" Header="Artikel" Width="100" x:Name="ArtColumn" />-->
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Amt1}" x:Name="Amt1Column" Header="Vorletzte Inventur" Width="150" TextAlignment="Right" HeaderTextAlignment="Right" DataFormatString="n2" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding Amt2}" x:Name="Amt2Column" Header="Aktuellste Inventur" Width="150" TextAlignment="Right" HeaderTextAlignment="Right" DataFormatString="n2" />
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Difference}" x:Name="DifferenceColumn" Header="Differenz" Width="100" TextAlignment="Right" HeaderTextAlignment="Right" DataFormatString="n2" />
             </telerik:RadGridView.Columns>
-        </telerik:RadGridView>-->
+        </telerik:RadGridView>
     </Grid>
 </UserControl>

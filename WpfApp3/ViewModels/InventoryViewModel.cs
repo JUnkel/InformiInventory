@@ -1,4 +1,5 @@
-﻿using InformiInventory.Commands;
+﻿using informiInventory.Models;
+using InformiInventory.Commands;
 using InformiInventory.Models;
 using InformiInventory.ViewModels.Commands;
 using InformiInventory.Views;
@@ -137,7 +138,7 @@ namespace InformiInventory.ViewModels
                 {
                     InventoryLineModels.Clear();
 
-                    InventoryLineModels.AddRange(db.Fetch<InventoryLineModel>("SELECT a.GTIN AS GTIN, a.ADesc AS ArtDesc, s.StorageName AS StorageName, a.ArticleId AS ArtId, il.Amt AS Amt, il.InventoryId AS InventoryId, il.InventoryLineId AS InventoryLineId FROM Articles a LEFT JOIN Storages s ON a.StorageId = s.StorageId LEFT JOIN InventoryLines il ON a.ArticleId = il.ArtId LEFT JOIN Inventories i ON i.InventoryId = il.InventoryId  WHERE (il.inventoryId = @0 OR il.inventoryId IS NULL) ORDER BY a.GTIN", selectedinventory.Id));
+                    InventoryLineModels.AddRange(db.Fetch<InventoryLineModel>("SELECT a.GTIN AS GTIN, a.ADesc AS ArtDesc, s.StorageName AS StorageName, a.ArticleId AS ArtId, (SELECT il.Amt WHERE il.InventoryId = @0) AS Amt, il.InventoryId AS InventoryId, il.InventoryLineId AS InventoryLineId FROM Articles a LEFT JOIN Storages s ON a.StorageId = s.StorageId LEFT JOIN InventoryLines il ON a.ArticleId = il.ArtId LEFT JOIN Inventories i ON i.InventoryId = il.InventoryId GROUP BY a.GTIN ORDER BY a.GTIN", selectedinventory.Id));
                 }
                 catch (Exception ex)
                 {
@@ -326,7 +327,6 @@ namespace InformiInventory.ViewModels
                         if (vm.SelectedInventoryModel == null) return;
 
                         var iLM = vm.SelectedInventoryLineModel;
-
 
                         if (iLM == null) return;
 
