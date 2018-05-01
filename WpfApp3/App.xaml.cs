@@ -18,8 +18,6 @@ namespace InformiInventory
 
         public App()
         {
-           
-
             var culture = System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag;
 
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(culture);
@@ -44,7 +42,6 @@ namespace InformiInventory
             this.Properties["StoreId"] = null;
             this.Properties["StoreName"] = null;
 
-
             try
             {
 
@@ -66,7 +63,6 @@ namespace InformiInventory
             catch(Exception ex)
             {
                 MessageBox.Show("Datenbank konnte nicht aktualisiert werden:\n\n" + ex.Message, "informiPos", MessageBoxButton.OK, MessageBoxImage.Error);
-
             }
         }
     }

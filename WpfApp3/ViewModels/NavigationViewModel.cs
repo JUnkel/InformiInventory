@@ -13,6 +13,40 @@ namespace InformiInventory.ViewModels
 {
     public class NavigationViewModel : ViewModelBase
     {
+        public NavigationViewModel()
+        {
+            try
+            {
+                CurrentUser = new UserModel()
+                {
+                    UserName = App.Current.Properties["UserName"].ToString(),
+                    StoreName = App.Current.Properties["StoreName"].ToString()
+                };
+            }
+            catch
+            {
+
+            }
+
+          
+
+            DifferenceListCommand = new BaseCommand(OpenDifferenceList);
+
+            InventoryCommand = new BaseCommand(OpenInventory);
+
+            NavigationCommand = new BaseCommand(OpenNavigationCommand);
+
+            AssemblyListViewCommand = new BaseCommand(OpenAssemblyListViewCommand);
+
+            LoginCommand = new BaseCommand(OpenLogin);
+
+            MenuCommand = new BaseCommand(OpenMenu);
+
+            CloseCommand = new BaseCommand(CloseApp);
+
+            ExcelViewCommand = new BaseCommand(OpenExcelView); 
+        }
+
         protected virtual bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;
@@ -21,13 +55,11 @@ namespace InformiInventory.ViewModels
             return true;
         }
 
-
-        User _currentUser;
-        public User CurrentUser
+        UserModel _currentUser;
+        public UserModel CurrentUser
         {
             get { return _currentUser; }
             set { SetProperty(ref _currentUser, value); }
-
         }
 
         string _storeName;
@@ -63,25 +95,6 @@ namespace InformiInventory.ViewModels
             set { SetProperty(ref _selectedViewModel, value); }
         }
 
-        public NavigationViewModel()
-        {
-            DifferenceListCommand = new BaseCommand(OpenDifferenceList);
-
-            InventoryCommand = new BaseCommand(OpenInventory);
-
-            NavigationCommand = new BaseCommand(OpenNavigationCommand);
-
-            AssemblyListViewCommand = new BaseCommand(OpenAssemblyListViewCommand);
-
-            LoginCommand = new BaseCommand(OpenLogin);
-
-            MenuCommand = new BaseCommand(OpenMenu);
-
-            CloseCommand = new BaseCommand(CloseApp);
-
-            ExcelViewCommand = new BaseCommand(OpenExcelView); 
-        }
-
         private void OpenExcelView(object obj)
         {
             MainWindow.Instance.MainWindowContentControl.Content = new ExcelImportView();
@@ -94,7 +107,7 @@ namespace InformiInventory.ViewModels
 
         private void OpenDifferenceList(object obj)
         {
-            MainWindow.Instance.MainWindowContentControl.Content = new DifferenceListView();
+            MainWindow.Instance.MainWindowContentControl.Content = new InventoryDifferenceView();
         }
 
         private void OpenInventory(object obj)

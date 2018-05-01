@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace informiInventory
 {
-    public class User : ViewModelBase
+    public class UserModel : ViewModelBase
     {
         protected virtual bool SetProperty<T>(ref T field, T value, [System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
@@ -16,8 +16,6 @@ namespace informiInventory
             this.OnPropertyChanged(propertyName);
             return true;
         }
-
-
 
         int _userId;
         public int UserId
@@ -38,6 +36,12 @@ namespace informiInventory
         {
             get { return _userName; }
             set { SetProperty(ref _userName, value); }
+        }
+        string _storeName;
+        public string StoreName
+        {
+            get { return _storeName; }
+            set { SetProperty(ref _storeName, value); }
         }
 
     }

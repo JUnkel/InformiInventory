@@ -23,7 +23,6 @@
        
     <Grid Margin="1" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
@@ -93,7 +92,7 @@
             <telerik:RadGridView.Columns>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Pos}"             Header="Pos"            Width="100" IsReadOnly="True"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}"            Header="Artikel-Nr."    Width="100" IsReadOnly="True"/>
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding ArtDesc}"         Header="Bezeichnung"    Width="250" IsReadOnly="True"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ArtDesc}"         Header="Stellplatz"    Width="250" IsReadOnly="True"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding StorageName}"     Header="Ort"            Width="50"  IsReadOnly="True"/>
                 <telerik:GridViewMaskedInputColumn DataMemberBinding="{Binding Amt}" Header="Bestellmenge"   Width="100" IsReadOnly="False"  x:Name="AmtColumn"  DataFormatString="d" />
             </telerik:RadGridView.Columns>

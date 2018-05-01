@@ -4,26 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-             xmlns:commands="clr-namespace:InformiInventory.ViewModels.Commands"
              xmlns:local="clr-namespace:InformiInventory.ViewModels"
-             xmlns:converter="clr-namespace:InformiInventory.ViewModels.Converter"
              SnapsToDevicePixels="True"
              mc:Ignorable="d"
              d:DesignHeight="712.549"
              d:DesignWidth="1166.82"
-             FontSize="25"
              >
 
     <UserControl.DataContext>
         <local:InventoryViewModel/>
     </UserControl.DataContext>
 
-    <UserControl.Resources>
-    </UserControl.Resources>
-
     <Grid Margin="1" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
@@ -36,7 +29,7 @@
             <!--<Button Command="{Binding ImportExcelRestockLinesCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=ExcelImportBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Excel-Import" x:Name="ExcelImportBtn" Background="WhiteSmoke" Margin="1"/>-->
             <Button Command="{Binding BookInventoryCommand}" CommandParameter="{Binding}" CommandTarget="{Binding ElementName=SaveRestockLineBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Abschließen" x:Name="SaveRestockLineBtn" Background="GreenYellow" Margin="1"/>
             <Button Command="{Binding DeleteInventoryCommand}" CommandParameter="{Binding ElementName=RestocksRadListBox, Path=SelectedItem}" CommandTarget="{Binding ElementName=DeleteRestockBtn}" Grid.Row="0" Grid.Column="1" Width="Auto" Content="Löschen" x:Name="DeleteRestockBtn" Background="Red" Margin="1" />
-            <Button  Content="Positione Aktualisieren" Margin="1"  Command="{Binding GetInventoryLinesCommand}" CommandParameter="{Binding ElementName=RestocksRadListBox,Path=SelectedItem}"  CommandTarget="{Binding ElementName=RefreshRestockLinesBtn}" x:Name="RefreshRestockLinesBtn"/>
+            <Button  Content="Positionen Aktualisieren" Margin="1"  Command="{Binding GetInventoryLinesCommand}" CommandParameter="{Binding ElementName=RestocksRadListBox,Path=SelectedItem}"  CommandTarget="{Binding ElementName=RefreshRestockLinesBtn}" x:Name="RefreshRestockLinesBtn"/>
             <Button  Content="Inventurenlisten abrufen" Margin="1"  Command="{Binding GetInventoriesCommand}" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=RefreshRestockLinesBtn}" x:Name="RefreshRestocksBtn"/>
             <Button  Content="Neue Inventurliste erstellen" Margin="1" Command="{Binding CreateInventoryCommand }" CommandParameter="{Binding}"  CommandTarget="{Binding ElementName=NewRestockModelBtn}" x:Name="NewRestockModelBtn"/>
 
@@ -94,7 +87,7 @@
                 <!--<telerik:GridViewDataColumn DataMemberBinding="{Binding Pos}"             Header="Pos"            Width="100" IsReadOnly="True"/>-->
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding GTIN}"            Header="Artikel-Nr."    Width="100" IsReadOnly="True"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding ArtDesc}"         Header="Bezeichnung"    Width="250" IsReadOnly="True"/>
-                <telerik:GridViewDataColumn DataMemberBinding="{Binding StorageName}"     Header="Ort"            Width="50"  IsReadOnly="True"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding StorageName}"     Header="Stellplatz"            Width="100"  IsReadOnly="True"/>
                 <telerik:GridViewMaskedInputColumn DataMemberBinding="{Binding Amt}" Header="Bestellmenge"   Width="100" IsReadOnly="False"  x:Name="AmtColumn"  DataFormatString="d" />
             </telerik:RadGridView.Columns>
         </telerik:RadGridView>

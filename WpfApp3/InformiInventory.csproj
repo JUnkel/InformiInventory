@@ -155,17 +155,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\ArticleModel.cs" />
-    <Compile Include="Models\Excel.cs" />
-    <Compile Include="Models\InventoryDifferenceModel.cs" />
     <Compile Include="Models\InventoryLinesModel.cs" />
     <Compile Include="Models\PetaPoco.cs" />
     <Compile Include="Models\StoreModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\RestockModel.cs" />
-    <Compile Include="Models\DifferenceListModel.cs" />
+    <Compile Include="Models\InventoryDifferenceModel.cs" />
     <Compile Include="Models\InventoryModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
-    <Compile Include="Models\NavigationModel.cs" />
     <Compile Include="ViewModels\Commands\Generic\BaseCommand.cs" />
     <Compile Include="ViewModels\Commands\InventoryCommand.cs" />
     <Compile Include="ViewModels\Commands\ExcelComand.cs" />
@@ -173,7 +170,7 @@
     <Compile Include="ViewModels\Commands\Generic\RelayCommand.cs" />
     <Compile Include="ViewModels\Commands\RestockCommand.cs" />
     <Compile Include="ViewModels\Converter\Converter.cs" />
-    <Compile Include="ViewModels\DifferenceListViewModel.cs" />
+    <Compile Include="ViewModels\InventoryDifferenceViewModel.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\NavigationViewModel.cs" />
     <Compile Include="ViewModels\RestockViewModel.cs" />
@@ -191,9 +188,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\NavigationControl.xaml.cs">
-      <DependentUpon>NavigationControl.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\ExcelImportView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -222,10 +216,6 @@
     <Page Include="Views\MenuView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NavigationControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

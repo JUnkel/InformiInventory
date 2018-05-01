@@ -26,7 +26,6 @@ namespace InformiInventory.ViewModels
             return true;
         }
 
-
         #region Properties
         string _username;
 
@@ -64,11 +63,11 @@ namespace InformiInventory.ViewModels
         {
             using (var db = new PetaPoco.Database("db"))
             {
-                var user = new User();
+                var user = new UserModel();
 
                 try
                 {
-                    user = db.FirstOrDefault<User>("SELECT u.UserId AS UserId, u.UserName as UserName, u.StoreId as StoreId FROM Users u LEFT JOIN Stores s ON s.StoreId = u.StoreId WHERE KeyCode = @0 AND Username = @1", Password, Username);
+                    user = db.FirstOrDefault<UserModel>("SELECT u.UserId AS UserId, u.UserName as UserName, u.StoreId as StoreId FROM Users u LEFT JOIN Stores s ON s.StoreId = u.StoreId WHERE KeyCode = @0 AND Username = @1", Password, Username);
 
                     if (user == null)
                     {
@@ -86,11 +85,12 @@ namespace InformiInventory.ViewModels
                         App.Current.Properties["StoreId"] = user.StoreId;
                         App.Current.Properties["StoreName"] = currentStore;
 
-                        var props = App.Current.Properties;
+                        //var props = App.Current.Properties;
 
-                        string uid = Application.Current.Properties["UserId"].ToString();
+                        //string uid = Application.Current.Properties["UserId"].ToString();
 
                         MainWindow.Instance.MainWindowContentControl.Content = new MenuView();
+                        MainWindow.Instance.NavigationPanel.DataContext = new NavigationViewModel();
                     }
                 }
                 catch (Exception ex)
